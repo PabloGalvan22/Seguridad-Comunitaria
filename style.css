@@ -267,36 +267,18 @@ a[href="admin.html"] {
     font-size: 0.8rem;
 }
 
-/* --- Móvil --- */
-@media (max-width: 768px) {
-    header h1 { font-size: 2.2rem; }
-    
-    nav { 
-        padding: 10px; 
-        overflow-x: auto; /* Scroll horizontal si no caben */
-        white-space: nowrap;
-    }
-    
-    .container {
-        width: 95%; /* Ocupa casi toda la pantalla en móvil */
-        max-width: 850px; /* Se detiene en este tamaño en computadora */
-        margin: 0 auto;
-        padding: 20px 10px; /* Reduce los espacios laterales en móvil */
-        box-sizing: border-box; /* Evita que el padding ensanche la página */
-    }
-}
 /* Esto solo se activa en celulares */
-@media (max-width: 480px) {
+@media (max-width: 320px) {
     body {
         font-size: 16px; /* Tamaño base cómodo para leer */
     }
     .content-card {
-        font-size: 20px !important; /* Aumenta el tamaño de la letra solo en celulares */
+        font-size: 18px !important; /* Aumenta el tamaño de la letra solo en celulares */
         line-height: 1.6;
         padding: 15px;
     }
     h1 {
-        font-size: 1.8rem !important;
+        font-size: 1.5rem !important;
     }
     .btn-vote {
         width: 100%; /* Botones uno sobre otro para que sean fáciles de tocar */
