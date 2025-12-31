@@ -1,103 +1,3 @@
-<!--<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Inicio - Seguridad Comunitaria</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="style.css">
-</head>
-<body>
-    <header>
-        <h1>Seguridad Comunitaria</h1>
-        <p>Tu escudo digital en un mundo interconectado</p>
-    </header>
-
-    <nav>
-        <a href="index.html">Inicio</a>
-        <a href="phishing.html">Phishing</a>
-        <a href="ciberseguridad.html">Ciberseguridad</a>
-        <a href="videojuegos.html">Videojuegos</a>
-        <a href="redes.html">Redes Sociales</a>
-        <a href="grooming.html">Grooming</a>
-    </nav>
-
-    <div class="container">
-        <h2>Protegiendo nuestro entorno digital</h2>
-        <p>En la era digital, la seguridad ya no es solo una opción, es una necesidad básica. Esta plataforma ha sido diseñada para empoderar a nuestra comunidad con conocimiento práctico frente a las amenazas modernas.</p>
-        
-        <h3>¿Por qué es importante informarse?</h3>
-        <ul>
-            <li><strong>Proteger nuestra identidad:</strong> Evitar que suplanten nuestro nombre en trámites o redes.</li>
-            <li><strong>Cuidar nuestra economía:</strong> Prevenir fraudes bancarios y estafas en compras online.</li>
-            <li><strong>Seguridad familiar:</strong> Crear un entorno seguro para que los menores exploren internet sin miedo.</li>
-        </ul>
-
-        <hr>
-
-        <section id="reporte-ciudadano">
-            <h2>Centro de Reportes</h2>
-            <p>¿Has tenido algún problema de seguridad en internet o sospechas de una estafa? Cuéntanos tu caso. Leeremos tu reporte para darte seguimiento y alertar a la comunidad.</p>
-            
-            <div class="post" style="background: rgba(255,255,255,0.05); border: 1px dashed var(--primary);">
-                <form id="formReporte">
-                    <label for="nombre" style="color: var(--primary); font-weight: 600;">Nombre o Alias (Opcional):</label>
-                    <input type="text" id="nombre" placeholder="Ej: VecinoAnónimo">
-                    
-                    <label for="contacto" style="color: var(--primary); font-weight: 600;">Correo o Teléfono de contacto:</label>
-                    <input type="text" id="contacto" placeholder="Para poder darte seguimiento" required>
-                    
-                    <label for="mensaje" style="color: var(--primary); font-weight: 600;">Describe lo sucedido:</label>
-                    <textarea id="mensaje" rows="5" placeholder="Cuéntanos qué pasó, sitios web involucrados, etc." required></textarea>
-                    
-                    <button type="submit" id="btnEnviarReporte">Enviar Reporte Seguro</button>
-                </form>
-            </div>
-        </section>
-    </div>
-
-    <script type="module">
-        import { db, collection, addDoc, Timestamp } from './firebase.js';
-
-        const form = document.getElementById('formReporte');
-
-        form.addEventListener('submit', async (e) => {
-            e.preventDefault(); // Evita que la página se recargue
-
-            const nombre = document.getElementById('nombre').value || "Anónimo";
-            const contacto = document.getElementById('contacto').value;
-            const mensaje = document.getElementById('mensaje').value;
-            const btn = document.getElementById('btnEnviarReporte');
-
-            btn.innerText = "Enviando...";
-            btn.disabled = true;
-
-            try {
-                // Guardamos el reporte en una nueva colección llamada "reportes"
-                await addDoc(collection(db, "reportes"), {
-                    usuario: nombre,
-                    contacto: contacto,
-                    descripcion: mensaje,
-                    fecha: Timestamp.now(),
-                    estado: "pendiente" // Para que tú lleves control
-                });
-
-                alert("Reporte enviado con éxito. Gracias por confiar en nosotros.");
-                form.reset(); // Limpia el formulario
-            } catch (error) {
-                console.error("Error al enviar:", error);
-                alert("Hubo un error al enviar el reporte. Inténtalo más tarde.");
-            } finally {
-                btn.innerText = "Enviar Reporte Seguro";
-                btn.disabled = false;
-            }
-        });
-    </script>
-</body>
-</html>-->
-
-
-
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -278,11 +178,11 @@
         <p>Síguenos para recibir consejos de seguridad diarios y alertas de nuevas estafas.</p>
         
         <div class="social-links">
-            <a href="#" class="social-icon fb" title="Facebook"><i class="fab fa-facebook-f"></i></a>
+            <a href="https://www.facebook.com/share/17zFLAxcDe/" class="social-icon fb" title="Facebook"><i class="fab fa-facebook-f"></i></a>
             <a href="#" class="social-icon ig" title="Instagram"><i class="fab fa-instagram"></i></a>
             <a href="#" class="social-icon x" title="X (Twitter)"><i class="fab fa-x-twitter"></i></a>
             <a href="#" class="social-icon yt" title="YouTube"><i class="fab fa-youtube"></i></a>
-            <a href="#" class="social-icon tk" title="TikTok"><i class="fab fa-tiktok"></i></a>
+            <a href="https://x.com/Seguridad_Com22" class="social-icon tk" title="TikTok"><i class="fab fa-tiktok"></i></a>
         </div>
 
         <div class="footer-text">
@@ -308,12 +208,11 @@
                     descripcion,
                     fecha: Timestamp.now()
                 });
-                status.innerHTML = "<p style='color: #4ade80;'>✅ Reporte enviado con éxito. Gracias por proteger a la comunidad.</p>";
+                status.innerHTML = "<p style='color: #4ade80;'>✅ Reporte enviado con éxito.</p>";
                 form.reset();
             } catch (error) {
-                status.innerHTML = "<p style='color: #f87171;'>❌ Error al enviar. Verifica tu conexión.</p>";
+                status.innerHTML = "<p style='color: #f87171;'>❌ Error al enviar.</p>";
             }
         });
     </script>
-</body>
 </html>

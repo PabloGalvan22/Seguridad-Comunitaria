@@ -221,32 +221,26 @@
         const postId = urlParams.get('id');
         const container = document.getElementById('detalle-post');
 
-        // Función para procesar el voto
         async function gestionarVoto(tipo) {
             const storageKey = `voto_${postId}`;
-            
-            // Verificamos si ya existe un registro de voto en este navegador
-            if (localStorage.getItem(storageKey)) {
-                alert("Ya has registrado tu voto en esta publicación.");
-                return;
-            }
+            if (localStorage.getItem(storageKey)) return;
 
             const docRef = doc(db, "posts", postId);
             try {
+                // Actualizamos en Firebase
                 await updateDoc(docRef, { [tipo]: increment(1) });
-                localStorage.setItem(storageKey, tipo); // Guardamos el voto localmente
-                location.reload(); 
-            } catch (e) { 
-                console.error("Error al votar", e); 
+                // Guardamos localmente
+                localStorage.setItem(storageKey, tipo);
+                // Refrescamos para ver cambios
+                location.reload();
+            } catch (e) {
+                console.error("Error Firebase:", e);
+                alert("Error: Verifica que las reglas de tu base de datos permitan 'update'.");
             }
         }
 
-        // Función principal que carga el contenido y configura los botones
         async function cargarTodo() {
-            if (!postId) {
-                container.innerHTML = `<div style="padding: 60px; text-align: center;"><h1>ID no encontrado</h1></div>`;
-                return;
-            }
+            if (!postId) return;
 
             try {
                 const docRef = doc(db, "posts", postId);
@@ -254,61 +248,48 @@
 
                 if (docSnap.exists()) {
                     const data = docSnap.data();
-                    const yaVoto = localStorage.getItem(`voto_${postId}`); // Revisamos si ya votó
-                    const fecha = data.fecha?.toDate().toLocaleDateString('es-ES', { 
-                        day: '2-digit', month: 'long', year: 'numeric' 
-                    }) || "Fecha Reciente";
+                    const storageKey = `voto_${postId}`;
+                    const yaVoto = localStorage.getItem(storageKey);
 
                     container.innerHTML = `
                         <header class="post-header">
-                            <span class="post-date">Publicado el ${fecha}</span>
                             <h1>${data.titulo}</h1>
                         </header>
                         <div class="post-body">
-                            <div class="content-card">
-                                ${data.contenido}
-                            </div>
-                            
+                            <div class="content-card">${data.contenido}</div>
                             <div class="interactions">
-                                <button id="btn-like" class="btn-vote like">
-                                    👍 <span class="count">${data.likes || 0}</span> Me gusta
+                                <button id="btn-like" class="btn-vote">
+                                    👍 like <span class="count">${data.likes || 0}</span>
                                 </button>
-                                <button id="btn-dislike" class="btn-vote dislike">
-                                    👎 <span class="count">${data.dislikes || 0}</span> No me gusta
+                                <button id="btn-dislike" class="btn-vote">
+                                    👎 dislike <span class="count">${data.dislikes || 0}</span>
                                 </button>
                             </div>
                         </div>
                     `;
 
-                    const btnLike = document.getElementById('btn-like');
-                    const btnDislike = document.getElementById('btn-dislike');
+                    const btnL = document.getElementById('btn-like');
+                    const btnD = document.getElementById('btn-dislike');
 
-                    // Si ya votó, aplicamos los estilos de bloqueo que mencionaste
                     if (yaVoto) {
-                        if (yaVoto === 'likes') btnLike.style.background = "rgba(74, 222, 128, 0.2)";
-                        if (yaVoto === 'dislikes') btnDislike.style.background = "rgba(239, 68, 68, 0.2)";
-                        
-                        btnLike.style.cursor = "default";
-                        btnDislike.style.cursor = "default";
-                        btnLike.title = "Ya votaste";
-                        btnDislike.title = "Ya votaste";
+                        // Si ya votó, los ponemos semitransparentes
+                        btnL.style.opacity = "0.4";
+                        btnD.style.opacity = "0.4";
+                        btnL.style.cursor = "not-allowed";
+                        btnD.style.cursor = "not-allowed";
+                        // Resaltamos el que eligió
+                        if (yaVoto === 'likes') btnL.style.border = "2px solid #4ade80";
+                        if (yaVoto === 'dislikes') btnD.style.border = "2px solid #ef4444";
                     } else {
-                        // Solo activamos los clics si NO ha votado
-                        btnLike.onclick = () => gestionarVoto('likes');
-                        btnDislike.onclick = () => gestionarVoto('dislikes');
+                        // Si NO ha votado, están activos y brillantes
+                        btnL.style.opacity = "1";
+                        btnD.style.opacity = "1";
+                        btnL.onclick = () => gestionarVoto('likes');
+                        btnD.onclick = () => gestionarVoto('dislikes');
                     }
-
-                    document.title = data.titulo + " | Seguridad Comunitaria";
-
-                } else {
-                    container.innerHTML = `<div style="padding: 60px; text-align: center;"><h1>El post no existe</h1></div>`;
                 }
-            } catch (error) {
-                console.error(error);
-                container.innerHTML = `<div style="padding: 60px; text-align: center;"><h1>Error de conexión</h1></div>`;
-            }
+            } catch (error) { console.error(error); }
         }
-
         cargarTodo();
     </script>
 </body>
