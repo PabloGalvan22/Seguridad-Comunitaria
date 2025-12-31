@@ -268,20 +268,27 @@ a[href="admin.html"] {
 }
 
 /* Esto solo se activa en celulares */
-@media (max-width: 320px) {
+/* Ajustes para celulares */
+@media (max-width: 768px) {
+    html {
+        font-size: 14px; /* Reduce un poco la escala general si se ve muy cerca */
+    }
+
     body {
-        font-size: 16px; /* Tamaño base cómodo para leer */
+        line-height: 1.5;
     }
-    .content-card {
-        font-size: 18px !important; /* Aumenta el tamaño de la letra solo en celulares */
-        line-height: 1.6;
-        padding: 15px;
-    }
+
     h1 {
-        font-size: 1.5rem !important;
+        font-size: 1.8rem !important; /* Títulos un poco más pequeños */
     }
-    .btn-vote {
-        width: 100%; /* Botones uno sobre otro para que sean fáciles de tocar */
-        margin-bottom: 10px;
+
+    header {
+        padding: 30px 15px;
+    }
+
+    /* En post-detalle.html, que el contenido respire */
+    .content-card {
+        padding: 20px !important;
+        font-size: 1.05rem !important;
     }
 }
