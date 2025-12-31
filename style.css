@@ -290,29 +290,16 @@ a[href="admin.html"] {
     body {
         font-size: 16px; /* Tamaño base cómodo para leer */
     }
-
-    h1 {
-        font-size: 1.8rem; /* Títulos más acordes al celular */
-    }
-
     .content-card {
-        padding: 20px; /* Menos espacio interno para que el texto sea más ancho */
-        font-size: 1rem;
+        font-size: 20px !important; /* Aumenta el tamaño de la letra solo en celulares */
         line-height: 1.6;
+        padding: 15px;
     }
-
+    h1 {
+        font-size: 1.8rem !important;
+    }
     .btn-vote {
         width: 100%; /* Botones uno sobre otro para que sean fáciles de tocar */
         margin-bottom: 10px;
-    }
-}
-@media (max-width: 480px) {
-    .content-card {
-        font-size: 22px !important; /* Aumenta el tamaño de la letra solo en celulares */
-        line-height: 1.6;
-        padding: 18px;
-    }
-    h1 {
-        font-size: 2rem !important;
     }
 }
