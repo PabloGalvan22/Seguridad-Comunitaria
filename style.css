@@ -308,11 +308,11 @@ a[href="admin.html"] {
 }
 @media (max-width: 480px) {
     .content-card {
-        font-size: 20px !important; /* Aumenta el tamaño de la letra solo en celulares */
+        font-size: 22px !important; /* Aumenta el tamaño de la letra solo en celulares */
         line-height: 1.6;
-        padding: 15px;
+        padding: 18px;
     }
     h1 {
-        font-size: 1.5rem !important;
+        font-size: 2rem !important;
     }
 }
