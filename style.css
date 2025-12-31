@@ -308,7 +308,7 @@ a[href="admin.html"] {
 }
 @media (max-width: 480px) {
     .content-card {
-        font-size: 18px !important; /* Aumenta el tamaño de la letra solo en celulares */
+        font-size: 20px !important; /* Aumenta el tamaño de la letra solo en celulares */
         line-height: 1.6;
         padding: 15px;
     }
