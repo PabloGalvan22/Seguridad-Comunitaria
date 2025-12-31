@@ -225,32 +225,30 @@
             const storageKey = `voto_${postId}`;
             if (localStorage.getItem(storageKey)) return;
 
-            const docRef = doc(db, "posts", postId);
             try {
+                const docRef = doc(db, "posts", postId);
                 // Actualizamos en Firebase
                 await updateDoc(docRef, { [tipo]: increment(1) });
-                // Guardamos localmente
+                // Guardamos en el navegador que ya votó
                 localStorage.setItem(storageKey, tipo);
-                // Refrescamos para ver cambios
-                location.reload();
+                // Recargamos para ver los cambios y colores
+                location.reload(); 
             } catch (e) {
-                console.error("Error Firebase:", e);
+                console.error(e);
                 alert("Error: Verifica que las reglas de tu base de datos permitan 'update'.");
             }
         }
 
         async function cargarTodo() {
             if (!postId) return;
-
             try {
                 const docRef = doc(db, "posts", postId);
                 const docSnap = await getDoc(docRef);
 
                 if (docSnap.exists()) {
                     const data = docSnap.data();
-                    const storageKey = `voto_${postId}`;
-                    const yaVoto = localStorage.getItem(storageKey);
-
+                    const yaVoto = localStorage.getItem(`voto_${postId}`);
+                    
                     container.innerHTML = `
                         <header class="post-header">
                             <h1>${data.titulo}</h1>
@@ -259,10 +257,10 @@
                             <div class="content-card">${data.contenido}</div>
                             <div class="interactions">
                                 <button id="btn-like" class="btn-vote">
-                                    👍 like <span class="count">${data.likes || 0}</span>
+                                    👍 <span class="count">${data.likes || 0}</span> Me gusta
                                 </button>
                                 <button id="btn-dislike" class="btn-vote">
-                                    👎 dislike <span class="count">${data.dislikes || 0}</span>
+                                    👎 <span class="count">${data.dislikes || 0}</span> No me gusta
                                 </button>
                             </div>
                         </div>
@@ -271,25 +269,27 @@
                     const btnL = document.getElementById('btn-like');
                     const btnD = document.getElementById('btn-dislike');
 
+                    // LÓGICA DE COLORES Y BLOQUEO
                     if (yaVoto) {
-                        // Si ya votó, los ponemos semitransparentes
-                        btnL.style.opacity = "0.4";
-                        btnD.style.opacity = "0.4";
-                        btnL.style.cursor = "not-allowed";
-                        btnD.style.cursor = "not-allowed";
-                        // Resaltamos el que eligió
-                        if (yaVoto === 'likes') btnL.style.border = "2px solid #4ade80";
-                        if (yaVoto === 'dislikes') btnD.style.border = "2px solid #ef4444";
+                        btnL.style.cursor = "default";
+                        btnD.style.cursor = "default";
+                        // Aplicar colores si ya votó
+                        if (yaVoto === 'likes') {
+                            btnL.style.background = "#4ade80"; // Verde
+                            btnL.style.color = "black";
+                        }
+                        if (yaVoto === 'dislikes') {
+                            btnD.style.background = "#ef4444"; // Rojo
+                            btnD.style.color = "white";
+                        }
                     } else {
-                        // Si NO ha votado, están activos y brillantes
-                        btnL.style.opacity = "1";
-                        btnD.style.opacity = "1";
                         btnL.onclick = () => gestionarVoto('likes');
                         btnD.onclick = () => gestionarVoto('dislikes');
                     }
                 }
             } catch (error) { console.error(error); }
         }
+
         cargarTodo();
     </script>
 </body>
