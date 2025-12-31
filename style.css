@@ -278,8 +278,31 @@ a[href="admin.html"] {
     }
     
     .container {
-        padding: 25px;
-        margin: 20px;
-        border-radius: 15px;
+        width: 95%; /* Ocupa casi toda la pantalla en móvil */
+        max-width: 850px; /* Se detiene en este tamaño en computadora */
+        margin: 0 auto;
+        padding: 20px 10px; /* Reduce los espacios laterales en móvil */
+        box-sizing: border-box; /* Evita que el padding ensanche la página */
+    }
+}
+/* Esto solo se activa en celulares */
+@media (max-width: 600px) {
+    body {
+        font-size: 16px; /* Tamaño base cómodo para leer */
+    }
+
+    h1 {
+        font-size: 1.8rem; /* Títulos más acordes al celular */
+    }
+
+    .content-card {
+        padding: 20px; /* Menos espacio interno para que el texto sea más ancho */
+        font-size: 1rem;
+        line-height: 1.6;
+    }
+
+    .btn-vote {
+        width: 100%; /* Botones uno sobre otro para que sean fáciles de tocar */
+        margin-bottom: 10px;
     }
 }
