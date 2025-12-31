@@ -306,3 +306,13 @@ a[href="admin.html"] {
         margin-bottom: 10px;
     }
 }
+@media (max-width: 480px) {
+    .content-card {
+        font-size: 18px !important; /* Aumenta el tamaño de la letra solo en celulares */
+        line-height: 1.6;
+        padding: 15px;
+    }
+    h1 {
+        font-size: 1.5rem !important;
+    }
+}
