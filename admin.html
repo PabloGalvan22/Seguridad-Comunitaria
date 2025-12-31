@@ -59,22 +59,32 @@
 
         // Publicar
         document.getElementById('publicarBtn').addEventListener('click', async () => {
+            const btn = document.getElementById('publicarBtn');
             const titulo = document.getElementById('titulo').value;
             const contenido = document.getElementById('contenido').value;
 
-            if(!titulo || !contenido) return alert("Llena todos los campos");
+            if(!titulo || !contenido) return alert("Por favor, llena todos los campos.");
+
+            // Cambio visual
+            btn.disabled = true;
+            btn.innerText = "🚀 Publicando historia...";
 
             try {
                 await addDoc(collection(db, "posts"), {
                     titulo: titulo,
                     contenido: contenido,
+                    likes: 0,      // Inicializamos en 0 para evitar errores
+                    dislikes: 0,
                     fecha: Timestamp.now()
                 });
-                alert("Historia publicada");
+                alert("¡Historia publicada con éxito!");
                 document.getElementById('titulo').value = '';
                 document.getElementById('contenido').value = '';
             } catch (e) {
-                alert("Error: " + e.message);
+                alert("Error de permisos: " + e.message);
+            } finally {
+                btn.disabled = false;
+                btn.innerText = "Publicar Historia";
             }
         });
 
