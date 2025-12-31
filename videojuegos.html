@@ -3,14 +3,39 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Seguridad en Videojuegos</title>
+    <title>Videojuegos Seguros - Guía Maestra</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
+    <style>
+        /* Estilos del Simulador */
+        .platform-badge { padding: 4px 10px; border-radius: 6px; font-size: 0.75rem; font-weight: bold; margin-bottom: 10px; display: inline-block; text-transform: uppercase; }
+        .android { background: #3DDC84; color: #073042; }
+        .ios { background: #f5f5f7; color: #1d1d1f; }
+        .windows { background: #0078d4; color: white; }
+        
+        .score-board {
+            position: sticky; top: 80px; background: var(--bg-card); padding: 15px;
+            border-radius: 12px; border: 2px solid var(--accent); text-align: center;
+            z-index: 99; margin: 20px 0; box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+        .score-text { font-size: 1.2rem; font-weight: bold; color: var(--accent); }
+
+        .question { background: rgba(255,255,255,0.03); padding: 25px; border-radius: 16px; margin-bottom: 25px; border: 1px solid rgba(255,255,255,0.1); }
+        .options button { display: block; width: 100%; text-align: left; padding: 14px; margin: 10px 0; background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.1); color: var(--text-main); border-radius: 10px; cursor: pointer; transition: 0.3s; font-family: 'Poppins', sans-serif; }
+        .options button:hover { background: rgba(244, 114, 182, 0.1); border-color: var(--accent); }
+        
+        .feedback { font-weight: 600; margin-top: 15px; display: none; padding: 12px; border-radius: 8px; font-size: 0.95rem; line-height: 1.4; }
+        .correct { color: #4ade80; background: rgba(74, 222, 128, 0.1); border: 1px solid #4ade80; }
+        .incorrect { color: #f87171; background: rgba(248, 113, 113, 0.1); border: 1px solid #f87171; }
+
+        .info-card { background: rgba(255,255,255,0.05); padding: 25px; border-radius: 15px; margin-bottom: 20px; border-top: 3px solid var(--secondary); }
+        .solution-tag { color: #4ade80; font-weight: 700; text-transform: uppercase; font-size: 0.8rem; }
+    </style>
 </head>
 <body>
     <header>
-        <h1>Seguridad Comunitaria</h1>
-        <p>Prevención y Conciencia Digital</p>
+        <h1>Cultura Gamer y Seguridad</h1>
+        <p>Aprende a identificar riesgos y proteger tu identidad mientras juegas</p>
     </header>
 
     <nav>
@@ -23,18 +48,181 @@
     </nav>
 
     <div class="container">
-        <h2>Riesgos en Videojuegos Online</h2>
-        <p>Los videojuegos son divertidos, pero los espacios de chat pueden ser peligrosos si no se usan con cuidado.</p>
+        <h2>Manual de Supervivencia Digital para Jugadores</h2>
+        <p>Los videojuegos modernos son mundos vivos donde millones interactúan. Pero detrás de un avatar amigable puede haber un atacante buscando acceso a tu información personal o financiera.</p>
 
-        <h3>Riesgos Comunes</h3>
-        <ul>
-            <li><strong>Toxicidad:</strong> Insultos y acoso en partidas competitivas.</li>
-            <li><strong>Estafas de "Skins":</strong> Gente que promete items gratis a cambio de tu contraseña.</li>
-            <li><strong>Contacto con extraños:</strong> Nunca reveles tu nombre real, dirección o escuela en un chat de juego.</li>
-        </ul>
+        <div class="info-card">
+            <h3>🧨 El Riesgo del "Doxing"</h3>
+            <p>Ocurre cuando un jugador se enoja contigo y decide investigar y publicar tu información real (nombre, escuela, dirección) en internet para acosarte.</p>
+            <p><span class="solution-tag">Solución:</span> Nunca uses tu nombre real como nombre de usuario. No vincules tus cuentas de juego con redes sociales personales donde se vea tu cara o tu ubicación.</p>
+        </div>
 
-        <h3>Consejo para padres</h3>
-        <p>Revisen las configuraciones de privacidad de las consolas y supervisen con quién juegan sus hijos.</p>
+        <div class="info-card">
+            <h3>💰 Estafas de Intercambio (Trading)</h3>
+            <p>Muchos juegos permiten intercambiar objetos. Los estafadores prometen ítems raros a cambio de que tú entregues los tuyos primero, o usan páginas de "apuestas" falsas que roban tus datos de inicio de sesión.</p>
+            <p><span class="solution-tag">Solución:</span> Realiza intercambios <strong>únicamente</strong> dentro del sistema oficial del juego. Desconfía de cualquiera que te pida salir del juego para "confirmar" un ítem en una web externa.</p>
+        </div>
+
+        <div class="info-card">
+            <h3>📥 Malware disfrazado de "Optimización"</h3>
+            <p>Existen programas que prometen bajar tu "ping" o subir tus FPS (velocidad del juego) milagrosamente. En realidad, son programas que graban lo que escribes en el teclado (Keyloggers) para robar tus claves bancarias.</p>
+            <p><span class="solution-tag">Solución:</span> Solo usa software oficial de marcas reconocidas (como NVIDIA, AMD o Intel). Si un programa te pide desactivar el antivirus para "funcionar mejor", bórralo inmediatamente.</p>
+        </div>
+
+        <div class="info-card">
+            <h3>🎙️ Grooming en Salas de Chat</h3>
+            <p>Personas adultas fingen ser niños para ganar confianza, regalarte "skins" o monedas y luego pedirte fotos privadas o encuentros en persona.</p>
+            <p><span class="solution-tag">Solución:</span> Si alguien que conociste online te pide llevar la conversación a una app privada (como WhatsApp) o te hace preguntas sobre tu cuerpo, bloquea y avisa a un adulto de confianza inmediatamente.</p>
+        </div>
+
+        <hr>
+
+        <div class="score-board">
+            <div class="score-text">Puntaje Gamer: <span id="puntos">0</span>/12 | Efectividad: <span id="porcentaje">0</span>%</div>
+        </div>
+
+        <h2>🛠️ Test: ¿Eres un Jugador Seguro?</h2>
+
+        <div class="platform-badge android">Android</div>
+        <div class="question">
+            <p><strong>1. Encuentras un anuncio de "Robux/V-Bucks Gratis" que pide descargar una App para verificar tu cuenta.</strong></p>
+            <div class="options">
+                <button class="opt" data-status="incorrect" data-msg="ERROR: Las monedas gratis no existen. Esa App robará tus datos o te suscribirá a servicios de pago.">Instalarla para obtener el premio.</button>
+                <button class="opt" data-status="correct" data-msg="¡CORRECTO! Ignorar ofertas que parecen demasiado buenas es la mejor defensa.">Ignorar. Es una estafa clásica para infectar el móvil.</button>
+            </div>
+            <div class="feedback"></div>
+        </div>
+        <div class="question">
+            <p><strong>2. Un jugador te pide tu número de teléfono para agregarte a un grupo de WhatsApp de "pro-players".</strong></p>
+            <div class="options">
+                <button class="opt" data-status="correct" data-msg="¡CORRECTO! Tu número es una puerta a tu vida privada; no lo entregues a extraños.">No dárselo. Prefiero usar Discord o el chat del juego.</button>
+                <button class="opt" data-status="incorrect" data-msg="ERROR: Los extraños pueden usar tu número para acosarte o intentar entrar a tus cuentas.">Dárselo, parece confiable.</button>
+            </div>
+            <div class="feedback"></div>
+        </div>
+        <div class="question">
+            <p><strong>3. Un mensaje en el juego dice que serás baneado si no pones tu clave en un sitio web de "soporte".</strong></p>
+            <div class="options">
+                <button class="opt" data-status="incorrect" data-msg="ERROR: Ningún moderador real te pedirá jamás tu contraseña.">Entrar rápido para salvar mi cuenta.</button>
+                <button class="opt" data-status="correct" data-msg="¡CORRECTO! Es Phishing. Los administradores oficiales ya tienen acceso a tu cuenta sin pedirte la clave.">Ignorar y reportar el mensaje por fraude.</button>
+            </div>
+            <div class="feedback"></div>
+        </div>
+        <div class="question">
+            <p><strong>4. Quieres un juego de pago pero lo bajas "gratis" desde un sitio web de archivos APK desconocido.</strong></p>
+            <div class="options">
+                <button class="opt" data-status="correct" data-msg="¡CORRECTO! Los juegos modificados (MODs) suelen traer virus espía.">No hacerlo. Es mejor comprarlo legalmente para evitar virus.</button>
+                <button class="opt" data-status="incorrect" data-msg="ERROR: Estás instalando una herramienta de hackeo en tu propio teléfono.">Instalarlo, mis amigos dicen que funciona bien.</button>
+            </div>
+            <div class="feedback"></div>
+        </div>
+
+        <div class="platform-badge ios">iOS</div>
+        <div class="question">
+            <p><strong>1. Una App de la tienda promete monedas infinitas si inicias sesión con tu Apple ID dentro de ella.</strong></p>
+            <div class="options">
+                <button class="opt" data-status="incorrect" data-msg="ERROR: Quieren tu cuenta para comprar apps o vaciar tu tarjeta vinculada.">Iniciar sesión para probar.</button>
+                <button class="opt" data-status="correct" data-msg="¡CORRECTO! Tu Apple ID solo debe usarse en sitios oficiales de Apple.">No poner nada. Es un truco de robo de identidad.</button>
+            </div>
+            <div class="feedback"></div>
+        </div>
+        <div class="question">
+            <p><strong>2. ¿Es seguro comprar una cuenta "chetada" (con skins raras) en redes sociales?</strong></p>
+            <div class="options">
+                <button class="opt" data-status="correct" data-msg="¡CORRECTO! El vendedor original puede recuperar la cuenta legalmente en cualquier momento.">No, es probable que pierdas el dinero y la cuenta.</button>
+                <button class="opt" data-status="incorrect" data-msg="ERROR: Es la estafa más común entre gamers. Nunca pagues por cuentas ajenas.">Sí, si el vendedor tiene buenas fotos.</button>
+            </div>
+            <div class="feedback"></div>
+        </div>
+        <div class="question">
+            <p><strong>3. Un jugador te ofrece enviarte una skin de regalo si le dices el código que te llegó por SMS.</strong></p>
+            <div class="options">
+                <button class="opt" data-status="incorrect" data-msg="ERROR: Ese código es para entrar a TU cuenta. ¡Te van a robar!">Dárselo, quiero mi skin gratis.</button>
+                <button class="opt" data-status="correct" data-msg="¡CORRECTO! Jamás compartas códigos de seguridad. Son personales e intransferibles.">Bloquearlo. Nadie pide códigos de seguridad para regalar cosas.</button>
+            </div>
+            <div class="feedback"></div>
+        </div>
+        <div class="question">
+            <p><strong>4. Recibes un email diciendo que ganaste una Beta Cerrada de un juego muy esperado y pide loguearte.</strong></p>
+            <div class="options">
+                <button class="opt" data-status="correct" data-msg="¡CORRECTO! Revisa siempre la dirección del remitente antes de hacer clic.">Desconfiar y verificar en las redes oficiales del juego.</button>
+                <button class="opt" data-status="incorrect" data-msg="ERROR: Los correos de 'Beta Cerrada' falsos son cebos muy efectivos.">Entrar rápido para ser el primero en jugar.</button>
+            </div>
+            <div class="feedback"></div>
+        </div>
+
+        <div class="platform-badge windows">Windows</div>
+        <div class="question">
+            <p><strong>1. Descargas un programa para ver a través de las paredes y el antivirus dice que es un Troyano.</strong></p>
+            <div class="options">
+                <button class="opt" data-status="incorrect" data-msg="ERROR: Los 'cheats' son la forma principal de infectar PCs de gamers.">Desactivar el antivirus para usar el truco.</button>
+                <button class="opt" data-status="correct" data-msg="¡CORRECTO! Un antivirus detectando un programa de trampas suele estar en lo cierto.">Borrar el archivo. Mi seguridad vale más que una partida ganada.</button>
+            </div>
+            <div class="feedback"></div>
+        </div>
+        <div class="question">
+            <p><strong>2. En Discord, un desconocido te pasa un archivo '.exe' diciendo que es un juego hecho por él.</strong></p>
+            <div class="options">
+                <button class="opt" data-status="correct" data-msg="¡CORRECTO! Los archivos ejecutables son programas que pueden controlar tu PC.">No abrirlo. Los programas de desconocidos son muy peligrosos.">No abrirlo. No confío en archivos de extraños.</button>
+                <button class="opt" data-status="incorrect" data-msg="ERROR: Nunca ejecutes archivos desconocidos; pueden robar tus 'tokens' de Discord.">Abrirlo para ver de qué trata el juego.</button>
+            </div>
+            <div class="feedback"></div>
+        </div>
+        <div class="question">
+            <p><strong>3. ¿Por qué es importante activar la verificación en dos pasos (2FA) en Steam?</strong></p>
+            <div class="options">
+                <button class="opt" data-status="incorrect" data-msg="ERROR: La seguridad no ayuda al rendimiento del PC.">Para que la computadora corra los juegos más rápido.</button>
+                <button class="opt" data-status="correct" data-msg="¡CORRECTO! Evita que otros vendan tus ítems o usen tu saldo si roban tu clave.">Para que nadie entre a mi cuenta sin el código de mi móvil.</button>
+            </div>
+            <div class="feedback"></div>
+        </div>
+        <div class="question">
+            <p><strong>4. Un programa promete "Optimizar FPS" pero pide que desactives el Firewall de Windows.</strong></p>
+            <div class="options">
+                <button class="opt" data-status="correct" data-msg="¡CORRECTO! El Firewall es tu muro contra hackers; nunca lo bajes por una app sospechosa.">No usarlo. Las apps que piden bajar la guardia suelen ser maliciosas.</button>
+                <button class="opt" data-status="incorrect" data-msg="ERROR: Estás dejando tu PC totalmente abierta a ataques externos.">Aceptar, quiero jugar con la máxima velocidad.</button>
+            </div>
+            <div class="feedback"></div>
+        </div>
     </div>
+
+    <script type="module">
+        let correctas = 0;
+        let respondidas = 0;
+
+        const setupQuiz = () => {
+            const buttons = document.querySelectorAll('.opt');
+            
+            buttons.forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    const parentQuestion = e.target.closest('.question');
+                    const feedback = parentQuestion.querySelector('.feedback');
+                    const status = e.target.getAttribute('data-status');
+                    const msg = e.target.getAttribute('data-msg');
+
+                    respondidas++;
+                    feedback.innerText = msg;
+                    feedback.style.display = 'block';
+
+                    if (status === 'correct') {
+                        feedback.className = 'feedback correct';
+                        correctas++;
+                    } else {
+                        feedback.className = 'feedback incorrect';
+                    }
+
+                    document.getElementById('puntos').innerText = correctas;
+                    document.getElementById('porcentaje').innerText = Math.round((correctas / respondidas) * 100);
+
+                    parentQuestion.querySelectorAll('.opt').forEach(b => {
+                        b.style.pointerEvents = 'none';
+                        b.style.opacity = '0.5';
+                    });
+                });
+            });
+        };
+
+        setupQuiz();
+    </script>
 </body>
 </html>

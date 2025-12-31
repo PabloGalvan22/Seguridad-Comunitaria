@@ -1,9 +1,11 @@
 // firebase.js
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
-import { getFirestore } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
-import { getAuth } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js";
+import { 
+  getFirestore, collection, addDoc, getDocs, query, orderBy, 
+  Timestamp, doc, getDoc, updateDoc, increment // <-- Se agregaron estas dos
+} from "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
+import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js";
 
-// TUS CREDENCIALES
 const firebaseConfig = {
   apiKey: "AIzaSyDBbiAZVGkN5em-ZUwISkjP4qCI9QK0Usc",
   authDomain: "seguridadcomunitaria-22p.firebaseapp.com",
@@ -14,14 +16,12 @@ const firebaseConfig = {
   measurementId: "G-Z3548XRKQX"
 };
 
-// Inicializamos la App, la Base de Datos y la Autenticación
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 const auth = getAuth(app);
 
-// Exportamos las herramientas para usarlas en los otros archivos
-export { db, auth, collection, addDoc, getDocs, query, orderBy, Timestamp, signInWithEmailAndPassword, onAuthStateChanged, signOut };
-
-// Nota: Importamos también las funciones de firestore/auth aquí abajo para re-exportarlas y facilitar el uso
-import { collection, addDoc, getDocs, query, orderBy, Timestamp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
-import { signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js";
+export { 
+  db, auth, collection, addDoc, getDocs, query, orderBy, 
+  Timestamp, doc, getDoc, updateDoc, increment, // <-- Exportar para usar en el detalle
+  signInWithEmailAndPassword, onAuthStateChanged, signOut 
+};

@@ -3,14 +3,40 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Phishing - Prevención de Estafas</title>
+    <title>Phishing - Guía Completa y Simulador</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
+    <style>
+        /* Estilos del Simulador */
+        .platform-badge { padding: 4px 10px; border-radius: 6px; font-size: 0.75rem; font-weight: bold; margin-bottom: 10px; display: inline-block; text-transform: uppercase; }
+        .android { background: #3DDC84; color: #073042; }
+        .ios { background: #f5f5f7; color: #1d1d1f; }
+        .windows { background: #0078d4; color: white; }
+        
+        .score-board {
+            position: sticky; top: 80px; background: var(--bg-card); padding: 15px;
+            border-radius: 12px; border: 2px solid var(--primary); text-align: center;
+            z-index: 99; margin: 20px 0; box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+        .score-text { font-size: 1.2rem; font-weight: bold; color: var(--primary); }
+
+        .question { background: rgba(255,255,255,0.03); padding: 25px; border-radius: 16px; margin-bottom: 25px; border: 1px solid rgba(255,255,255,0.1); }
+        .options button { display: block; width: 100%; text-align: left; padding: 14px; margin: 10px 0; background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.1); color: var(--text-main); border-radius: 10px; cursor: pointer; transition: 0.3s; font-family: 'Poppins', sans-serif; }
+        .options button:hover { background: rgba(56, 189, 248, 0.1); border-color: var(--primary); }
+        
+        .feedback { font-weight: 600; margin-top: 15px; display: none; padding: 12px; border-radius: 8px; font-size: 0.95rem; line-height: 1.4; }
+        .correct { color: #4ade80; background: rgba(74, 222, 128, 0.1); border: 1px solid #4ade80; }
+        .incorrect { color: #f87171; background: rgba(248, 113, 113, 0.1); border: 1px solid #f87171; }
+
+        /* Estilos de Información */
+        .info-card { background: rgba(255,255,255,0.05); padding: 25px; border-radius: 15px; margin-bottom: 20px; border-top: 3px solid var(--secondary); }
+        .highlight { color: var(--accent); font-weight: 600; }
+    </style>
 </head>
 <body>
     <header>
-        <h1>Seguridad Comunitaria</h1>
-        <p>Prevención y Conciencia Digital</p>
+        <h1>Guía de Protección contra Engaños</h1>
+        <p>Toda la información y entrenamiento en un solo lugar</p>
     </header>
 
     <nav>
@@ -23,19 +49,175 @@
     </nav>
 
     <div class="container">
-        <h2>¿Qué es el Phishing?</h2>
-        <p>El phishing es una técnica de engaño que utilizan los ciberdelincuentes para robar tus datos personales, contraseñas o datos bancarios, haciéndose pasar por una entidad de confianza.</p>
-        
-        <h3>Señales de alerta</h3>
-        <ul>
-            <li>Te piden actuar con <strong>urgencia</strong> ("¡Tu cuenta será bloqueada en 24hs!").</li>
-            <li>El correo del remitente es extraño (ejemplo: <code>soporte@banc0-seguro.xyz</code>).</li>
-            <li>El mensaje tiene faltas de ortografía o redacción extraña.</li>
-            <li>Te piden hacer clic en enlaces sospechosos.</li>
-        </ul>
+        <h2>¿Qué es el Phishing? (Explicado para todos)</h2>
+        <p>Imagina que alguien llama a tu puerta disfrazado de cartero. Te pide las llaves de tu casa para "revisar que el buzón funcione". Si le das las llaves, podrá entrar cuando quiera. El <span class="highlight">Phishing</span> es exactamente eso: un desconocido se disfraza de una empresa famosa para que tú mismo le entregues tus contraseñas.</p>
 
-        <h3>¿Qué hacer?</h3>
-        <p>Nunca abras enlaces de correos desconocidos. Si tienes dudas, comunícate directamente con la empresa por sus canales oficiales.</p>
+        <div class="info-card">
+            <h3>🎣 El "Anzuelo": ¿Cómo intentan atraparte?</h3>
+            <p>Los atacantes se basan en tres trucos psicológicos:</p>
+            <ul>
+                <li><strong>El Susto:</strong> Mensajes como "¡Alguien entró a tu cuenta!" hacen que quieras arreglarlo rápido sin pensar.</li>
+                <li><strong>El Regalo:</strong> "Ganaste un bono" o "Recibe dinero gratis" nos hace bajar la guardia.</li>
+                <li><strong>La Curiosidad:</strong> "Mira esta foto tuya" o "Hicieron un comentario de ti aquí".</li>
+            </ul>
+        </div>
+
+        <div class="info-card">
+            <h3>🧐 ¿Cómo saber si un mensaje es falso?</h3>
+            <p>Busca estos detalles simples pero reveladores:</p>
+            <ul>
+                <li><strong>Direcciones extrañas:</strong> Un correo oficial de Netflix debe ser <code>@netflix.com</code>, no <code>@ayuda-clientes-netflix.tk</code>.</li>
+                <li><strong>Faltas de ortografía:</strong> Errores gramaticales son señales de que el mensaje es fraudulento.</li>
+                <li><strong>Te piden datos secretos:</strong> Los bancos reales jamás piden contraseñas por mensajes.</li>
+            </ul>
+        </div>
+
+        <div class="info-card">
+            <h3>⚠️ Los disfraces más comunes hoy</h3>
+            <ul>
+                <li><strong>El paquete de correo:</strong> SMS diciendo que un paquete no se entregó por falta de datos.</li>
+                <li><strong>El código de WhatsApp:</strong> Alguien te pide que le digas un código de 6 números que te llegó "por error".</li>
+                <li><strong>Soporte Técnico falso:</strong> Un mensaje en pantalla dice que tu PC tiene virus y da un número de teléfono.</li>
+            </ul>
+        </div>
+
+        <hr>
+
+        <div class="score-board">
+            <div class="score-text">Puntaje: <span id="puntos">0</span>/12 | Efectividad: <span id="porcentaje">0</span>%</div>
+        </div>
+
+        <h2>🎮 Simulador de Amenazas</h2>
+        <p>Pon a prueba lo aprendido. Si fallas, te explicaremos el porqué del truco.</p>
+
+        <div class="platform-badge android">Android</div>
+        <div class="question" id="a1">
+            <p><strong>1. WhatsApp: Alguien te pide el código de 6 dígitos que te llegó por SMS para "verificar tu cuenta".</strong></p>
+            <div class="options">
+                <button onclick="check('a1','c','ERROR: Ese código es la llave para que ellos instalen TU WhatsApp en su teléfono y te roben la cuenta.')">Dárselo, parece urgente.</button>
+                <button onclick="check('a1','correct','¡CORRECTO! Nunca compartas códigos de acceso con nadie.')">Bloquear el número inmediatamente.</button>
+            </div>
+            <div class="feedback"></div>
+        </div>
+
+        <div class="question" id="a2">
+            <p><strong>2. Google Play: Un correo dice que instales una app de seguridad desde un enlace externo.</strong></p>
+            <div class="options">
+                <button onclick="check('a2','correct','¡CORRECTO! Las apps reales solo se bajan desde la Play Store oficial.')">Ignorar. Solo uso la tienda oficial de Google.</button>
+                <button onclick="check('a2','c','ERROR: Instalar cosas desde enlaces externos puede infectar tu móvil con spyware.')">Descargarla para estar protegido.</button>
+            </div>
+            <div class="feedback"></div>
+        </div>
+
+        <div class="question" id="a3">
+            <p><strong>3. Permisos: Una app de "Linterna" te pide permiso para ver tus contactos y llamadas.</strong></p>
+            <div class="options">
+                <button onclick="check('a3','c','ERROR: Una linterna no necesita saber quiénes son tus amigos. Es una app sospechosa.')">Permitir, seguro es necesario.</button>
+                <button onclick="check('a3','correct','¡CORRECTO! No permitas accesos que no tengan sentido para la función de la app.')">Denegar permisos y desinstalar la app.</button>
+            </div>
+            <div class="feedback"></div>
+        </div>
+
+        <div class="question" id="a4">
+            <p><strong>4. SMS: Un mensaje de "Paquetería" pide tu dirección en un link para entregar un paquete.</strong></p>
+            <div class="options">
+                <button onclick="check('a4','correct','¡CORRECTO! Es Smishing. Quieren que pongas tu tarjeta para cobrarte supuestos gastos.')">Desconfiar. No he pedido nada recientemente.</button>
+                <button onclick="check('a4','c','ERROR: Es una estafa para robar datos bancarios de forma masiva.')">Entrar al link y poner mi dirección.</button>
+            </div>
+            <div class="feedback"></div>
+        </div>
+
+        <div class="platform-badge ios">iOS (iPhone)</div>
+        <div class="question" id="i1">
+            <p><strong>1. iCloud: Un correo dice que tu espacio está lleno y des clic a un botón para pagar más.</strong></p>
+            <div class="options">
+                <button onclick="check('i1','c','ERROR: Ese botón lleva a una web falsa para robar tu Apple ID.')">Dar clic al botón para no perder mis fotos.</button>
+                <button onclick="check('i1','correct','¡CORRECTO! Siempre revisa el almacenamiento desde Ajustes > Tu Nombre.')">Cerrar el correo e ir a Ajustes manualmente.</button>
+            </div>
+            <div class="feedback"></div>
+        </div>
+
+        <div class="question" id="i2">
+            <p><strong>2. Safari: Aparece un mensaje: "¡Tu iPhone tiene 13 virus! Tienes 2 minutos para desinfectarlo".</strong></p>
+            <div class="options">
+                <button onclick="check('i2','correct','¡CORRECTO! Apple no muestra avisos de virus en el navegador.')">Cerrar la pestaña; es publicidad engañosa.</button>
+                <button onclick="check('i2','c','ERROR: Es un truco para que instales apps sospechosas o des tus datos.')">Instalar el limpiador recomendado.</button>
+            </div>
+            <div class="feedback"></div>
+        </div>
+
+        <div class="question" id="i3">
+            <p><strong>3. Buscar mi iPhone: SMS dice que tu iPhone robado fue hallado y da un link para verlo.</strong></p>
+            <div class="options">
+                <button onclick="check('i3','c','ERROR: Los ladrones quieren tu clave para desbloquear el iPhone robado.')">Poner mi clave en el link para ver la ubicación.</button>
+                <button onclick="check('i3','correct','¡CORRECTO! Solo entra a icloud.com/find directamente.')">No entrar. Usar la web oficial de iCloud manualmente.</button>
+            </div>
+            <div class="feedback"></div>
+        </div>
+
+        <div class="question" id="i4">
+            <p><strong>4. Factura Falsa: Mail dice que compraste una app de $99 y da un link si quieres "Cancelar".</strong></p>
+            <div class="options">
+                <button onclick="check('i4','correct','¡CORRECTO! Usan el susto del dinero para que entres a su sitio falso.')">Ignorar el link. Revisar mis compras reales en la App Store.</button>
+                <button onclick="check('i4','c','ERROR: El link de cancelación es una trampa para robar tu cuenta.')">Llenar el formulario de cancelación rápido.</button>
+            </div>
+            <div class="feedback"></div>
+        </div>
+
+        <div class="platform-badge windows">Windows</div>
+        <div class="question" id="w1">
+            <p><strong>1. Soporte: Una ventana dice que llames a un 01-800 para quitar un error de Windows.</strong></p>
+            <div class="options">
+                <button onclick="check('w1','c','ERROR: Microsoft nunca pone teléfonos en pantallas de error.')">Llamar para que me ayuden.</button>
+                <button onclick="check('w1','correct','¡CORRECTO! Es una estafa de soporte técnico falso.')">Reiniciar la computadora.</button>
+            </div>
+            <div class="feedback"></div>
+        </div>
+
+        <div class="question" id="w2">
+            <p><strong>2. Archivos: Recibes una factura en un archivo llamado "Cobro.zip" de alguien desconocido.</strong></p>
+            <div class="options">
+                <button onclick="check('w2','correct','¡CORRECTO! Los archivos .zip desconocidos suelen traer virus.')">No abrirlo y borrar el correo.</button>
+                <button onclick="check('w2','c','ERROR: Los archivos comprimidos son la forma favorita de enviar malware.')">Abrirlo para ver de qué se trata.</button>
+            </div>
+            <div class="feedback"></div>
+        </div>
+
+        <div class="question" id="w3">
+            <p><strong>3. Software: Una web te pide apagar el antivirus para instalar un programa "gratis".</strong></p>
+            <div class="options">
+                <button onclick="check('w3','c','ERROR: Si te pide apagar el antivirus, el programa es peligroso.')">Apagarlo un momento.</button>
+                <button onclick="check('w3','correct','¡CORRECTO! Jamás apagues tu seguridad por un programa.')">No hacerlo y salir de esa web.</button>
+            </div>
+            <div class="feedback"></div>
+        </div>
+
+        <div class="question" id="w4">
+            <p><strong>4. Office: Un Excel de "Nuevos Salarios" te pide "Habilitar Macros" para verlo.</strong></p>
+            <div class="options">
+                <button onclick="check('w4','c','ERROR: Las macros pueden ejecutar virus que borran todo tu disco duro.')">Habilitar macros para ver el archivo.</button>
+                <button onclick="check('w4','correct','¡CORRECTO! Las macros son un riesgo alto de seguridad.')">Cerrar el archivo sin habilitar nada.</button>
+            </div>
+            <div class="feedback"></div>
+        </div>
     </div>
+
+    <script>
+        let correctas = 0;
+        let respondidas = 0;
+        function check(id, status, msg) {
+            const q = document.getElementById(id);
+            const fb = q.querySelector('.feedback');
+            respondidas++;
+            fb.innerText = msg;
+            fb.style.display = 'block';
+            if (status === 'correct') { fb.className = 'feedback correct'; correctas++; }
+            else { fb.className = 'feedback incorrect'; }
+            document.getElementById('puntos').innerText = correctas;
+            document.getElementById('porcentaje').innerText = Math.round((correctas / respondidas) * 100);
+            const btns = q.querySelectorAll('button');
+            btns.forEach(b => { b.style.pointerEvents = 'none'; b.style.opacity = '0.5'; });
+        }
+    </script>
 </body>
 </html>
