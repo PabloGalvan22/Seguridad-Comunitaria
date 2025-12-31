@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Grooming - Historias Reales</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <header>
+        <h1>Seguridad Comunitaria</h1>
+        <p>Prevención y Conciencia Digital</p>
+    </header>
+
+    <nav>
+        <a href="index.html">Inicio</a>
+        <a href="phishing.html">Phishing</a>
+        <a href="ciberseguridad.html">Ciberseguridad</a>
+        <a href="videojuegos.html">Videojuegos</a>
+        <a href="redes.html">Redes Sociales</a>
+        <a href="grooming.html">Grooming</a>
+    </nav>
+
+    <div class="container">
+        <h2>Grooming: Historias y Prevención</h2>
+        <p>El grooming es el acoso sexual online a menores. Aquí compartimos información vital e historias reales para prevenirlo.</p>
+        
+        <hr>
+        
+        <h3>Blog de la Comunidad</h3>
+        <div id="posts-container">
+            <p>Cargando historias...</p>
+        </div>
+        
+        <div style="margin-top: 50px; text-align: center; opacity: 0.3;">
+            <a href="admin.html" style="font-size: 12px; color: gray;">Acceso Admin</a>
+        </div>
+    </div>
+
+    <script type="module">
+        // Importamos todo desde NUESTRO archivo firebase.js
+        import { db, collection, getDocs, query, orderBy } from './firebase.js';
+
+        async function loadPosts() {
+            const container = document.getElementById('posts-container');
+            container.innerHTML = ''; 
+
+            try {
+                const q = query(collection(db, "posts"), orderBy("fecha", "desc"));
+                const querySnapshot = await getDocs(q);
+
+                if (querySnapshot.empty) {
+                    container.innerHTML = '<p>No hay historias publicadas aún.</p>';
+                    return;
+                }
+
+                querySnapshot.forEach((doc) => {
+                    const data = doc.data();
+                    let fecha = "Fecha desconocida";
+                    if (data.fecha && data.fecha.toDate) {
+                        fecha = data.fecha.toDate().toLocaleDateString();
+                    }
+                    
+                    const postHTML = `
+                        <div class="post">
+                            <h3>${data.titulo}</h3>
+                            <small>Publicado el: ${fecha}</small>
+                            <p>${data.contenido}</p>
+                        </div>
+                    `;
+                    container.innerHTML += postHTML;
+                });
+            } catch (error) {
+                console.error("Error:", error);
+                if(error.message.includes("insufficient permissions")) {
+                     container.innerHTML = '<p>Falta configurar las reglas de la base de datos.</p>';
+                } else {
+                     container.innerHTML = '<p>Error de conexión.</p>';
+                }
+            }
+        }
+        loadPosts();
+    </script>
+</body>
+</html>

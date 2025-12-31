@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin - Publicar Historia</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <nav>
+        <a href="grooming.html">← Volver al Blog</a>
+    </nav>
+
+    <div class="container">
+        <h2>Panel de Administrador</h2>
+        
+        <div id="login-section">
+            <h3>Identifícate</h3>
+            <p style="font-size: 0.9em; color: #666;">Ingresa con el correo y contraseña que creaste en Firebase Authentication.</p>
+            <input type="email" id="email" placeholder="Correo de administrador">
+            <input type="password" id="password" placeholder="Contraseña">
+            <button id="loginBtn">Ingresar</button>
+        </div>
+
+        <div id="post-section" style="display: none;">
+            <h3>Escribir nueva historia</h3>
+            <input type="text" id="titulo" placeholder="Título de la historia">
+            <textarea id="contenido" rows="10" placeholder="Escribe la historia aquí..."></textarea>
+            <button id="publicarBtn">Publicar Historia</button>
+            <button id="logoutBtn" style="background-color: #c0392b; margin-top: 10px;">Cerrar Sesión</button>
+        </div>
+    </div>
+
+    <script type="module">
+        // Importamos desde firebase.js
+        import { db, auth, collection, addDoc, Timestamp, signInWithEmailAndPassword, onAuthStateChanged, signOut } from './firebase.js';
+
+        const loginSection = document.getElementById('login-section');
+        const postSection = document.getElementById('post-section');
+
+        // Verificar estado del usuario
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                loginSection.style.display = 'none';
+                postSection.style.display = 'block';
+            } else {
+                loginSection.style.display = 'block';
+                postSection.style.display = 'none';
+            }
+        });
+
+        // Login
+        document.getElementById('loginBtn').addEventListener('click', () => {
+            const email = document.getElementById('email').value;
+            const pass = document.getElementById('password').value;
+            signInWithEmailAndPassword(auth, email, pass)
+                .catch((error) => alert("Error: " + error.message));
+        });
+
+        // Publicar
+        document.getElementById('publicarBtn').addEventListener('click', async () => {
+            const titulo = document.getElementById('titulo').value;
+            const contenido = document.getElementById('contenido').value;
+
+            if(!titulo || !contenido) return alert("Llena todos los campos");
+
+            try {
+                await addDoc(collection(db, "posts"), {
+                    titulo: titulo,
+                    contenido: contenido,
+                    fecha: Timestamp.now()
+                });
+                alert("Historia publicada");
+                document.getElementById('titulo').value = '';
+                document.getElementById('contenido').value = '';
+            } catch (e) {
+                alert("Error: " + e.message);
+            }
+        });
+
+        // Salir
+        document.getElementById('logoutBtn').addEventListener('click', () => {
+            signOut(auth);
+        });
+    </script>
+</body>
+</html>
