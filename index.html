@@ -205,35 +205,16 @@
             const titulo = document.getElementById('titulo').value;
             const descripcion = document.getElementById('descripcion').value;
 
-            // --- VALIDACIONES (Coinciden con tus reglas de Firebase) ---
-            
-            // 1. Validar Título (entre 5 y 50 caracteres)
-            if(titulo.length <= 5 || titulo.length >= 50) {
-                alert("El título es muy corto o muy largo (mínimo 6 letras).");
-                return;
-            }
-
-            // 2. Validar Descripción (mínimo 20 caracteres) - ¡Esto faltaba!
-            if(descripcion.length <= 20) {
-                alert("Por favor detalla más la descripción (mínimo 10 letras).");
-                return;
-            }
-
-            // --- ENVIAR A FIREBASE ---
             try {
-                status.innerHTML = "<p style='color: #fbbf24;'>⏳ Enviando reporte...</p>"; // Feedback de carga
-                
                 await addDoc(collection(db, "reportes"), {
                     titulo,
                     descripcion,
                     fecha: Timestamp.now()
                 });
-                
                 status.innerHTML = "<p style='color: #4ade80;'>✅ Reporte enviado con éxito.</p>";
                 form.reset();
             } catch (error) {
-                console.error("Error:", error); // Ver el error real en la consola (F12)
-                status.innerHTML = "<p style='color: #f87171;'>❌ Error al enviar. Intenta de nuevo.</p>";
+                status.innerHTML = "<p style='color: #f87171;'>❌ Error al enviar.</p>";
             }
         });
     </script>
