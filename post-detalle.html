@@ -105,37 +105,97 @@
             </div>
     </div>
 
+    
     <script type="module">
-        import { db, doc, getDoc, updateDoc, increment } from './firebase.js';
+        import { db, doc, getDoc, updateDoc, increment, collection, addDoc, query, where, getDocs, Timestamp } from './firebase.js';
 
         const urlParams = new URLSearchParams(window.location.search);
         const postId = urlParams.get('id');
         const container = document.getElementById('detalle-post');
 
-        async function gestionarVoto(tipo) {
-            const storageKey = `voto_${postId}`;
-            if (localStorage.getItem(storageKey)) return;
+        // ===== FUNCIÓN PARA GENERAR FINGERPRINT =====
+        async function generarFingerprint() {
+            const data = [
+                navigator.userAgent,
+                navigator.language,
+                screen.width,
+                screen.height,
+                new Date().getTimezoneOffset()
+            ].join('|');
+            
+            let hash = 0;
+            for (let i = 0; i < data.length; i++) {
+                const char = data.charCodeAt(i);
+                hash = ((hash << 5) - hash) + char;
+                hash = hash & hash;
+            }
+            return Math.abs(hash).toString(36);
+        }
 
+        // ===== VERIFICAR SI YA VOTÓ =====
+        async function yaVoto(postId, fingerprint) {
+            const q = query(
+                collection(db, "votos"),
+                where("postId", "==", postId),
+                where("userFingerprint", "==", fingerprint)
+            );
+            const snap = await getDocs(q);
+            return !snap.empty ? snap.docs[0].data().tipo : null;
+        }
+
+        // ===== REGISTRAR VOTO =====
+        async function gestionarVoto(tipo) {
+            const fingerprint = await generarFingerprint();
+            const votoExistente = await yaVoto(postId, fingerprint);
+            
+            if (votoExistente) {
+                alert(`Ya votaste con ${votoExistente === 'likes' ? '👍 Like' : '👎 Dislike'}`);
+                return;
+            }
+            
             try {
+                await addDoc(collection(db, "votos"), {
+                    postId,
+                    userFingerprint: fingerprint,
+                    tipo,
+                    fecha: Timestamp.now()
+                });
+                
                 const docRef = doc(db, "posts", postId);
                 await updateDoc(docRef, { [tipo]: increment(1) });
-                localStorage.setItem(storageKey, tipo);
-                location.reload(); 
+                
+                location.reload();
             } catch (e) {
                 console.error(e);
-                alert("Error al registrar voto.");
+                alert("Error al votar. Intenta nuevamente.");
             }
         }
 
+        // ===== FUNCIÓN PARA SANITIZAR HTML =====
+        function sanitizarHTML(texto) {
+            const div = document.createElement('div');
+            div.textContent = texto;
+            let safe = div.innerHTML;
+            safe = safe.replace(/\n/g, '<br>');
+            return safe;
+        }
+
+        // ===== CARGAR POST =====
         async function cargarTodo() {
-            if (!postId) return;
+            if (!postId) {
+                container.innerHTML = '<p style="color: #ef4444;">⚠️ No se especificó ningún post</p>';
+                return;
+            }
+            
             try {
                 const docRef = doc(db, "posts", postId);
                 const docSnap = await getDoc(docRef);
 
                 if (docSnap.exists()) {
                     const data = docSnap.data();
-                    const yaVoto = localStorage.getItem(`voto_${postId}`);
+                    const fingerprint = await generarFingerprint();
+                    const votoExistente = await yaVoto(postId, fingerprint);
+                    
                     const fecha = data.fecha?.toDate().toLocaleDateString('es-ES', {
                         day: '2-digit', month: 'long', year: 'numeric'
                     }) || "Reciente";
@@ -143,10 +203,10 @@
                     container.innerHTML = `
                         <header class="post-header">
                             <span class="post-date">Publicado el ${fecha}</span>
-                            <h1>${data.titulo}</h1>
+                            <h1>${sanitizarHTML(data.titulo)}</h1>
                         </header>
                         <div class="post-body">
-                            <div class="content-card">${data.contenido}</div>
+                            <div class="content-card">${sanitizarHTML(data.contenido)}</div>
                             
                             <div class="interactions">
                                 <button id="btn-like" class="btn-vote">
@@ -162,23 +222,33 @@
                     const btnL = document.getElementById('btn-like');
                     const btnD = document.getElementById('btn-dislike');
 
-                    if (yaVoto) {
-                        btnL.style.cursor = "default";
-                        btnD.style.cursor = "default";
-                        if (yaVoto === 'likes') {
+                    if (votoExistente) {
+                        btnL.style.cursor = "not-allowed";
+                        btnD.style.cursor = "not-allowed";
+                        btnL.style.opacity = "0.6";
+                        btnD.style.opacity = "0.6";
+                        
+                        if (votoExistente === 'likes') {
                             btnL.style.background = "#4ade80";
                             btnL.style.color = "black";
+                            btnL.style.opacity = "1";
                         }
-                        if (yaVoto === 'dislikes') {
+                        if (votoExistente === 'dislikes') {
                             btnD.style.background = "#ef4444";
                             btnD.style.color = "white";
+                            btnD.style.opacity = "1";
                         }
                     } else {
                         btnL.onclick = () => gestionarVoto('likes');
                         btnD.onclick = () => gestionarVoto('dislikes');
                     }
+                } else {
+                    container.innerHTML = '<p style="color: #ef4444;">⚠️ Este post no existe</p>';
                 }
-            } catch (error) { console.error(error); }
+            } catch (error) { 
+                console.error(error);
+                container.innerHTML = '<p style="color: #ef4444;">❌ Error al cargar el post</p>';
+            }
         }
 
         cargarTodo();
