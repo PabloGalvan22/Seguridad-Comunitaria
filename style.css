@@ -333,7 +333,7 @@ a[href="admin.html"] {
 .enlaces-utiles {
     margin: 40px 0;
     padding: 30px;
-    background-color: #f8f9fa;
+    background-color: #b20303;
     border-radius: 10px;
 }
 
@@ -345,7 +345,7 @@ a[href="admin.html"] {
 }
 
 .enlace-card {
-    background: white;
+    background: rgb(250, 250, 250);
     padding: 20px;
     border-radius: 10px;
     box-shadow: 0 4px 6px rgba(0,0,0,0.1);
