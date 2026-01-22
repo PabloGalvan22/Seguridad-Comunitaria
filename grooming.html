@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0 maximum-scale=5.0">
+    <title>Grooming - Prevención y Casos Reales</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        /* --- ESTILOS DEL BLOG EN CUADRADOS --- */
+        #blog-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 20px;
+            margin: 30px 0;
+        }
+        .post-card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 20px;
+            cursor: pointer;
+            transition: transform 0.3s ease, border-color 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            min-height: 220px;
+        }
+        .post-card:hover {
+            transform: translateY(-5px);
+            border-color: #ef4444;
+            background: rgba(239, 68, 68, 0.05);
+        }
+        .post-card h3 { color: #ef4444; font-size: 1.2rem; margin: 0 0 10px 0; }
+        .post-card p { 
+            font-size: 0.9rem; 
+            color: #ccc; 
+            overflow: hidden; 
+            display: -webkit-box; 
+            -webkit-box-orient: vertical; 
+        }
+        .leer-mas { font-size: 0.8rem; color: #ef4444; font-weight: bold; margin-top: 15px; text-transform: uppercase; }
+
+        /* --- ESTILOS AYUDA Y CONTACTO --- */
+        .help-section {
+            background: rgba(239, 68, 68, 0.15);
+            border-radius: 15px;
+            padding: 25px;
+            margin-top: 50px;
+            border: 1px solid #ef4444;
+        }
+        .contact-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-top: 15px;
+        }
+        .contact-item { font-weight: bold; color: #fff; }
+        .contact-item span { display: block; font-weight: normal; color: #fca5a5; font-size: 0.9rem; }
+
+        /* --- ESTILOS SIMULADOR --- */
+        .platform-badge { padding: 4px 10px; border-radius: 6px; font-size: 0.75rem; font-weight: bold; margin-bottom: 10px; display: inline-block; text-transform: uppercase; }
+        .android { background: #3DDC84; color: #073042; }
+        .ios { background: #f5f5f7; color: #1d1d1f; }
+        .windows { background: #0078d4; color: white; }
+        .score-board { position: sticky; top: 80px; background: var(--bg-card); padding: 15px; border-radius: 12px; border: 2px solid #ef4444; text-align: center; z-index: 99; margin: 20px 0; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+        .score-text { font-size: 1.2rem; font-weight: bold; color: #ef4444; }
+        .question { background: rgba(255,255,255,0.03); padding: 25px; border-radius: 16px; margin-bottom: 25px; border: 1px solid rgba(255,255,255,0.1); }
+        .options button { display: block; width: 100%; text-align: left; padding: 14px; margin: 10px 0; background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.1); color: var(--text-main); border-radius: 10px; cursor: pointer; transition: 0.3s; font-family: 'Poppins', sans-serif; }
+        .options button:hover { background: rgba(239, 68, 68, 0.1); border-color: #ef4444; }
+        .feedback { font-weight: 600; margin-top: 15px; display: none; padding: 12px; border-radius: 8px; font-size: 0.95rem; line-height: 1.4; }
+        .correct { color: #4ade80; background: rgba(74, 222, 128, 0.1); border: 1px solid #4ade80; }
+        .incorrect { color: #f87171; background: rgba(248, 113, 113, 0.1); border: 1px solid #f87171; }
+
+        /* --- INFORMACIÓN --- */
+        .info-card { background: rgba(255,255,255,0.05); padding: 25px; border-radius: 15px; margin-bottom: 20px; border-top: 3px solid #ef4444; }
+        .alert-box { background: rgba(239, 68, 68, 0.1); padding: 20px; border-radius: 10px; border: 1px solid #ef4444; margin: 20px 0; }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Prevención de Grooming</h1>
+        <p>Identifica las señales y protege a los más vulnerables en la red</p>
+    </header>
+
+    <nav>
+        <a href="index.html">Inicio</a>
+        <a href="phishing.html">Phishing</a>
+        <a href="ciberseguridad.html">Ciberseguridad</a>
+        <a href="videojuegos.html">Videojuegos</a>
+        <a href="redes.html">Redes Sociales</a>
+        <a href="grooming.html">Grooming</a>
+    </nav>
+
+    <div class="container">
+        <h2>¿Qué es el Grooming y cómo detectarlo?</h2>
+        <p>El grooming es una técnica de manipulación psicológica donde un adulto construye una relación de confianza con un menor de edad para obtener beneficios ilegales. No es un evento aislado, sino un proceso de "preparación".</p>
+
+        <div class="info-card">
+            <h3>🤝 La técnica del "Amigo Ideal"</h3>
+            <p>El acosador suele ser paciente. Valida sentimientos ("Tus padres no te entienden") y ofrece regalos (skins, diamantes) para crear una deuda emocional y de lealtad.</p>
+        </div>
+
+        <div class="info-card">
+            <h3>⚠️ De la Amistad a la Sextorsión</h3>
+            <p>Una práctica ligada es la <strong>Sextorsión</strong>: tras convencer al menor de enviar una foto íntima, el adulto amenaza con difundirla para obligarlo a peticiones más graves. Nunca cedas al chantaje.</p>
+        </div>
+
+        <div class="info-card">
+            <h3>🚩 Señales Críticas de Alerta</h3>
+            <ul>
+                <li>Insistencia en que la relación sea un "secreto compartido".</li>
+                <li>Intentos constantes de mover la charla a apps privadas fuera de supervisión.</li>
+                <li>Preguntas sobre vestimenta o si el menor se encuentra solo en casa.</li>
+                <li>Cambios repentinos en el comportamiento o humor del menor.</li>
+            </ul>
+        </div>
+
+        <div class="alert-box">
+            <h3>🆘 Primeros Auxilios Digitales</h3>
+            <p>Si sospechas de un caso: <strong>1. No borres evidencia</strong> (mensajes/fotos). <strong>2. No cedas al chantaje</strong> (les da más poder). <strong>3. Habla</strong> con un adulto de confianza o autoridad de inmediato.</p>
+        </div>
+
+        <hr>
+
+        <h2>Historias y Alertas Recientes</h2>
+        <p>Casos reportados para prevenir a la comunidad. Haz clic para leer el detalle.</p>
+        <br>
+        <h4>Para poder visualizar de mejor manera ponga su navegador en modo: "Sitio para computadora"</h4>
+        <div id="blog-container">
+            <p>Cargando posts de la comunidad...</p>
+        </div>
+
+        <hr>
+
+        <div class="score-board">
+            <div class="score-text">Detección de Riesgos: <span id="puntos">0</span>/12 | <span id="porcentaje">0</span>% Seguro</div>
+        </div>
+
+        <h2>🛠️ Test de Prevención Integral</h2>
+
+        <div class="platform-badge android">Android</div>
+        <div class="question">
+            <p><strong>1. Un usuario de un juego móvil te pide tu WhatsApp para "regalarte diamantes".</strong></p>
+            <div class="options">
+                <button class="opt" data-status="correct" data-msg="¡CORRECTO! Mover la charla a medios privados es la primera táctica para iniciar el acoso.">No dárselo. Seguiré hablando por el chat del juego.</button>
+                <button class="opt" data-status="incorrect" data-msg="ERROR: Tu número es privado y permite que el acosador te contacte sin supervisión.">Dárselo, necesito los diamantes.</button>
+            </div>
+            <div class="feedback"></div>
+        </div>
+        <div class="question">
+            <p><strong>2. Alguien online te pide borrar los mensajes después de hablar "para que nadie nos moleste".</strong></p>
+            <div class="options">
+                <button class="opt" data-status="correct" data-msg="¡CORRECTO! El secreto y el borrado de evidencia son señales claras de grooming.">No hacerlo. Los secretos en internet son peligrosos.</button>
+                <button class="opt" data-status="incorrect" data-msg="ERROR: Borrar mensajes ayuda al acosador a ocultar pruebas ante tus padres.">Aceptar para proteger nuestra amistad secreta.</button>
+            </div>
+            <div class="feedback"></div>
+        </div>
+        <div class="question">
+            <p><strong>3. Una persona te pide una foto de tu cuerpo para "ver si haces ejercicio".</strong></p>
+            <div class="options">
+                <button class="opt" data-status="correct" data-msg="¡CORRECTO! Nadie honesto te pedirá fotos privadas. Es acoso directo.">Bloquear de inmediato. Es una solicitud inapropiada.</button>
+                <button class="opt" data-status="incorrect" data-msg="ERROR: Una vez enviada una foto íntima, se usará para extorsionarte.">Mandarla si él manda una primero.</button>
+            </div>
+            <div class="feedback"></div>
+        </div>
+        <div class="question">
+            <p><strong>4. ¿Qué haces si un amigo de internet sabe dónde estudias sin que tú se lo dijeras?</strong></p>
+            <div class="options">
+                <button class="opt" data-status="correct" data-msg="¡CORRECTO! Indica que te estuvo investigando (Cyberstalking). Es un riesgo real.">Avisar a mis padres inmediatamente. Es una señal de acecho.</button>
+                <button class="opt" data-status="incorrect" data-msg="ERROR: Si conoce tu escuela sin permiso, corres peligro físico.">Ignorarlo y seguir siendo amigos.</button>
+            </div>
+            <div class="feedback"></div>
+        </div>
+
+        <div class="platform-badge ios">iOS</div>
+        <div class="question">
+            <p><strong>1. Alguien que dice tener tu edad te pide hacer videollamada a escondidas de noche.</strong></p>
+            <div class="options">
+                <button class="opt" data-status="correct" data-msg="¡CORRECTO! Las videollamadas nocturnas a escondidas son tácticas de manipulación emocional.">Rechazar. Solo hago videollamadas con gente que conozco en persona.</button>
+                <button class="opt" data-status="incorrect" data-msg="ERROR: El video puede ser grabado sin tu permiso para extorsionarte luego.">Aceptar, así nos conocemos mejor.</button>
+            </div>
+            <div class="feedback"></div>
+        </div>
+        <div class="question">
+            <p><strong>2. Recibes una solicitud en Instagram de un perfil atractivo pero sin amigos en común.</strong></p>
+            <div class="options">
+                <button class="opt" data-status="correct" data-msg="¡CORRECTO! Los perfiles 'atractivos' sin conexiones reales suelen ser falsos.">Rechazar. No acepto a gente que no tiene conexiones reales conmigo.</button>
+                <button class="opt" data-status="incorrect" data-msg="ERROR: Aceptar extraños facilita que obtengan información sobre tu ubicación.">Aceptar, se ve como buena persona.</button>
+            </div>
+            <div class="feedback"></div>
+        </div>
+        <div class="question">
+            <p><strong>3. Alguien te dice que si dejas de hablarle se hará daño "por tu culpa".</strong></p>
+            <div class="options">
+                <button class="opt" data-status="correct" data-msg="¡CORRECTO! Es manipulación emocional extrema para controlarte.">Es un chantaje. Contarlo a un adulto de confianza y bloquear.</button>
+                <button class="opt" data-status="incorrect" data-msg="ERROR: No eres responsable de las emociones de un extraño.">Seguir hablándole por lástima.</button>
+            </div>
+            <div class="feedback"></div>
+        </div>
+        <div class="question">
+            <p><strong>4. ¿Es seguro conocer a alguien online en un lugar público si vas solo?</strong></p>
+            <div class="options">
+                <button class="opt" data-status="correct" data-msg="¡CORRECTO! Nunca vayas solo. Las personas pueden mentir sobre su identidad por años.">No. Jamás te reúnas con extraños de internet sin tus padres.</button>
+                <button class="opt" data-status="incorrect" data-msg="ERROR: Es el riesgo más crítico de seguridad física. El lugar público no garantiza nada.">Sí, mientras sea un parque con gente.</button>
+            </div>
+            <div class="feedback"></div>
+        </div>
+
+        <div class="platform-badge windows">Windows</div>
+        <div class="question">
+            <p><strong>1. Un usuario de Discord te pide transmitir pantalla mientras estás en tu habitación.</strong></p>
+            <div class="options">
+                <button class="opt" data-status="correct" data-msg="¡CORRECTO! Tu privacidad es sagrada. No cedas a exhibirte ante desconocidos.">Cerrar la llamada y reportar el abuso inmediatamente.</button>
+                <button class="opt" data-status="incorrect" data-msg="ERROR: Estás permitiendo acceso visual a tu espacio íntimo a un extraño.">Hacerlo un momento para que no se enoje.</button>
+            </div>
+            <div class="feedback"></div>
+        </div>
+        <div class="question">
+            <p><strong>2. Te envían un link a una "App de chat secreta" para hablar fuera de reglas familiares.</strong></p>
+            <div class="options">
+                <button class="opt" data-status="correct" data-msg="¡CORRECTO! Las apps no oficiales se usan para ocultar delitos y malware.">No descargarla. Las apps 'secretas' son peligrosas.</button>
+                <button class="opt" data-status="incorrect" data-msg="ERROR: Puede ser un virus para activar tu cámara o micrófono remotamente.">Probarla para ver qué tiene.</button>
+            </div>
+            <div class="feedback"></div>
+        </div>
+        <div class="question">
+            <p><strong>3. ¿Qué haces si un extraño de internet envía regalos o comida a tu domicilio físico?</strong></p>
+            <div class="options">
+                <button class="opt" data-status="correct" data-msg="¡CORRECTO! Es una señal grave de acecho; conocen tu ubicación real.">No aceptarlo y avisar a mis padres de inmediato.</button>
+                <button class="opt" data-status="incorrect" data-msg="ERROR: Los regalos se usan para crear sentimientos de deuda.">Recibirlo y darle las gracias por ser tan detallista.</button>
+            </div>
+            <div class="feedback"></div>
+        </div>
+        <div class="question">
+            <p><strong>4. Te amenazan con publicar un secreto tuyo si no haces lo que el acosador pide.</strong></p>
+            <div class="options">
+                <button class="opt" data-status="correct" data-msg="¡CORRECTO! El chantaje no se detiene cediendo; se detiene pidiendo ayuda legal.">No ceder. Pedir ayuda a un adulto y denunciar a la autoridad.</button>
+                <button class="opt" data-status="incorrect" data-msg="ERROR: Si cedes una vez, las peticiones serán cada vez más graves.">Hacerlo una última vez para que se detenga.</button>
+            </div>
+            <div class="feedback"></div>
+        </div>
+
+        <hr>
+
+        <section class="help-section">
+            <h2>🆘 Directorio de Ayuda y Denuncia</h2>
+            <div class="contact-grid">
+                <div class="contact-item">Emergencias Nacionales <span>📞 555 242 5100 (Policía)</span></div>
+                <div class="contact-item">Policía Cibernética <span>📧 policia.cibernetica@ssc.cdmx.gob.mx</span></div>
+                <div class="contact-item">Denuncia de Abuso Online <span>🌐 groominglatam.org</span></div>
+            </div>
+        </section>
+    </div>
+
+    <script type="module">
+        import { db, collection, getDocs, query, orderBy } from './firebase.js';
+
+        // CARGAR BLOG EN CUADRADOS
+        // Dentro de tu script en grooming.html, actualiza esta parte:
+        const cargarBlog = async () => {
+            const container = document.getElementById('blog-container');
+            try {
+                const q = query(collection(db, "posts"), orderBy("fecha", "desc"));
+                const snap = await getDocs(q);
+                container.innerHTML = '';
+                
+                snap.forEach(doc => {
+                    const d = doc.data();
+                    const card = document.createElement('div');
+                    card.className = 'post-card';
+                    
+                    // Limitamos el texto a 100 caracteres para la vista previa
+                    const extracto = d.contenido.length > 100 ? 
+                                    d.contenido.substring(0, 100) + "..." : 
+                                    d.contenido;
+
+                    card.innerHTML = `
+                        <div>
+                            <h3>${d.titulo}</h3>
+                            <p>${extracto}</p> 
+                        </div>
+                        <div class="leer-mas">Ver detalles →</div>
+                    `;
+                    card.onclick = () => window.location.href = `post-detalle.html?id=${doc.id}`;
+                    container.appendChild(card);
+                });
+            } catch(e) { container.innerHTML = '<p>Error al cargar el blog.</p>'; }
+        };
+
+        // LÓGICA DEL TEST (SCORE)
+        let corr = 0; let resp = 0;
+        document.querySelectorAll('.opt').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                const parent = e.target.closest('.question');
+                const feed = parent.querySelector('.feedback');
+                resp++;
+                feed.innerText = e.target.getAttribute('data-msg');
+                feed.style.display = 'block';
+                if(e.target.getAttribute('data-status') === 'correct') {
+                    feed.className = 'feedback correct'; corr++;
+                } else { feed.className = 'feedback incorrect'; }
+                document.getElementById('puntos').innerText = corr;
+                document.getElementById('porcentaje').innerText = Math.round((corr/resp)*100);
+                parent.querySelectorAll('.opt').forEach(b => { b.style.pointerEvents = 'none'; b.style.opacity = '0.5'; });
+            });
+        });
+
+        cargarBlog();
+    </script>
+</body>
+</html>

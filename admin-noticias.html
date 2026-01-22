@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin - Publicar Noticia</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .gradient-options {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin: 15px 0;
+        }
+        .gradient-option {
+            height: 60px;
+            border-radius: 8px;
+            cursor: pointer;
+            border: 2px solid transparent;
+            transition: 0.3s;
+        }
+        .gradient-option:hover {
+            transform: scale(1.05);
+        }
+        .gradient-option.selected {
+            border: 3px solid var(--primary);
+            box-shadow: 0 0 10px var(--primary);
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <a href="index.html">← Volver al Inicio</a>
+        <a href="admin.html">Administrar Blog</a>
+    </nav>
+
+    <div class="container">
+        <h2>Panel de Administración - Noticias</h2>
+        
+        <div id="login-section">
+            <h3>Identifícate</h3>
+            <input type="email" id="email" placeholder="Correo de administrador">
+            <input type="password" id="password" placeholder="Contraseña">
+            <button id="loginBtn">Ingresar</button>
+        </div>
+
+        <div id="post-section" style="display: none;">
+            <h3>Publicar Nueva Noticia</h3>
+            <input type="text" id="titulo" placeholder="Título de la noticia" required>
+            <textarea id="contenido" rows="5" placeholder="Descripción de la noticia" required></textarea>
+            
+            <label>Selecciona un gradiente para la imagen:</label>
+            <div class="gradient-options">
+                <div class="gradient-option" style="background: linear-gradient(135deg, #667eea, #764ba2);" onclick="selectGradient(this, 'linear-gradient(135deg, #667eea, #764ba2)')"></div>
+                <div class="gradient-option" style="background: linear-gradient(135deg, #f093fb, #f5576c);" onclick="selectGradient(this, 'linear-gradient(135deg, #f093fb, #f5576c)')"></div>
+                <div class="gradient-option" style="background: linear-gradient(135deg, #4facfe, #00f2fe);" onclick="selectGradient(this, 'linear-gradient(135deg, #4facfe, #00f2fe)')"></div>
+                <div class="gradient-option" style="background: linear-gradient(135deg, #43e97b, #38f9d7);" onclick="selectGradient(this, 'linear-gradient(135deg, #43e97b, #38f9d7)')"></div>
+                <div class="gradient-option" style="background: linear-gradient(135deg, #fa709a, #fee140);" onclick="selectGradient(this, 'linear-gradient(135deg, #fa709a, #fee140)')"></div>
+                <div class="gradient-option" style="background: linear-gradient(135deg, #30cfd0, #330867);" onclick="selectGradient(this, 'linear-gradient(135deg, #30cfd0, #330867)')"></div>
+            </div>
+            <input type="hidden" id="gradient" value="linear-gradient(135deg, #667eea, #764ba2)">
+            
+            <input type="text" id="badge" placeholder="Categoría (ej: Alerta, Actualización)" required>
+            <input type="text" id="link" placeholder="Enlace (ej: phishing.html, dejar vacío para #)">
+            
+            <button id="publicarBtn">Publicar Noticia</button>
+            <button id="logoutBtn" style="background-color: #c0392b; margin-top: 10px;">Cerrar Sesión</button>
+            
+            <hr style="margin: 40px 0;">
+            
+            <h3>Noticias Publicadas</h3>
+            <div id="noticias-list"></div>
+        </div>
+    </div>
+
+    <script type="module">
+        import { db, auth, collection, addDoc, getDocs, query, orderBy, Timestamp, signInWithEmailAndPassword, onAuthStateChanged, signOut } from './firebase.js';
+
+        const loginSection = document.getElementById('login-section');
+        const postSection = document.getElementById('post-section');
+        let selectedGradient = 'linear-gradient(135deg, #667eea, #764ba2)';
+
+        // Función para seleccionar gradiente
+        window.selectGradient = function(element, gradient) {
+            // Remover selección anterior
+            document.querySelectorAll('.gradient-option').forEach(opt => {
+                opt.classList.remove('selected');
+            });
+            
+            // Seleccionar nuevo
+            element.classList.add('selected');
+            selectedGradient = gradient;
+            document.getElementById('gradient').value = gradient;
+        };
+
+        // Verificar estado del usuario
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                loginSection.style.display = 'none';
+                postSection.style.display = 'block';
+                cargarNoticias();
+            } else {
+                loginSection.style.display = 'block';
+                postSection.style.display = 'none';
+            }
+        });
+
+        // Login
+        document.getElementById('loginBtn').addEventListener('click', () => {
+            const email = document.getElementById('email').value;
+            const pass = document.getElementById('password').value;
+            signInWithEmailAndPassword(auth, email, pass)
+                .catch((error) => alert("Error: " + error.message));
+        });
+
+        // Publicar noticia
+        document.getElementById('publicarBtn').addEventListener('click', async () => {
+            const btn = document.getElementById('publicarBtn');
+            const titulo = document.getElementById('titulo').value;
+            const contenido = document.getElementById('contenido').value;
+            const badge = document.getElementById('badge').value;
+            const link = document.getElementById('link').value;
+
+            if(!titulo || !contenido || !badge) {
+                alert("Por favor, llena todos los campos obligatorios.");
+                return;
+            }
+
+            btn.disabled = true;
+            btn.innerText = "Publicando...";
+
+            try {
+                await addDoc(collection(db, "noticias"), {
+                    titulo: titulo,
+                    contenido: contenido,
+                    gradient: selectedGradient,
+                    badge: badge,
+                    link: link || '#',
+                    fecha: Timestamp.now()
+                });
+                
+                alert("¡Noticia publicada con éxito!");
+                
+                // Limpiar campos
+                document.getElementById('titulo').value = '';
+                document.getElementById('contenido').value = '';
+                document.getElementById('badge').value = '';
+                document.getElementById('link').value = '';
+                
+                // Recargar lista de noticias
+                cargarNoticias();
+                
+            } catch (e) {
+                alert("Error al publicar: " + e.message);
+            } finally {
+                btn.disabled = false;
+                btn.innerText = "Publicar Noticia";
+            }
+        });
+
+        // Cargar noticias existentes
+        async function cargarNoticias() {
+            const container = document.getElementById('noticias-list');
+            try {
+                const q = query(collection(db, "noticias"), orderBy("fecha", "desc"));
+                const snap = await getDocs(q);
+                
+                container.innerHTML = '';
+                
+                if (snap.empty) {
+                    container.innerHTML = '<p>No hay noticias publicadas aún.</p>';
+                    return;
+                }
+                
+                snap.forEach(doc => {
+                    const d = doc.data();
+                    const fecha = d.fecha?.toDate().toLocaleDateString('es-ES', {
+                        day: '2-digit', month: 'short', year: 'numeric'
+                    }) || "Reciente";
+                    
+                    const noticiaDiv = document.createElement('div');
+                    noticiaDiv.className = 'post';
+                    noticiaDiv.innerHTML = `
+                        <h3>${d.titulo}</h3>
+                        <small>${fecha} | ${d.badge}</small>
+                        <p>${d.contenido.substring(0, 100)}...</p>
+                    `;
+                    container.appendChild(noticiaDiv);
+                });
+                
+            } catch(e) {
+                container.innerHTML = '<p>Error al cargar noticias.</p>';
+            }
+        }
+
+        // Salir
+        document.getElementById('logoutBtn').addEventListener('click', () => {
+            signOut(auth);
+        });
+
+        // Seleccionar primer gradiente por defecto
+        document.querySelector('.gradient-option').click();
+    </script>
+</body>
+</html>
