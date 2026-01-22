@@ -2,240 +2,111 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
-    <title>Seguridad Comunitaria - Protección Digital</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="style.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portal de noticias</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <style>
-        .hero-section {
-            padding: 60px 0;
-            text-align: center;
-            background: linear-gradient(rgba(13, 14, 20, 0.8), rgba(13, 14, 20, 0.8)), url('https://images.unsplash.com/photo-1550751827-4bd374c3f58b?auto=format&fit=crop&w=1920');
-            background-size: cover;
-            border-radius: 30px;
-            margin-bottom: 40px;
-        }
-        .mission-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 20px;
-            margin: 40px 0;
-        }
-        .mission-card {
-            background: rgba(255,255,255,0.05);
-            padding: 30px;
-            border-radius: 20px;
-            border: 1px solid rgba(255,255,255,0.1);
-            transition: 0.3s;
-        }
-        .mission-card:hover { transform: translateY(-10px); background: rgba(255,255,255,0.08); }
-        .mission-card h3 { color: var(--secondary); margin-bottom: 15px; }
-        
-        .report-box {
-            background: #1a1c26;
-            padding: 40px;
-            border-radius: 25px;
-            border: 1px solid var(--primary);
-            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
-        }
-        .objective-text {
-            font-size: 1.1rem;
-            line-height: 1.8;
-            color: #cbd5e1;
-            margin-bottom: 30px;
-        }
-
-        /* Estilos de Información y Objetivos */
-        .info-section {
-            margin: 60px 0;
-            text-align: center;
-        }
-        .mission-box {
-            background: rgba(255, 255, 255, 0.03);
-            border-radius: 20px;
-            padding: 40px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            margin-bottom: 40px;
-        }
-        .objective-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 25px;
-            margin-top: 30px;
-        }
-        .obj-card {
-            padding: 25px;
-            background: #1a1c26;
-            border-bottom: 3px solid #ef4444; /* Usando tu color de acento */
-            border-radius: 15px;
-        }
-
-        /* Estilos del Footer y Redes Sociales */
-        footer {
-            background: #090a0f;
-            padding: 50px 20px;
-            margin-top: 80px;
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
-            text-align: center;
-        }
-        .social-links {
-            display: flex;
-            justify-content: center;
-            gap: 20px;
-            flex-wrap: wrap;
-            margin: 30px 0;
-        }
-        .social-icon {
-            width: 55px;
-            height: 55px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 50%;
-            background: rgba(255,255,255,0.05);
-            color: white;
-            text-decoration: none;
-            font-size: 1.6rem;
-            transition: all 0.3s ease;
-            border: 1px solid rgba(255,255,255,0.1);
-        }
-        /* Colores de marca al pasar el mouse */
-        .social-icon.fb:hover { background: #1877F2; border-color: #1877F2; transform: translateY(-5px); }
-        .social-icon.ig:hover { background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%); border-color: transparent; transform: translateY(-5px); }
-        .social-icon.x:hover { background: #000; border-color: #fff; transform: translateY(-5px); }
-        .social-icon.yt:hover { background: #FF0000; border-color: #FF0000; transform: translateY(-5px); }
-        .social-icon.tk:hover { background: #000; border-color: #00f2ea; color: #00f2ea; text-shadow: 2px 0 #ff0050; transform: translateY(-5px); }
-
-        .footer-text {
-            color: #666;
-            font-size: 0.9rem;
-            margin-top: 20px;
-            line-height: 1.6;
-        }
-    </style>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
 </head>
 <body>
     <header>
-        <h1>Seguridad Comunitaria</h1>
-        <p>Tu escudo contra las amenazas del mundo digital</p>
-        <br>
-        <h5>(Esta página solo es un prototipo, aún hay fallas por encontrar y mejorar)</h5>
-        <h5>Si encuantran algun error usen la sección de "reportes ciudadanos" para informarme, y tratando de explicar el error de la mejor manera posible. Gracias</h5>
-    </header>
-
-    <nav>
-        <a href="index.html">Inicio</a>
-        <a href="phishing.html">Phishing</a>
-        <a href="ciberseguridad.html">Ciberseguridad</a>
-        <a href="videojuegos.html">Videojuegos</a>
-        <a href="redes.html">Redes Sociales</a>
-        <a href="grooming.html">Grooming</a>
-        <a href="https://pablogalvan22.github.io/NoticiasSanIsidro/" target="_blank" rel="noopener noreferrer">
-            Noticias para la Comunidad
-        </a>
-    </nav>
-
-    <div class="container">
-        <section class="hero-section">
-            <h2 style="color: #fff; font-size: 2.5rem;">Unidos por un Internet Seguro</h2>
-            <p class="objective-text" style="max-width: 800px; margin: 20px auto;">
-                Esta plataforma nace como una respuesta colectiva ante el incremento de delitos informáticos. Nuestro objetivo es **educar, prevenir y brindar herramientas** prácticas para que niños, jóvenes y adultos puedan navegar sin riesgos.
-            </p>
-        </section>
-
-        <div class="mission-grid">
-            <div class="mission-card">
-                <h3>🔍 Educación</h3>
-                <p>Proporcionamos guías detalladas sobre las técnicas más usadas por ciberdelincuentes, como el Phishing y el Grooming, para que aprendas a identificarlas al instante.</p>
+        <div class="container header-content">
+            <div class="logo" id="go-home">
+                <i class="fas fa-newspaper"></i>
+                <h1>Noticias para la comunidad</h1>
             </div>
-            <div class="mission-card">
-                <h3>🛡️ Prevención</h3>
-                <p>A través de nuestros simuladores dinámicos, ponemos a prueba tus conocimientos en situaciones reales de riesgo antes de que sucedan en la vida real.</p>
-            </div>
-            <div class="mission-card">
-                <h3>📣 Denuncia</h3>
-                <p>Fomentamos la cultura del reporte. Tu denuncia puede prevenir que otros usuarios caigan en las mismas estafas o redes de acoso.</p>
-            </div>
-        </div>
-
-        <hr>
-
-        <section class="enlaces-utiles">
-            <h2>Enlaces de Interés</h2>
-            <div class="enlaces-grid">
-                <div class="enlace-card">
-                    <i class="fas fa-newspaper fa-2x"></i>
-                    <h3>Portal de Noticias</h3>
-                    <p>Noticias actualizadas sobre tecnología, seguridad informática y más.</p>
-                    <a href="https://pablogalvan22.github.io/NoticiasSanIsidro/" target="_blank" rel="noopener noreferrer">Noticias Comunitarias</a>
+            <div class="auth-section">
+                <div id="user-info" class="hidden">
+                    <div id="user-avatar"></div>
+                    <span id="user-email"></span>
+                    <button id="logout-btn" class="logout">Cerrar Sesión</button>
                 </div>
-                <!-- Puedes agregar más tarjetas de enlaces aquí -->
+                <div id="login-button-container">
+                    <a href="admin.html" class="admin-link">
+                        <button><i class="fas fa-user-shield"></i> Modo Administrador</button>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </header>
+    
+    <main class="container">
+        <!-- Vista de lista de noticias -->
+        <section id="news-section">
+            <div class="actions-bar">
+                <h2 class="section-title">Últimas Noticias</h2>
+                <div class="filter-section">
+                    <div class="category-filter">
+                        <select id="category-filter-select">
+                            <option value="">Todas las categorías</option>
+                            <option value="Política">Política</option>
+                            <option value="Tecnología">Tecnología</option>
+                            <option value="Deportes">Deportes</option>
+                            <option value="Cultura">Cultura</option>
+                            <option value="Salud">Salud</option>
+                            <option value="Internacional">Internacional</option>
+                            <option value="Economía">Economía</option>
+                            <option value="Educación">Educación</option>
+                            <option value="Entretenimiento">Entretenimiento</option>
+                            <option value="Ciencia">Ciencia</option>
+                        </select>
+                    </div>
+                    <div id="filter-stats" class="filter-stats"></div>
+                </div>
+            </div>
+            <button id="back-to-list" class="back-button hidden"><i class="fas fa-arrow-left"></i> Volver al listado</button>
+            <div id="news-loading" class="loading">
+                <i class="fas fa-spinner fa-spin"></i>
+                <p>Cargando noticias...</p>
+            </div>
+            <div id="news-container" class="news-grid"></div>
+        </section>
+        
+        <!-- Vista detallada de noticia -->
+        <section id="news-detail-section" class="hidden">
+            <div class="actions-bar">
+                <button id="back-button" class="back-button"><i class="fas fa-arrow-left"></i> Volver al listado</button>
+            </div>
+            <div id="news-detail-loading" class="loading">
+                <i class="fas fa-spinner fa-spin"></i>
+                <p>Cargando noticia...</p>
+            </div>
+            <div id="news-detail-container" class="news-detail-container hidden">
+                <div class="news-detail-header">
+                    <div class="news-detail-meta">
+                        <span id="news-detail-category" class="news-category news-detail-category">Categoría</span>
+                        <span id="news-detail-author" class="news-detail-author"></span>
+                    </div>
+                    <h1 id="news-detail-title" class="news-detail-title">Título de la noticia</h1>
+                    <div class="news-date">
+                        <i class="far fa-calendar-alt"></i>
+                        <span id="news-detail-date">Fecha de publicación</span>
+                    </div>
+                </div>
+                <div id="news-detail-image" class="news-detail-image"></div>
+                <div class="news-detail-body">
+                    <h3 id="news-detail-summary" class="news-summary-large"></h3>
+                    <div id="news-detail-content" class="news-detail-content">
+                        Contenido de la noticia...
+                    </div>
+                </div>
+                <div class="news-detail-footer">
+                    <span>Portal de Noticias</span>
+                    <button id="share-news" class="back-button"><i class="fas fa-share-alt"></i> Compartir</button>
+                </div>
             </div>
         </section>
-
-        <hr>
-
-        <div class="report-box">
-            <h2>📢 Centro de Reportes Ciudadanos</h2>
-            <p>Si crees que estás siendo victima de Estafa, Grooming, Hackeo o Suplantación de identidad haz una denuncia anónima para alertar a la comunidad y tratar de solucionarlo.</p>
-            <form id="reporte-form">
-                <input type="text" id="titulo" placeholder="Título del reporte (ej. Perfil falso en IG)" required>
-                <textarea id="descripcion" placeholder="Describe lo sucedido..." required></textarea>
-                <button type="submit">Enviar Reporte a la Comunidad</button>
-            </form>
-            <div id="status"></div>
-        </div>
-
-        <hr>
-
-        <section style="margin-top: 40px; text-align: center; color: #888;">
-            <h3>¿Cómo usar esta página?</h3>
-            <p>Navega a través de las pestañas superiores para explorar cada temática. En la sección de **Grooming**, encontrarás un blog con casos actualizados donde podrás interactuar y aprender de experiencias reales compartidas por otros usuarios.</p>
-        </section>
-    </div>
-
+    </main>
+    
     <footer>
-        <h3>Nuestras Redes Sociales</h3>
-        <p>Síguenos para recibir consejos de seguridad diarios y alertas de nuevas estafas.</p>
-        
-        <div class="social-links">
-            <a href="#" class="social-icon fb" title="Facebook"><i class="fab fa-facebook-f"></i></a>
-            <a href="#" class="social-icon ig" title="Instagram"><i class="fab fa-instagram"></i></a>
-            <a href="https://x.com/Seguridad_Com22" class="social-icon x" title="X (Twitter)"><i class="fab fa-x-twitter"></i></a>
-            <a href="https://youtube.com/@pablogalvan-m9v?si=UHn10_6mypqj2ZBX" class="social-icon yt" title="YouTube"><i class="fab fa-youtube"></i></a>
-            <a href="https://www.tiktok.com/@pablo.galvan63?_r=1&_t=ZS-92gm3nkfNd1" class="social-icon tk" title="TikTok"><i class="fab fa-tiktok"></i></a>
-        </div>
-
-        <div class="footer-text">
-            &copy; 2025 Seguridad Comunitaria. Todos los derechos reservados.<br>
-            Plataforma educativa para la prevención de delitos informáticos.
+        <div class="container">
+            <p>Portal de Noticias &copy; <span id="current-year"></span></p>
         </div>
     </footer>
 
-    <script type="module">
-        import { db, collection, addDoc, Timestamp } from './firebase.js';
-
-        const form = document.getElementById('reporte-form');
-        const status = document.getElementById('status');
-
-        form.addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const titulo = document.getElementById('titulo').value;
-            const descripcion = document.getElementById('descripcion').value;
-
-            try {
-                await addDoc(collection(db, "reportes"), {
-                    titulo,
-                    descripcion,
-                    fecha: Timestamp.now()
-                });
-                status.innerHTML = "<p style='color: #4ade80;'>✅ Reporte enviado con éxito.</p>";
-                form.reset();
-            } catch (error) {
-                status.innerHTML = "<p style='color: #f87171;'>❌ Error al enviar.</p>";
-            }
-        });
-    </script>
-
+    <script src="firebase-config.js"></script>
+    <script src="index.js"></script>
+</body>
 </html>

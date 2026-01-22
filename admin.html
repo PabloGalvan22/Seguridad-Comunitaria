@@ -2,96 +2,210 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Admin - Publicar Historia</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="style.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portal de Noticias - Administración</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+    <script src="https://cdn.ckeditor.com/ckeditor5/41.1.0/classic/ckeditor.js"></script>
 </head>
 <body>
-    <nav>
-        <a href="grooming.html">← Volver al Blog</a>
-    </nav>
-
-    <div class="container">
-        <h2>Panel de Administrador</h2>
+    <header>
+        <div class="container header-content">
+            <div class="logo" id="go-home">
+                <i class="fas fa-newspaper"></i>
+                <h1>Portal de Noticias - Administración</h1>
+            </div>
+            <div class="auth-section">
+                <div id="user-info" class="hidden">
+                    <div id="user-avatar"></div>
+                    <span id="user-email"></span>
+                    <button id="logout-btn" class="logout">Cerrar Sesión</button>
+                </div>
+                <a href="index.html" class="admin-link">
+                    <button class="back-button"><i class="fas fa-arrow-left"></i> Ver Noticias</button>
+                </a>
+            </div>
+        </div>
+    </header>
+    
+    <main class="container">
+        <!-- Sección de inicio de sesión -->
+        <section id="login-section">
+            <h2 class="login-title">Iniciar Sesión como Administrador</h2>
+            <div id="login-status" class="status-message hidden"></div>
+            <div class="form-group">
+                <label for="login-email">Correo Electrónico</label>
+                <input type="email" id="login-email" placeholder="admin@ejemplo.com">
+            </div>
+            <div class="form-group">
+                <label for="login-password">Contraseña</label>
+                <input type="password" id="login-password" placeholder="Tu contraseña">
+            </div>
+            <button id="submit-login">Acceder</button>
+        </section>
         
-        <div id="login-section">
-            <h3>Identifícate</h3>
-            <p style="font-size: 0.9em; color: #666;">Ingresa con el correo y contraseña que creaste en Firebase Authentication.</p>
-            <input type="email" id="email" placeholder="Correo de administrador">
-            <input type="password" id="password" placeholder="Contraseña">
-            <button id="loginBtn">Ingresar</button>
+        <!-- Panel de administración (solo visible cuando se ha iniciado sesión) -->
+        <section id="admin-panel" class="admin-panel hidden">
+            <h2 class="section-title">Publicar Nueva Noticia</h2>
+            <div id="publish-status" class="status-message hidden"></div>
+            <form id="news-form">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="news-title">Título de la noticia</label>
+                        <input type="text" id="news-title" placeholder="Ingresa el título" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="news-category">Categoría</label>
+                        <select id="news-category" required>
+                            <option value="">Selecciona una categoría</option>
+                            <option value="Política">Política</option>
+                            <option value="Tecnología">Tecnología</option>
+                            <option value="Deportes">Deportes</option>
+                            <option value="Cultura">Cultura</option>
+                            <option value="Salud">Salud</option>
+                            <option value="Internacional">Internacional</option>
+                            <option value="Economía">Economía</option>
+                            <option value="Educación">Educación</option>
+                            <option value="Entretenimiento">Entretenimiento</option>
+                            <option value="Ciencia">Ciencia</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="news-image">URL de la imagen principal</label>
+                    <input type="url" id="news-image" placeholder="https://ejemplo.com/imagen.jpg">
+                    <small class="help-text">Imagen principal que aparecerá en la vista previa. Puedes usar imágenes de <a href="https://unsplash.com" target="_blank">Unsplash</a>, <a href="https://picsum.photos" target="_blank">Lorem Picsum</a> o subirla a un servicio como <a href="https://imgbb.com" target="_blank">ImgBB</a>.</small>
+                </div>
+                
+                <div class="form-group">
+                    <label for="news-summary">Resumen</label>
+                    <textarea id="news-summary" placeholder="Escribe un breve resumen de la noticia (aparecerá en la vista previa y en redes sociales)" required></textarea>
+                    <small class="help-text">Máximo 200 caracteres recomendado para mejor visualización.</small>
+                    <div class="char-counter">
+                        <span id="summary-chars">0</span>/200 caracteres
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="news-content">Contenido completo</label>
+                    <div class="editor-instructions">
+                        <p><i class="fas fa-info-circle"></i> Usa el editor para crear contenido enriquecido con texto formateado, imágenes, videos, tablas, etc.</p>
+                    </div>
+                    <!-- Textarea que será reemplazado por CKEditor 5 -->
+                    <div id="editor-container">
+                        <textarea id="news-content" placeholder="Escribe el contenido completo de la noticia aquí..."></textarea>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="news-tags">Etiquetas (tags)</label>
+                    <input type="text" id="news-tags" placeholder="tecnología, política, deportes">
+                    <small class="help-text">Separa las etiquetas con comas. Esto ayuda a organizar y buscar noticias.</small>
+                </div>
+                
+                <div class="form-group">
+                    <label for="news-video">URL de video (opcional)</label>
+                    <input type="url" id="news-video" placeholder="https://youtube.com/watch?v=... o https://vimeo.com/...">
+                    <small class="help-text">Soporta YouTube, Vimeo y otros servicios de video. Se insertará automáticamente en el contenido.</small>
+                </div>
+                
+                <div class="form-actions">
+                    <button type="submit" id="publish-news" class="publish-btn">
+                        <i class="fas fa-paper-plane"></i> Publicar Noticia
+                    </button>
+                    <button type="button" id="preview-news" class="preview-btn">
+                        <i class="fas fa-eye"></i> Vista Previa
+                    </button>
+                    <button type="button" id="save-draft" class="draft-btn">
+                        <i class="fas fa-save"></i> Guardar Borrador
+                    </button>
+                    <button type="reset" id="reset-form" class="reset-btn">
+                        <i class="fas fa-redo"></i> Limpiar Formulario
+                    </button>
+                </div>
+            </form>
+            
+            <!-- Lista de noticias publicadas (solo para admin) -->
+            <div class="published-news">
+                <h3 class="section-title">Noticias Publicadas <span id="news-count">(0)</span></h3>
+                <!-- En la sección de published-news -->
+                <!-- En la sección de published-news, REEMPLAZAR el news-actions con esto: -->
+                <div class="news-actions">
+                    <button id="refresh-news" class="refresh-btn">
+                        <i class="fas fa-sync-alt"></i> Actualizar Lista
+                    </button>
+                    <!-- Agregar después del botón de Actualizar Lista -->
+                    <button id="force-reload" class="refresh-btn" title="Forzar recarga completa">
+                        <i class="fas fa-redo-alt"></i> Recarga Forzada
+                    </button>
+                    <div class="admin-filters">
+                        <select id="admin-category-filter" class="category-filter-admin">
+                            <option value="">Todas las categorías</option>
+                            <option value="Política">Política</option>
+                            <option value="Tecnología">Tecnología</option>
+                            <option value="Deportes">Deportes</option>
+                            <option value="Cultura">Cultura</option>
+                            <option value="Salud">Salud</option>
+                            <option value="Internacional">Internacional</option>
+                            <option value="Economía">Economía</option>
+                            <option value="Educación">Educación</option>
+                            <option value="Entretenimiento">Entretenimiento</option>
+                            <option value="Ciencia">Ciencia</option>
+                        </select>
+                        <div class="search-box">
+                            <input type="text" id="search-news" placeholder="Buscar noticias...">
+                            <i class="fas fa-search"></i>
+                        </div>
+                    </div>
+                </div>
+                <div id="admin-news-loading" class="loading">
+                    <i class="fas fa-spinner fa-spin"></i>
+                    <p>Cargando noticias...</p>
+                </div>
+                <div id="admin-news-container" class="news-grid"></div>
+            </div>
+        </section>
+        
+        <!-- Vista previa modal -->
+        <div id="preview-modal" class="modal hidden">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3>Vista Previa de la Noticia</h3>
+                    <button id="close-preview" class="modal-close">&times;</button>
+                </div>
+                <div class="modal-body" id="preview-modal-body">
+                    <!-- La vista previa se insertará aquí -->
+                </div>
+                <div class="modal-footer">
+                    <button id="edit-from-preview" class="back-button">
+                        <i class="fas fa-edit"></i> Seguir Editando
+                    </button>
+                    <button id="publish-from-preview" class="publish-btn">
+                        <i class="fas fa-paper-plane"></i> Publicar Ahora
+                    </button>
+                </div>
+            </div>
         </div>
-
-        <div id="post-section" style="display: none;">
-            <h3>Escribir nueva historia</h3>
-            <input type="text" id="titulo" placeholder="Título de la historia">
-            <textarea id="contenido" rows="10" placeholder="Escribe la historia aquí..."></textarea>
-            <button id="publicarBtn">Publicar Historia</button>
-            <button id="logoutBtn" style="background-color: #c0392b; margin-top: 10px;">Cerrar Sesión</button>
+    </main>
+    
+    <footer>
+        <div class="container">
+            <p>Portal de Noticias - Administración &copy; <span id="current-year"></span></p>
+            <p class="footer-info">
+                <i class="fas fa-code"></i> Desarrollado con 
+                <i class="fab fa-html5"></i> HTML5, 
+                <i class="fab fa-css3-alt"></i> CSS3, 
+                <i class="fab fa-js"></i> JavaScript y 
+                <i class="fab fa-google"></i> Firebase
+            </p>
         </div>
-    </div>
+    </footer>
 
-    <script type="module">
-        // Importamos desde firebase.js
-        import { db, auth, collection, addDoc, Timestamp, signInWithEmailAndPassword, onAuthStateChanged, signOut } from './firebase.js';
-
-        const loginSection = document.getElementById('login-section');
-        const postSection = document.getElementById('post-section');
-
-        // Verificar estado del usuario
-        onAuthStateChanged(auth, (user) => {
-            if (user) {
-                loginSection.style.display = 'none';
-                postSection.style.display = 'block';
-            } else {
-                loginSection.style.display = 'block';
-                postSection.style.display = 'none';
-            }
-        });
-
-        // Login
-        document.getElementById('loginBtn').addEventListener('click', () => {
-            const email = document.getElementById('email').value;
-            const pass = document.getElementById('password').value;
-            signInWithEmailAndPassword(auth, email, pass)
-                .catch((error) => alert("Error: " + error.message));
-        });
-
-        // Publicar
-        document.getElementById('publicarBtn').addEventListener('click', async () => {
-            const btn = document.getElementById('publicarBtn');
-            const titulo = document.getElementById('titulo').value;
-            const contenido = document.getElementById('contenido').value;
-
-            if(!titulo || !contenido) return alert("Por favor, llena todos los campos.");
-
-            // Cambio visual
-            btn.disabled = true;
-            btn.innerText = "🚀 Publicando historia...";
-
-            try {
-                await addDoc(collection(db, "posts"), {
-                    titulo: titulo,
-                    contenido: contenido,
-                    likes: 0,      // Inicializamos en 0 para evitar errores
-                    dislikes: 0,
-                    fecha: Timestamp.now()
-                });
-                alert("¡Historia publicada con éxito!");
-                document.getElementById('titulo').value = '';
-                document.getElementById('contenido').value = '';
-            } catch (e) {
-                alert("Error de permisos: " + e.message);
-            } finally {
-                btn.disabled = false;
-                btn.innerText = "Publicar Historia";
-            }
-        });
-
-        // Salir
-        document.getElementById('logoutBtn').addEventListener('click', () => {
-            signOut(auth);
-        });
-    </script>
+    <script src="firebase-config.js"></script>
+    <script src="admin.js"></script>
 </body>
 </html>
