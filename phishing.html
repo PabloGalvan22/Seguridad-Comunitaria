@@ -5,32 +5,173 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0 maximum-scale=5.0">
     <title>Phishing - Guía Completa y Simulador</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="style.css">
     <style>
         /* Estilos del Simulador */
-        .platform-badge { padding: 4px 10px; border-radius: 6px; font-size: 0.75rem; font-weight: bold; margin-bottom: 10px; display: inline-block; text-transform: uppercase; }
+        .platform-badge { 
+            padding: 4px 10px; 
+            border-radius: 6px; 
+            font-size: 0.75rem; 
+            font-weight: bold; 
+            margin-bottom: 10px; 
+            display: inline-block; 
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        .platform-badge:hover {
+            transform: scale(1.05);
+        }
         .android { background: #3DDC84; color: #073042; }
         .ios { background: #f5f5f7; color: #1d1d1f; }
         .windows { background: #0078d4; color: white; }
         
         .score-board {
-            position: sticky; top: 80px; background: var(--bg-card); padding: 15px;
-            border-radius: 12px; border: 2px solid var(--primary); text-align: center;
-            z-index: 99; margin: 20px 0; box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            position: sticky; 
+            top: 80px; 
+            background: var(--bg-card); 
+            padding: 15px;
+            border-radius: 12px; 
+            border: 2px solid var(--primary); 
+            text-align: center;
+            z-index: 99; 
+            margin: 20px 0; 
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
         }
-        .score-text { font-size: 1.2rem; font-weight: bold; color: var(--primary); }
+        .score-text { 
+            font-size: 1.2rem; 
+            font-weight: bold; 
+            color: var(--primary); 
+        }
+        .test-controls {
+            display: flex;
+            gap: 10px;
+        }
+        .test-controls button {
+            padding: 8px 15px;
+            font-size: 0.9rem;
+        }
 
-        .question { background: rgba(255,255,255,0.03); padding: 25px; border-radius: 16px; margin-bottom: 25px; border: 1px solid rgba(255,255,255,0.1); }
-        .options button { display: block; width: 100%; text-align: left; padding: 14px; margin: 10px 0; background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.1); color: var(--text-main); border-radius: 10px; cursor: pointer; transition: 0.3s; font-family: 'Poppins', sans-serif; }
-        .options button:hover { background: rgba(56, 189, 248, 0.1); border-color: var(--primary); }
+        .question { 
+            background: rgba(255,255,255,0.03); 
+            padding: 25px; 
+            border-radius: 16px; 
+            margin-bottom: 25px; 
+            border: 1px solid rgba(255,255,255,0.1); 
+        }
+        .options button { 
+            display: block; 
+            width: 100%; 
+            text-align: left; 
+            padding: 14px; 
+            margin: 10px 0; 
+            background: rgba(0,0,0,0.3); 
+            border: 1px solid rgba(255,255,255,0.1); 
+            color: var(--text-main); 
+            border-radius: 10px; 
+            cursor: pointer; 
+            transition: 0.3s; 
+            font-family: 'Poppins', sans-serif; 
+        }
+        .options button:hover { 
+            background: rgba(56, 189, 248, 0.1); 
+            border-color: var(--primary); 
+        }
         
-        .feedback { font-weight: 600; margin-top: 15px; display: none; padding: 12px; border-radius: 8px; font-size: 0.95rem; line-height: 1.4; }
-        .correct { color: #4ade80; background: rgba(74, 222, 128, 0.1); border: 1px solid #4ade80; }
-        .incorrect { color: #f87171; background: rgba(248, 113, 113, 0.1); border: 1px solid #f87171; }
+        .feedback { 
+            font-weight: 600; 
+            margin-top: 15px; 
+            display: none; 
+            padding: 12px; 
+            border-radius: 8px; 
+            font-size: 0.95rem; 
+            line-height: 1.4; 
+        }
+        .correct { 
+            color: #4ade80; 
+            background: rgba(74, 222, 128, 0.1); 
+            border: 1px solid #4ade80; 
+        }
+        .incorrect { 
+            color: #f87171; 
+            background: rgba(248, 113, 113, 0.1); 
+            border: 1px solid #f87171; 
+        }
 
         /* Estilos de Información */
-        .info-card { background: rgba(255,255,255,0.05); padding: 25px; border-radius: 15px; margin-bottom: 20px; border-top: 3px solid var(--secondary); }
-        .highlight { color: var(--accent); font-weight: 600; }
+        .info-card { 
+            background: rgba(255,255,255,0.05); 
+            padding: 25px; 
+            border-radius: 15px; 
+            margin-bottom: 20px; 
+            border-top: 3px solid var(--secondary); 
+        }
+        .highlight { 
+            color: var(--accent); 
+            font-weight: 600; 
+        }
+        
+        /* Navegación interna */
+        .section-nav {
+            display: flex;
+            gap: 10px;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+        .section-nav a {
+            padding: 8px 15px;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 20px;
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: 0.3s;
+        }
+        .section-nav a:hover {
+            background: var(--primary);
+            color: var(--bg-dark);
+        }
+        
+        /* Resultados finales */
+        .results-summary {
+            background: rgba(255,255,255,0.05);
+            padding: 30px;
+            border-radius: 15px;
+            margin: 30px 0;
+            text-align: center;
+            display: none;
+        }
+        .results-summary h3 {
+            color: var(--primary);
+            margin-bottom: 20px;
+        }
+        .result-stats {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            flex-wrap: wrap;
+            margin: 20px 0;
+        }
+        .stat-item {
+            text-align: center;
+        }
+        .stat-value {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: var(--primary);
+            display: block;
+        }
+        .stat-label {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+        }
     </style>
 </head>
 <body>
@@ -40,19 +181,29 @@
     </header>
 
     <nav>
-        <a href="index.html">Inicio</a>
-        <a href="phishing.html">Phishing</a>
-        <a href="ciberseguridad.html">Ciberseguridad</a>
-        <a href="videojuegos.html">Videojuegos</a>
-        <a href="redes.html">Redes Sociales</a>
-        <a href="grooming.html">Grooming</a>
+        <a href="index.html"><i class="fas fa-home"></i> Inicio</a>
+        <a href="phishing.html"><i class="fas fa-fish"></i> Phishing</a>
+        <a href="ciberseguridad.html"><i class="fas fa-shield-alt"></i> Ciberseguridad</a>
+        <a href="videojuegos.html"><i class="fas fa-gamepad"></i> Videojuegos</a>
+        <a href="redes.html"><i class="fas fa-users"></i> Redes Sociales</a>
+        <a href="grooming.html"><i class="fas fa-exclamation-triangle"></i> Grooming</a>
         <a href="https://pablogalvan22.github.io/NoticiasSanIsidro/" target="_blank" rel="noopener noreferrer">
-            Noticias para la Comunidad
+            <i class="fas fa-newspaper"></i> Noticias para la Comunidad
+        </a>
+        <a href="admin.html" style="margin-left: auto; background: rgba(239, 68, 68, 0.1);">
+            <i class="fas fa-lock"></i> Admin
         </a>
     </nav>
 
     <div class="container">
-        <h2>¿Qué es el Phishing? (Explicado para todos)</h2>
+        <div class="section-nav">
+            <a href="#info">📚 Información</a>
+            <a href="#android-test">🤖 Test Android</a>
+            <a href="#ios-test">🍎 Test iOS</a>
+            <a href="#windows-test">🖥️ Test Windows</a>
+        </div>
+        
+        <h2 id="info">¿Qué es el Phishing? (Explicado para todos)</h2>
         <p>Imagina que alguien llama a tu puerta disfrazado de cartero. Te pide las llaves de tu casa para "revisar que el buzón funcione". Si le das las llaves, podrá entrar cuando quiera. El <span class="highlight">Phishing</span> es exactamente eso: un desconocido se disfraza de una empresa famosa para que tú mismo le entregues tus contraseñas.</p>
 
         <div class="info-card">
@@ -87,13 +238,46 @@
         <hr>
 
         <div class="score-board">
-            <div class="score-text">Puntaje: <span id="puntos">0</span>/12 | Efectividad: <span id="porcentaje">0</span>%</div>
+            <div>
+                <div class="score-text">Puntaje: <span id="puntos">0</span>/12 | Efectividad: <span id="porcentaje">0</span>%</div>
+                <div id="lastAttempt" style="font-size:0.8em; color:var(--text-muted); margin-top:5px;">
+                    Último intento: No registrado
+                </div>
+            </div>
+            <div class="test-controls">
+                <button onclick="reiniciarTest()" style="background:var(--accent);">🔄 Reiniciar Test</button>
+                <button onclick="mostrarResultados()" style="background:var(--secondary);">📊 Ver Resultados</button>
+            </div>
         </div>
 
         <h2>🎮 Simulador de Amenazas</h2>
         <p>Pon a prueba lo aprendido. Si fallas, te explicaremos el porqué del truco.</p>
 
-        <div class="platform-badge android">Android</div>
+        <!-- Resultados finales -->
+        <div class="results-summary" id="resultsSummary">
+            <h3>📊 Resultados del Test</h3>
+            <div class="result-stats">
+                <div class="stat-item">
+                    <span class="stat-value" id="finalScore">0</span>
+                    <span class="stat-label">Puntuación</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-value" id="finalPercentage">0%</span>
+                    <span class="stat-label">Efectividad</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-value" id="timeSpent">0s</span>
+                    <span class="stat-label">Tiempo</span>
+                </div>
+            </div>
+            <div id="performanceFeedback" style="margin-top: 20px;">
+                <p>Cargando evaluación...</p>
+            </div>
+            <button onclick="ocultarResultados()" style="margin-top: 20px;">Cerrar Resultados</button>
+        </div>
+
+        <h3 id="android-test">🤖 Android</h3>
+        <div class="platform-badge android" onclick="scrollToSection('a1')">Android</div>
         <div class="question" id="a1">
             <p><strong>1. WhatsApp: Alguien te pide el código de 6 dígitos que te llegó por SMS para "verificar tu cuenta".</strong></p>
             <div class="options">
@@ -130,7 +314,8 @@
             <div class="feedback"></div>
         </div>
 
-        <div class="platform-badge ios">iOS (iPhone)</div>
+        <h3 id="ios-test">🍎 iOS (iPhone)</h3>
+        <div class="platform-badge ios" onclick="scrollToSection('i1')">iOS</div>
         <div class="question" id="i1">
             <p><strong>1. iCloud: Un correo dice que tu espacio está lleno y des clic a un botón para pagar más.</strong></p>
             <div class="options">
@@ -167,7 +352,8 @@
             <div class="feedback"></div>
         </div>
 
-        <div class="platform-badge windows">Windows</div>
+        <h3 id="windows-test">🖥️ Windows</h3>
+        <div class="platform-badge windows" onclick="scrollToSection('w1')">Windows</div>
         <div class="question" id="w1">
             <p><strong>1. Soporte: Una ventana dice que llames a un 01-800 para quitar un error de Windows.</strong></p>
             <div class="options">
@@ -206,21 +392,224 @@
     </div>
 
     <script>
+        // Variables globales
         let correctas = 0;
         let respondidas = 0;
+        let startTime = null;
+        let testCompleted = false;
+        
+        // Cargar progreso guardado
+        function cargarProgreso() {
+            const savedProgress = localStorage.getItem('phishingTestProgress');
+            const savedScore = localStorage.getItem('phishingTestScore');
+            const savedTime = localStorage.getItem('phishingTestTime');
+            
+            if (savedProgress) {
+                const progress = JSON.parse(savedProgress);
+                progress.forEach(item => {
+                    if (item.answered) {
+                        const q = document.getElementById(item.id);
+                        if (q) {
+                            // Marcar como respondida
+                            q.classList.add('respondida');
+                            if (item.correct) correctas++;
+                            respondidas++;
+                            
+                            // Mostrar feedback
+                            const feedback = q.querySelector('.feedback');
+                            feedback.innerText = item.feedback;
+                            feedback.style.display = 'block';
+                            feedback.className = `feedback ${item.correct ? 'correct' : 'incorrect'}`;
+                            
+                            // Deshabilitar botones
+                            q.querySelectorAll('button').forEach(b => {
+                                b.style.pointerEvents = 'none';
+                                b.style.opacity = '0.5';
+                            });
+                        }
+                    }
+                });
+                
+                // Actualizar puntuación
+                document.getElementById('puntos').innerText = correctas;
+                document.getElementById('porcentaje').innerText = Math.round((correctas / respondidas) * 100);
+                
+                // Mostrar último intento
+                if (savedTime) {
+                    const fecha = new Date(savedTime);
+                    document.getElementById('lastAttempt').innerText = 
+                        `Último intento: ${fecha.toLocaleDateString()} ${fecha.toLocaleTimeString()}`;
+                }
+                
+                // Verificar si el test está completo
+                if (respondidas === 12) {
+                    testCompleted = true;
+                    startTime = new Date(savedScore?.startTime || Date.now());
+                }
+            }
+            
+            // Iniciar temporizador si no hay progreso guardado
+            if (!startTime) {
+                startTime = new Date();
+            }
+        }
+        
+        // Guardar progreso
+        function guardarProgreso(id, correct, feedbackText) {
+            const progress = JSON.parse(localStorage.getItem('phishingTestProgress') || '[]');
+            const existingIndex = progress.findIndex(item => item.id === id);
+            
+            if (existingIndex !== -1) {
+                progress[existingIndex] = { id, answered: true, correct, feedback: feedbackText };
+            } else {
+                progress.push({ id, answered: true, correct, feedback: feedbackText });
+            }
+            
+            localStorage.setItem('phishingTestProgress', JSON.stringify(progress));
+            localStorage.setItem('phishingTestScore', JSON.stringify({
+                correctas,
+                respondidas,
+                startTime: startTime.toISOString()
+            }));
+            localStorage.setItem('phishingTestTime', new Date().toISOString());
+            
+            // Disparar evento para estadísticas en index.html
+            if (respondidas === 12 && !testCompleted) {
+                testCompleted = true;
+                const event = new Event('testCompleted');
+                window.dispatchEvent(event);
+            }
+        }
+        
+        // Función principal para verificar respuestas
         function check(id, status, msg) {
             const q = document.getElementById(id);
-            const fb = q.querySelector('.feedback');
+            
+            // Si ya fue respondida, no hacer nada
+            if (q.classList.contains('respondida')) return;
+            
             respondidas++;
-            fb.innerText = msg;
-            fb.style.display = 'block';
-            if (status === 'correct') { fb.className = 'feedback correct'; correctas++; }
-            else { fb.className = 'feedback incorrect'; }
+            const feedback = q.querySelector('.feedback');
+            feedback.innerText = msg;
+            feedback.style.display = 'block';
+            
+            const isCorrect = status === 'correct';
+            if (isCorrect) { 
+                feedback.className = 'feedback correct'; 
+                correctas++; 
+            } else { 
+                feedback.className = 'feedback incorrect'; 
+            }
+            
             document.getElementById('puntos').innerText = correctas;
             document.getElementById('porcentaje').innerText = Math.round((correctas / respondidas) * 100);
-            const btns = q.querySelectorAll('button');
-            btns.forEach(b => { b.style.pointerEvents = 'none'; b.style.opacity = '0.5'; });
+            
+            q.querySelectorAll('button').forEach(b => { 
+                b.style.pointerEvents = 'none'; 
+                b.style.opacity = '0.5'; 
+            });
+            
+            q.classList.add('respondida');
+            
+            // Guardar progreso
+            guardarProgreso(id, isCorrect, msg);
         }
+        
+        // Reiniciar test
+        function reiniciarTest() {
+            if (confirm('¿Estás seguro de que quieres reiniciar el test? Se perderán tus respuestas actuales.')) {
+                correctas = 0;
+                respondidas = 0;
+                testCompleted = false;
+                startTime = new Date();
+                
+                // Resetear todas las preguntas
+                document.querySelectorAll('.question').forEach(q => {
+                    q.classList.remove('respondida');
+                    const feedback = q.querySelector('.feedback');
+                    feedback.style.display = 'none';
+                    q.querySelectorAll('button').forEach(b => {
+                        b.style.pointerEvents = 'auto';
+                        b.style.opacity = '1';
+                    });
+                });
+                
+                // Actualizar puntuación
+                document.getElementById('puntos').innerText = '0';
+                document.getElementById('porcentaje').innerText = '0';
+                document.getElementById('lastAttempt').innerText = 'Último intento: No registrado';
+                
+                // Limpiar localStorage
+                localStorage.removeItem('phishingTestProgress');
+                localStorage.removeItem('phishingTestScore');
+                localStorage.removeItem('phishingTestTime');
+                
+                // Ocultar resultados
+                document.getElementById('resultsSummary').style.display = 'none';
+            }
+        }
+        
+        // Mostrar resultados finales
+        function mostrarResultados() {
+            const resultsSummary = document.getElementById('resultsSummary');
+            const finalScore = document.getElementById('finalScore');
+            const finalPercentage = document.getElementById('finalPercentage');
+            const timeSpent = document.getElementById('timeSpent');
+            const performanceFeedback = document.getElementById('performanceFeedback');
+            
+            // Calcular tiempo transcurrido
+            const endTime = new Date();
+            const timeDiff = Math.floor((endTime - startTime) / 1000);
+            const minutes = Math.floor(timeDiff / 60);
+            const seconds = timeDiff % 60;
+            
+            // Actualizar estadísticas
+            finalScore.textContent = correctas;
+            finalPercentage.textContent = Math.round((correctas / 12) * 100) + '%';
+            timeSpent.textContent = `${minutes > 0 ? minutes + 'm ' : ''}${seconds}s`;
+            
+            // Dar feedback según el desempeño
+            let feedback = '';
+            let emoji = '';
+            
+            const percentage = (correctas / 12) * 100;
+            
+            if (percentage >= 90) {
+                feedback = '¡Excelente! Eres un experto en detectar phishing.';
+                emoji = '🏆';
+            } else if (percentage >= 70) {
+                feedback = '¡Muy bien! Tienes buen conocimiento sobre phishing.';
+                emoji = '👍';
+            } else if (percentage >= 50) {
+                feedback = 'Bien, pero hay áreas donde puedes mejorar. Revisa las respuestas incorrectas.';
+                emoji = '💡';
+            } else {
+                feedback = 'Necesitas aprender más sobre phishing. Revisa la información y vuelve a intentarlo.';
+                emoji = '📚';
+            }
+            
+            performanceFeedback.innerHTML = `<p style="font-size:1.2rem;">${emoji} ${feedback}</p>`;
+            
+            // Mostrar resultados
+            resultsSummary.style.display = 'block';
+            resultsSummary.scrollIntoView({ behavior: 'smooth' });
+        }
+        
+        // Ocultar resultados
+        function ocultarResultados() {
+            document.getElementById('resultsSummary').style.display = 'none';
+        }
+        
+        // Navegación por secciones
+        function scrollToSection(sectionId) {
+            const element = document.getElementById(sectionId);
+            if (element) {
+                element.scrollIntoView({ behavior: 'smooth' });
+            }
+        }
+        
+        // Inicializar
+        document.addEventListener('DOMContentLoaded', cargarProgreso);
     </script>
 </body>
 </html>

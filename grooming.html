@@ -6,7 +6,138 @@
     <title>Grooming - Prevención y Casos Reales</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
+        /* --- ESTILOS SIMULADOR --- */
+        .platform-badge { 
+            padding: 4px 10px; 
+            border-radius: 6px; 
+            font-size: 0.75rem; 
+            font-weight: bold; 
+            margin-bottom: 10px; 
+            display: inline-block; 
+            text-transform: uppercase; 
+        }
+        .android { background: #3DDC84; color: #073042; }
+        .ios { background: #f5f5f7; color: #1d1d1f; }
+        .windows { background: #0078d4; color: white; }
+        
+        .score-board { 
+            position: sticky; 
+            top: 80px; 
+            background: var(--bg-card); 
+            padding: 15px; 
+            border-radius: 12px; 
+            border: 2px solid var(--danger); 
+            text-align: center; 
+            z-index: 99; 
+            margin: 20px 0; 
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5); 
+            transition: all 0.3s ease;
+        }
+        
+        .score-text { 
+            font-size: 1.2rem; 
+            font-weight: bold; 
+            color: var(--danger); 
+        }
+        
+        .question { 
+            background: rgba(255,255,255,0.03); 
+            padding: 25px; 
+            border-radius: 16px; 
+            margin-bottom: 25px; 
+            border: 1px solid rgba(255,255,255,0.1); 
+            transition: all 0.3s ease;
+        }
+        
+        .options button { 
+            display: block; 
+            width: 100%; 
+            text-align: left; 
+            padding: 14px; 
+            margin: 10px 0; 
+            background: rgba(0,0,0,0.3); 
+            border: 1px solid rgba(255,255,255,0.1); 
+            color: var(--text-main); 
+            border-radius: 10px; 
+            cursor: pointer; 
+            transition: 0.3s; 
+            font-family: 'Poppins', sans-serif; 
+        }
+        
+        .options button:hover { 
+            background: rgba(239, 68, 68, 0.1); 
+            border-color: var(--danger); 
+        }
+        
+        .feedback { 
+            font-weight: 600; 
+            margin-top: 15px; 
+            display: none; 
+            padding: 12px; 
+            border-radius: 8px; 
+            font-size: 0.95rem; 
+            line-height: 1.4; 
+        }
+        
+        .correct { 
+            color: var(--success); 
+            background: rgba(74, 222, 128, 0.1); 
+            border: 1px solid var(--success); 
+        }
+        
+        .incorrect { 
+            color: var(--danger); 
+            background: rgba(248, 113, 113, 0.1); 
+            border: 1px solid var(--danger); 
+        }
+        
+        /* --- INFORMACIÓN --- */
+        .info-card { 
+            background: rgba(255,255,255,0.05); 
+            padding: 25px; 
+            border-radius: 15px; 
+            margin-bottom: 20px; 
+            border-top: 3px solid var(--danger); 
+        }
+        
+        .alert-box { 
+            background: rgba(239, 68, 68, 0.1); 
+            padding: 20px; 
+            border-radius: 10px; 
+            border: 1px solid var(--danger); 
+            margin: 20px 0; 
+        }
+        
+        /* --- ESTILOS AYUDA Y CONTACTO --- */
+        .help-section {
+            background: rgba(239, 68, 68, 0.15);
+            border-radius: 15px;
+            padding: 25px;
+            margin-top: 50px;
+            border: 1px solid var(--danger);
+        }
+        
+        .contact-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-top: 15px;
+        }
+        
+        .contact-item { 
+            font-weight: bold; 
+            color: #fff; 
+        }
+        
+        .contact-item span { 
+            display: block; 
+            font-weight: normal; 
+            color: #fca5a5; 
+            font-size: 0.9rem; 
+        }
+        
         /* --- ESTILOS DEL BLOG EN CUADRADOS --- */
         #blog-container {
             display: grid;
@@ -14,6 +145,7 @@
             gap: 20px;
             margin: 30px 0;
         }
+        
         .post-card {
             background: rgba(255, 255, 255, 0.05);
             border: 1px solid rgba(255, 255, 255, 0.1);
@@ -26,55 +158,90 @@
             justify-content: space-between;
             min-height: 220px;
         }
+        
         .post-card:hover {
             transform: translateY(-5px);
-            border-color: #ef4444;
+            border-color: var(--danger);
             background: rgba(239, 68, 68, 0.05);
         }
-        .post-card h3 { color: #ef4444; font-size: 1.2rem; margin: 0 0 10px 0; }
+        
+        .post-card h3 { 
+            color: var(--danger); 
+            font-size: 1.2rem; 
+            margin: 0 0 10px 0; 
+        }
+        
         .post-card p { 
             font-size: 0.9rem; 
             color: #ccc; 
             overflow: hidden; 
             display: -webkit-box; 
             -webkit-box-orient: vertical; 
+            line-height: 1.4;
+            height: 4.2em;
         }
-        .leer-mas { font-size: 0.8rem; color: #ef4444; font-weight: bold; margin-top: 15px; text-transform: uppercase; }
-
-        /* --- ESTILOS AYUDA Y CONTACTO --- */
-        .help-section {
-            background: rgba(239, 68, 68, 0.15);
-            border-radius: 15px;
-            padding: 25px;
-            margin-top: 50px;
-            border: 1px solid #ef4444;
+        
+        .leer-mas { 
+            font-size: 0.8rem; 
+            color: var(--danger); 
+            font-weight: bold; 
+            margin-top: 15px; 
+            text-transform: uppercase; 
+            display: flex;
+            align-items: center;
+            gap: 5px;
         }
-        .contact-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 20px;
-            margin-top: 15px;
+        
+        .blog-controls {
+            display: flex;
+            gap: 15px;
+            margin: 20px 0;
+            align-items: center;
+            flex-wrap: wrap;
         }
-        .contact-item { font-weight: bold; color: #fff; }
-        .contact-item span { display: block; font-weight: normal; color: #fca5a5; font-size: 0.9rem; }
-
-        /* --- ESTILOS SIMULADOR --- */
-        .platform-badge { padding: 4px 10px; border-radius: 6px; font-size: 0.75rem; font-weight: bold; margin-bottom: 10px; display: inline-block; text-transform: uppercase; }
-        .android { background: #3DDC84; color: #073042; }
-        .ios { background: #f5f5f7; color: #1d1d1f; }
-        .windows { background: #0078d4; color: white; }
-        .score-board { position: sticky; top: 80px; background: var(--bg-card); padding: 15px; border-radius: 12px; border: 2px solid #ef4444; text-align: center; z-index: 99; margin: 20px 0; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
-        .score-text { font-size: 1.2rem; font-weight: bold; color: #ef4444; }
-        .question { background: rgba(255,255,255,0.03); padding: 25px; border-radius: 16px; margin-bottom: 25px; border: 1px solid rgba(255,255,255,0.1); }
-        .options button { display: block; width: 100%; text-align: left; padding: 14px; margin: 10px 0; background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.1); color: var(--text-main); border-radius: 10px; cursor: pointer; transition: 0.3s; font-family: 'Poppins', sans-serif; }
-        .options button:hover { background: rgba(239, 68, 68, 0.1); border-color: #ef4444; }
-        .feedback { font-weight: 600; margin-top: 15px; display: none; padding: 12px; border-radius: 8px; font-size: 0.95rem; line-height: 1.4; }
-        .correct { color: #4ade80; background: rgba(74, 222, 128, 0.1); border: 1px solid #4ade80; }
-        .incorrect { color: #f87171; background: rgba(248, 113, 113, 0.1); border: 1px solid #f87171; }
-
-        /* --- INFORMACIÓN --- */
-        .info-card { background: rgba(255,255,255,0.05); padding: 25px; border-radius: 15px; margin-bottom: 20px; border-top: 3px solid #ef4444; }
-        .alert-box { background: rgba(239, 68, 68, 0.1); padding: 20px; border-radius: 10px; border: 1px solid #ef4444; margin: 20px 0; }
+        
+        .blog-stats {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: var(--text-muted);
+            grid-column: 1 / -1;
+        }
+        
+        .empty-state-icon {
+            font-size: 4rem;
+            margin-bottom: 20px;
+            opacity: 0.5;
+        }
+        
+        .loading-posts {
+            text-align: center;
+            padding: 40px;
+            color: var(--text-muted);
+            grid-column: 1 / -1;
+        }
+        
+        .spinner {
+            border: 3px solid rgba(255,255,255,0.1);
+            border-top: 3px solid var(--primary);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
     </style>
 </head>
 <body>
@@ -84,33 +251,36 @@
     </header>
 
     <nav>
-        <a href="index.html">Inicio</a>
-        <a href="phishing.html">Phishing</a>
-        <a href="ciberseguridad.html">Ciberseguridad</a>
-        <a href="videojuegos.html">Videojuegos</a>
-        <a href="redes.html">Redes Sociales</a>
-        <a href="grooming.html">Grooming</a>
+        <a href="index.html"><i class="fas fa-home"></i> Inicio</a>
+        <a href="phishing.html"><i class="fas fa-fish"></i> Phishing</a>
+        <a href="ciberseguridad.html"><i class="fas fa-shield-alt"></i> Ciberseguridad</a>
+        <a href="videojuegos.html"><i class="fas fa-gamepad"></i> Videojuegos</a>
+        <a href="redes.html"><i class="fas fa-users"></i> Redes Sociales</a>
+        <a href="grooming.html" class="active"><i class="fas fa-exclamation-triangle"></i> Grooming</a>
         <a href="https://pablogalvan22.github.io/NoticiasSanIsidro/" target="_blank" rel="noopener noreferrer">
-            Noticias para la Comunidad
+            <i class="fas fa-newspaper"></i> Noticias para la Comunidad
+        </a>
+        <a href="admin.html" style="margin-left: auto; background: rgba(239, 68, 68, 0.1);">
+            <i class="fas fa-lock"></i> Admin
         </a>
     </nav>
 
     <div class="container">
-        <h2>¿Qué es el Grooming y cómo detectarlo?</h2>
-        <p>Grooming es una práctica delictiva en la que un adulto establece una relación de confianza con un niño, niña o adolescente a través de medios digitales, como redes sociales, chats o juegos en línea, con el fin de abusar sexualmente de ellos.  El acosador suele falsificar su identidad, presentándose como alguien de edad similar, y utiliza el engaño, la manipulación emocional y el chantaje para ganarse la confianza de la víctima.  Este proceso puede durar semanas o meses y generalmente se divide en etapas: enganche, fidelización, seducción y acoso sexual, con el objetivo de obtener material íntimo o lograr un encuentro físico.  Es un delito penado en muchos países, incluido Argentina desde 2013, y representa una de las principales amenazas en el entorno digital para la seguridad de los menores. </p>
-        <br>
+        <h2><i class="fas fa-search"></i> ¿Qué es el Grooming y cómo detectarlo?</h2>
+        <p>Grooming es una práctica delictiva en la que un adulto establece una relación de confianza con un niño, niña o adolescente a través de medios digitales, como redes sociales, chats o juegos en línea, con el fin de abusar sexualmente de ellos. El acosador suele falsificar su identidad, presentándose como alguien de edad similar, y utiliza el engaño, la manipulación emocional y el chantaje para ganarse la confianza de la víctima. Este proceso puede durar semanas o meses y generalmente se divide en etapas: enganche, fidelización, seducción y acoso sexual, con el objetivo de obtener material íntimo o lograr un encuentro físico. Es un delito penado en muchos países, incluido Argentina desde 2013, y representa una de las principales amenazas en el entorno digital para la seguridad de los menores.</p>
+        
         <div class="info-card">
-            <h3>🤝 La técnica del "Amigo Ideal"</h3>
+            <h3><i class="fas fa-handshake"></i> La técnica del "Amigo Ideal"</h3>
             <p>El acosador suele ser paciente. Valida sentimientos ("Tus padres no te entienden") y ofrece regalos (skins, diamantes) para crear una deuda emocional y de lealtad.</p>
         </div>
 
         <div class="info-card">
-            <h3>⚠️ De la Amistad a la Sextorsión</h3>
+            <h3><i class="fas fa-exclamation-circle"></i> De la Amistad a la Sextorsión</h3>
             <p>Una práctica ligada es la <strong>Sextorsión</strong>: tras convencer al menor de enviar una foto íntima, el adulto amenaza con difundirla para obligarlo a peticiones más graves. Nunca cedas al chantaje.</p>
         </div>
 
         <div class="info-card">
-            <h3>🚩 Señales Críticas de Alerta</h3>
+            <h3><i class="fas fa-flag"></i> Señales Críticas de Alerta</h3>
             <ul>
                 <li>Insistencia en que la relación sea un "secreto compartido".</li>
                 <li>Intentos constantes de mover la charla a apps privadas fuera de supervisión.</li>
@@ -120,18 +290,34 @@
         </div>
 
         <div class="alert-box">
-            <h3>🆘 Primeros Auxilios Digitales</h3>
+            <h3><i class="fas fa-first-aid"></i> Primeros Auxilios Digitales</h3>
             <p>Si sospechas de un caso: <strong>1. No borres evidencia</strong> (mensajes/fotos). <strong>2. No cedas al chantaje</strong> (les da más poder). <strong>3. Habla</strong> con un adulto de confianza o autoridad de inmediato.</p>
         </div>
 
         <hr>
 
-        <h2>Historias y Alertas Recientes</h2>
+        <h2><i class="fas fa-newspaper"></i> Historias y Alertas Recientes</h2>
         <p>Casos reportados para prevenir a la comunidad. Haz clic para leer el detalle.</p>
-        <br>
-        <h4>Para poder visualizar de mejor manera ponga su navegador en modo: "Sitio para computadora"</h4>
+        
+        <div class="blog-controls">
+            <div class="blog-stats">
+                <span id="post-count">0</span> historias publicadas
+            </div>
+            <div style="margin-left: auto; display: flex; gap: 10px;">
+                <button id="sort-posts" class="btn-secondary" style="padding: 8px 15px; font-size: 0.9rem;">
+                    <i class="fas fa-sort-amount-down"></i> Ordenar
+                </button>
+                <button id="refresh-posts" style="padding: 8px 15px; font-size: 0.9rem;">
+                    <i class="fas fa-sync-alt"></i> Actualizar
+                </button>
+            </div>
+        </div>
+
         <div id="blog-container">
-            <p>Cargando posts de la comunidad...</p>
+            <div class="loading-posts">
+                <div class="spinner"></div>
+                <p>Cargando historias de la comunidad...</p>
+            </div>
         </div>
 
         <hr>
@@ -140,9 +326,9 @@
             <div class="score-text">Detección de Riesgos: <span id="puntos">0</span>/12 | <span id="porcentaje">0</span>% Seguro</div>
         </div>
 
-        <h2>🛠️ Test de Prevención Integral</h2>
+        <h2><i class="fas fa-tools"></i> Test de Prevención Integral</h2>
 
-        <div class="platform-badge android">Android</div>
+        <div class="platform-badge android"><i class="fab fa-android"></i> Android</div>
         <div class="question">
             <p><strong>1. Un usuario de un juego móvil te pide tu WhatsApp para "regalarte diamantes".</strong></p>
             <div class="options">
@@ -176,7 +362,7 @@
             <div class="feedback"></div>
         </div>
 
-        <div class="platform-badge ios">iOS</div>
+        <div class="platform-badge ios"><i class="fab fa-apple"></i> iOS</div>
         <div class="question">
             <p><strong>1. Alguien que dice tener tu edad te pide hacer videollamada a escondidas de noche.</strong></p>
             <div class="options">
@@ -210,7 +396,7 @@
             <div class="feedback"></div>
         </div>
 
-        <div class="platform-badge windows">Windows</div>
+        <div class="platform-badge windows"><i class="fab fa-windows"></i> Windows</div>
         <div class="question">
             <p><strong>1. Un usuario de Discord te pide transmitir pantalla mientras estás en tu habitación.</strong></p>
             <div class="options">
@@ -247,69 +433,214 @@
         <hr>
 
         <section class="help-section">
-            <h2>🆘 Directorio de Ayuda y Denuncia</h2>
+            <h2><i class="fas fa-life-ring"></i> Directorio de Ayuda y Denuncia</h2>
+            <p style="color: #fca5a5; margin-bottom: 20px;">Si estás en peligro o conoces a alguien que lo esté, contacta inmediatamente:</p>
             <div class="contact-grid">
-                <div class="contact-item">Emergencias Nacionales <span>📞 555 242 5100 (Policía)</span></div>
-                <div class="contact-item">Policía Cibernética <span>📧 policia.cibernetica@ssc.cdmx.gob.mx</span></div>
-                <div class="contact-item">Denuncia de Abuso Online <span>🌐 groominglatam.org</span></div>
+                <div class="contact-item">Emergencias Nacionales <span><i class="fas fa-phone"></i> 555 242 5100 (Policía)</span></div>
+                <div class="contact-item">Policía Cibernética <span><i class="fas fa-envelope"></i> policia.cibernetica@ssc.cdmx.gob.mx</span></div>
+                <div class="contact-item">Denuncia de Abuso Online <span><i class="fas fa-globe"></i> groominglatam.org</span></div>
+                <div class="contact-item">Línea de Ayuda Infantil <span><i class="fas fa-phone"></i> 800 123 4567</span></div>
             </div>
         </section>
     </div>
 
     <script type="module">
-        import { db, collection, getDocs, query, orderBy } from './firebase.js';
+        // Importar funciones necesarias de firebase.js
+        import { 
+            getPosts, 
+            getTotalPosts, 
+            formatDate 
+        } from './firebase.js';
+
+        // Variables para ordenar posts
+        let currentSort = 'desc';
+        let isLoading = false;
 
         // CARGAR BLOG EN CUADRADOS
-        // Dentro de tu script en grooming.html, actualiza esta parte:
         const cargarBlog = async () => {
+            if (isLoading) return;
+            
             const container = document.getElementById('blog-container');
             try {
-                const q = query(collection(db, "posts"), orderBy("fecha", "desc"));
-                const snap = await getDocs(q);
+                isLoading = true;
+                container.innerHTML = `
+                    <div class="loading-posts">
+                        <div class="spinner"></div>
+                        <p>Cargando historias de la comunidad...</p>
+                    </div>
+                `;
+                
+                const querySnapshot = await getPosts(currentSort);
                 container.innerHTML = '';
                 
-                snap.forEach(doc => {
+                // Actualizar contador
+                const totalPosts = await getTotalPosts();
+                document.getElementById('post-count').textContent = totalPosts;
+                
+                if (querySnapshot.empty) {
+                    container.innerHTML = `
+                        <div class="empty-state">
+                            <div class="empty-state-icon">📝</div>
+                            <h3>No hay historias publicadas aún</h3>
+                            <p>Sé el primero en compartir un caso o alerta importante.</p>
+                            <a href="admin.html" style="margin-top: 20px; display: inline-block;" class="btn-secondary">
+                                <i class="fas fa-plus"></i> Publicar primera historia
+                            </a>
+                        </div>
+                    `;
+                    isLoading = false;
+                    return;
+                }
+                
+                let postIndex = 0;
+                querySnapshot.forEach((doc) => {
                     const d = doc.data();
                     const card = document.createElement('div');
                     card.className = 'post-card';
                     
-                    // Limitamos el texto a 100 caracteres para la vista previa
-                    const extracto = d.contenido.length > 100 ? 
-                                    d.contenido.substring(0, 100) + "..." : 
-                                    d.contenido;
-
+                    const extracto = d.contenido.length > 120 ? 
+                        d.contenido.substring(0, 120) + "..." : 
+                        d.contenido;
+                    
+                    const fecha = formatDate(d.fecha) || "Reciente";
+                    
                     card.innerHTML = `
                         <div>
                             <h3>${d.titulo}</h3>
                             <p>${extracto}</p> 
                         </div>
-                        <div class="leer-mas">Ver detalles →</div>
+                        <div>
+                            <div class="post-meta">
+                                <div><i class="far fa-calendar"></i> ${fecha.split(' ')[0]}</div>
+                                <div class="post-stats">
+                                    <span class="stat-item"><i class="far fa-thumbs-up"></i> ${d.likes || 0}</span>
+                                    <span class="stat-item"><i class="far fa-thumbs-down"></i> ${d.dislikes || 0}</span>
+                                </div>
+                            </div>
+                            <div class="leer-mas">Leer historia completa <i class="fas fa-arrow-right"></i></div>
+                        </div>
                     `;
                     card.onclick = () => window.location.href = `post-detalle.html?id=${doc.id}`;
                     container.appendChild(card);
+                    
+                    // Añadir efecto de aparición escalonada
+                    card.style.opacity = '0';
+                    card.style.transform = 'translateY(20px)';
+                    setTimeout(() => {
+                        card.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+                        card.style.opacity = '1';
+                        card.style.transform = 'translateY(0)';
+                    }, postIndex * 100);
+                    postIndex++;
                 });
-            } catch(e) { container.innerHTML = '<p>Error al cargar el blog.</p>'; }
+                
+            } catch(e) { 
+                console.error("Error al cargar blog:", e);
+                container.innerHTML = `
+                    <div style="text-align: center; padding: 40px; color: var(--danger);">
+                        <h3><i class="fas fa-exclamation-triangle"></i> Error al cargar las historias</h3>
+                        <p>${e.message || "Intenta recargar la página o verifica tu conexión."}</p>
+                        <button onclick="cargarBlog()" style="margin-top: 15px;">
+                            <i class="fas fa-redo"></i> Reintentar
+                        </button>
+                    </div>
+                `; 
+            } finally {
+                isLoading = false;
+            }
         };
 
+        // Botón para refrescar posts
+        document.getElementById('refresh-posts').addEventListener('click', () => {
+            const btn = document.getElementById('refresh-posts');
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Actualizando...';
+            btn.disabled = true;
+            
+            cargarBlog().finally(() => {
+                setTimeout(() => {
+                    btn.innerHTML = '<i class="fas fa-sync-alt"></i> Actualizar';
+                    btn.disabled = false;
+                }, 1000);
+            });
+        });
+
+        // Botón para ordenar posts
+        document.getElementById('sort-posts').addEventListener('click', () => {
+            currentSort = currentSort === 'desc' ? 'asc' : 'desc';
+            const btn = document.getElementById('sort-posts');
+            btn.innerHTML = currentSort === 'desc' 
+                ? '<i class="fas fa-sort-amount-down"></i> Más recientes primero'
+                : '<i class="fas fa-sort-amount-up"></i> Más antiguos primero';
+            
+            cargarBlog();
+        });
+
         // LÓGICA DEL TEST (SCORE)
-        let corr = 0; let resp = 0;
+        let corr = 0; 
+        let resp = 0;
+        
         document.querySelectorAll('.opt').forEach(btn => {
             btn.addEventListener('click', (e) => {
                 const parent = e.target.closest('.question');
                 const feed = parent.querySelector('.feedback');
                 resp++;
+                
                 feed.innerText = e.target.getAttribute('data-msg');
                 feed.style.display = 'block';
+                
                 if(e.target.getAttribute('data-status') === 'correct') {
-                    feed.className = 'feedback correct'; corr++;
-                } else { feed.className = 'feedback incorrect'; }
+                    feed.className = 'feedback correct'; 
+                    corr++;
+                } else { 
+                    feed.className = 'feedback incorrect'; 
+                }
+                
                 document.getElementById('puntos').innerText = corr;
-                document.getElementById('porcentaje').innerText = Math.round((corr/resp)*100);
-                parent.querySelectorAll('.opt').forEach(b => { b.style.pointerEvents = 'none'; b.style.opacity = '0.5'; });
+                const porcentaje = Math.round((corr/resp)*100);
+                document.getElementById('porcentaje').innerText = porcentaje;
+                
+                // Deshabilitar botones de esta pregunta
+                parent.querySelectorAll('.opt').forEach(b => { 
+                    b.style.pointerEvents = 'none'; 
+                    b.style.opacity = '0.5'; 
+                });
+                
+                // Actualizar score-board visualmente
+                const scoreBoard = document.querySelector('.score-board');
+                
+                if (porcentaje >= 75) {
+                    scoreBoard.style.borderColor = 'var(--success)';
+                    scoreBoard.style.boxShadow = '0 10px 30px rgba(74, 222, 128, 0.3)';
+                    scoreBoard.querySelector('.score-text').style.color = 'var(--success)';
+                } else if (porcentaje >= 50) {
+                    scoreBoard.style.borderColor = 'var(--warning)';
+                    scoreBoard.style.boxShadow = '0 10px 30px rgba(245, 158, 11, 0.3)';
+                    scoreBoard.querySelector('.score-text').style.color = 'var(--warning)';
+                } else {
+                    scoreBoard.style.borderColor = 'var(--danger)';
+                    scoreBoard.style.boxShadow = '0 10px 30px rgba(239, 68, 68, 0.3)';
+                    scoreBoard.querySelector('.score-text').style.color = 'var(--danger)';
+                }
+                
+                // Agregar animación de acierto/error
+                if (e.target.getAttribute('data-status') === 'correct') {
+                    parent.style.borderColor = 'var(--success)';
+                    parent.style.boxShadow = '0 5px 15px rgba(74, 222, 128, 0.2)';
+                } else {
+                    parent.style.borderColor = 'var(--danger)';
+                    parent.style.boxShadow = '0 5px 15px rgba(239, 68, 68, 0.2)';
+                }
             });
         });
 
-        cargarBlog();
+        // Inicializar
+        document.addEventListener('DOMContentLoaded', () => {
+            cargarBlog();
+            
+            // Inicializar botón de ordenar
+            document.getElementById('sort-posts').innerHTML = 
+                '<i class="fas fa-sort-amount-down"></i> Más recientes primero';
+        });
     </script>
 </body>
 </html>

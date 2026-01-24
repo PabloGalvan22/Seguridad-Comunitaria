@@ -1,49 +1,596 @@
-
 <!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
     <title>Admin - Publicar Historia</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="style.css">
+    <style>
+        /* Estilos adicionales para el admin */
+        .admin-panel {
+            max-width: 900px;
+            margin: 40px auto;
+            padding: 40px;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 24px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: var(--primary);
+            font-weight: 600;
+            font-size: 0.95rem;
+        }
+
+        .input-with-icon {
+            position: relative;
+        }
+
+        .input-icon {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-muted);
+            font-size: 1.2rem;
+        }
+
+        .input-with-icon input {
+            padding-left: 45px;
+        }
+
+        .character-count {
+            text-align: right;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin-top: -15px;
+            margin-bottom: 10px;
+        }
+
+        .character-count.warning {
+            color: var(--warning);
+        }
+
+        .character-count.danger {
+            color: var(--danger);
+        }
+
+        /* Editor Markdown */
+        .editor-container {
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        .editor-toolbar {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 10px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .tool-btn {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: var(--text-main);
+            padding: 8px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .tool-btn:hover {
+            background: var(--primary);
+            color: var(--bg-dark);
+            border-color: var(--primary);
+        }
+
+        .emoji-picker {
+            position: relative;
+        }
+
+        .emoji-grid {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            background: var(--bg-card);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            padding: 10px;
+            display: none;
+            grid-template-columns: repeat(6, 1fr);
+            gap: 5px;
+            z-index: 1000;
+            max-width: 200px;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+
+        .emoji-picker:hover .emoji-grid {
+            display: grid;
+        }
+
+        .emoji {
+            cursor: pointer;
+            padding: 5px;
+            border-radius: 4px;
+            text-align: center;
+            font-size: 1.2rem;
+        }
+
+        .emoji:hover {
+            background: rgba(56, 189, 248, 0.2);
+        }
+
+        #contenido {
+            min-height: 300px;
+            font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+            font-size: 14px;
+            line-height: 1.6;
+            tab-size: 4;
+        }
+
+        .editor-preview {
+            background: rgba(0, 0, 0, 0.2);
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            display: none;
+        }
+
+        .preview-content {
+            font-family: 'Poppins', sans-serif;
+            line-height: 1.8;
+        }
+
+        .preview-content h1, .preview-content h2, .preview-content h3 {
+            color: var(--primary);
+            margin: 20px 0 10px 0;
+        }
+
+        .preview-content strong {
+            color: var(--secondary);
+            font-weight: 700;
+        }
+
+        .preview-content em {
+            color: var(--accent);
+            font-style: italic;
+        }
+
+        .preview-content ul, .preview-content ol {
+            padding-left: 20px;
+            margin: 10px 0;
+        }
+
+        .preview-content li {
+            margin-bottom: 5px;
+        }
+
+        .preview-content blockquote {
+            border-left: 4px solid var(--primary);
+            padding-left: 15px;
+            margin: 15px 0;
+            color: var(--text-muted);
+            font-style: italic;
+        }
+
+        .preview-content code {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: monospace;
+            font-size: 0.9em;
+        }
+
+        .preview-content pre {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 15px;
+            border-radius: 8px;
+            overflow-x: auto;
+            margin: 15px 0;
+        }
+
+        .markdown-guide {
+            margin-top: 20px;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 8px;
+            border-left: 4px solid var(--secondary);
+        }
+
+        .markdown-guide h4 {
+            color: var(--secondary);
+            margin-bottom: 10px;
+        }
+
+        .markdown-examples {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 10px;
+            font-size: 0.85rem;
+        }
+
+        .markdown-example {
+            background: rgba(0, 0, 0, 0.2);
+            padding: 8px;
+            border-radius: 4px;
+        }
+
+        .markdown-example code {
+            font-family: monospace;
+            color: var(--accent);
+        }
+
+        .admin-actions {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .admin-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .admin-icon {
+            font-size: 2.5rem;
+            color: var(--danger);
+        }
+
+        .status-message {
+            padding: 12px;
+            border-radius: 10px;
+            margin-top: 15px;
+            text-align: center;
+            font-weight: 600;
+            display: none;
+        }
+
+        .status-success {
+            background: rgba(74, 222, 128, 0.15);
+            border: 1px solid var(--success);
+            color: var(--success);
+            display: block;
+        }
+
+        .status-error {
+            background: rgba(239, 68, 68, 0.15);
+            border: 1px solid var(--danger);
+            color: var(--danger);
+            display: block;
+        }
+    </style>
 </head>
 <body>
     <nav>
-        <a href="grooming.html">← Volver al Blog</a>
+        <a href="grooming.html"><i class="fas fa-arrow-left"></i> Volver al Blog</a>
+        <a href="index.html"><i class="fas fa-home"></i> Inicio</a>
+        <a href="phishing.html"><i class="fas fa-fish"></i> Phishing</a>
+        <a href="ciberseguridad.html"><i class="fas fa-shield-alt"></i> Ciberseguridad</a>
+        <a href="videojuegos.html"><i class="fas fa-gamepad"></i> Videojuegos</a>
+        <a href="redes.html"><i class="fas fa-users"></i> Redes Sociales</a>
+        <a href="grooming.html"><i class="fas fa-exclamation-triangle"></i> Grooming</a>
+        <a href="https://pablogalvan22.github.io/NoticiasSanIsidro/" target="_blank" rel="noopener noreferrer">
+            <i class="fas fa-newspaper"></i> Noticias
+        </a>
+        <a href="admin.html" style="margin-left: auto; background: rgba(239, 68, 68, 0.1);">
+            <i class="fas fa-lock"></i> Admin
+        </a>
     </nav>
 
-    <div class="container">
-        <h2>Panel de Administrador</h2>
+    <div class="admin-panel">
+        <div class="admin-header">
+            <div class="admin-icon">
+                <i class="fas fa-user-shield"></i>
+            </div>
+            <div>
+                <h2>Panel de Administrador</h2>
+                <p style="color: var(--text-muted); font-size: 0.9rem;">Gestiona y publica historias para la comunidad</p>
+            </div>
+        </div>
         
         <div id="login-section">
-            <h3>Identifícate</h3>
-            <p style="font-size: 0.9em; color: #666;">Ingresa con el correo y contraseña que creaste en Firebase Authentication.</p>
-            <input type="email" id="email" placeholder="Correo de administrador">
-            <input type="password" id="password" placeholder="Contraseña">
-            <button id="loginBtn">Ingresar</button>
+            <h3><i class="fas fa-sign-in-alt"></i> Identifícate</h3>
+            <p style="font-size: 0.9em; color: #666; margin-bottom: 20px;">Ingresa con el correo y contraseña que creaste en Firebase Authentication.</p>
+            
+            <div class="form-group">
+                <div class="input-with-icon">
+                    <i class="input-icon fas fa-envelope"></i>
+                    <input type="email" id="email" placeholder="Correo de administrador" autocomplete="username">
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <div class="input-with-icon">
+                    <i class="input-icon fas fa-lock"></i>
+                    <input type="password" id="password" placeholder="Contraseña" autocomplete="current-password">
+                </div>
+            </div>
+            
+            <button id="loginBtn" style="width: 100%;">
+                <i class="fas fa-sign-in-alt"></i> Ingresar
+            </button>
         </div>
 
         <div id="post-section" style="display: none;">
-            <h3>Escribir nueva historia</h3>
-            <input type="text" id="titulo" placeholder="Título de la historia">
-            <textarea id="contenido" rows="10" placeholder="Escribe la historia aquí..."></textarea>
-            <button id="publicarBtn">Publicar Historia</button>
-            <button id="logoutBtn" style="background-color: #c0392b; margin-top: 10px;">Cerrar Sesión</button>
+            <h3><i class="fas fa-edit"></i> Escribir nueva historia</h3>
+            <p style="color: var(--text-muted); margin-bottom: 20px;">Usa Markdown para formatear tu historia. Puedes usar negritas, listas, títulos y más.</p>
+            
+            <div class="form-group">
+                <label for="titulo"><i class="fas fa-heading"></i> Título de la historia</label>
+                <div class="input-with-icon">
+                    <i class="input-icon fas fa-pen"></i>
+                    <input type="text" id="titulo" placeholder="Ej: Nuevo caso de grooming detectado en Instagram...">
+                </div>
+                <div class="character-count" id="title-count">0/120 caracteres</div>
+            </div>
+            
+            <div class="form-group">
+                <label for="contenido"><i class="fas fa-align-left"></i> Contenido (soporta Markdown)</label>
+                
+                <div class="editor-container">
+                    <div class="editor-toolbar">
+                        <button type="button" class="tool-btn" onclick="formatText('bold')">
+                            <i class="fas fa-bold"></i> Negrita
+                        </button>
+                        <button type="button" class="tool-btn" onclick="formatText('italic')">
+                            <i class="fas fa-italic"></i> Cursiva
+                        </button>
+                        <button type="button" class="tool-btn" onclick="formatText('heading')">
+                            <i class="fas fa-heading"></i> Título
+                        </button>
+                        <button type="button" class="tool-btn" onclick="formatText('list')">
+                            <i class="fas fa-list"></i> Lista
+                        </button>
+                        <button type="button" class="tool-btn" onclick="formatText('link')">
+                            <i class="fas fa-link"></i> Enlace
+                        </button>
+                        <div class="emoji-picker">
+                            <button type="button" class="tool-btn">
+                                <i class="fas fa-smile"></i> Emoji
+                            </button>
+                            <div class="emoji-grid">
+                                <!-- Emojis de seguridad -->
+                                <span class="emoji" onclick="insertEmoji('⚠️')">⚠️</span>
+                                <span class="emoji" onclick="insertEmoji('🔒')">🔒</span>
+                                <span class="emoji" onclick="insertEmoji('🔑')">🔑</span>
+                                <span class="emoji" onclick="insertEmoji('💻')">💻</span>
+                                <span class="emoji" onclick="insertEmoji('📱')">📱</span>
+                                <span class="emoji" onclick="insertEmoji('🌐')">🌐</span>
+                                <span class="emoji" onclick="insertEmoji('🚨')">🚨</span>
+                                <span class="emoji" onclick="insertEmoji('✅')">✅</span>
+                                <span class="emoji" onclick="insertEmoji('❌')">❌</span>
+                                <span class="emoji" onclick="insertEmoji('❗')">❗</span>
+                                <span class="emoji" onclick="insertEmoji('❓')">❓</span>
+                                <span class="emoji" onclick="insertEmoji('💡')">💡</span>
+                                <span class="emoji" onclick="insertEmoji('🔔')">🔔</span>
+                                <span class="emoji" onclick="insertEmoji('👤')">👤</span>
+                                <span class="emoji" onclick="insertEmoji('🛡️')">🛡️</span>
+                                <span class="emoji" onclick="insertEmoji('🎯')">🎯</span>
+                                <span class="emoji" onclick="insertEmoji('📢')">📢</span>
+                                <span class="emoji" onclick="insertEmoji('🔍')">🔍</span>
+                                <span class="emoji" onclick="insertEmoji('📝')">📝</span>
+                                <span class="emoji" onclick="insertEmoji('💬')">💬</span>
+                                <span class="emoji" onclick="insertEmoji('👁️')">👁️</span>
+                                <span class="emoji" onclick="insertEmoji('🤝')">🤝</span>
+                                <span class="emoji" onclick="insertEmoji('🙏')">🙏</span>
+                                <span class="emoji" onclick="insertEmoji('❤️')">❤️</span>
+                            </div>
+                        </div>
+                        <button type="button" class="tool-btn" onclick="togglePreview()">
+                            <i class="fas fa-eye"></i> Vista previa
+                        </button>
+                    </div>
+                    
+                    <textarea id="contenido" rows="15" placeholder="Escribe tu historia aquí usando Markdown...
+
+# Título principal
+## Subtítulo
+**Texto en negrita** *texto en cursiva*
+
+- Lista con puntos
+- Segundo elemento
+
+1. Lista numerada
+2. Segundo elemento
+
+> Cita o bloque importante
+
+[Texto del enlace](https://ejemplo.com)
+
+¡No olvides los emojis! 🚨⚠️🔒"></textarea>
+                </div>
+                
+                <div class="character-count" id="content-count">0/10000 caracteres</div>
+                
+                <div class="editor-preview" id="preview">
+                    <h4><i class="fas fa-eye"></i> Vista previa:</h4>
+                    <div class="preview-content" id="preview-content"></div>
+                </div>
+            </div>
+            
+            <div class="markdown-guide">
+                <h4><i class="fas fa-info-circle"></i> Guía rápida de Markdown:</h4>
+                <div class="markdown-examples">
+                    <div class="markdown-example">
+                        <strong>Negritas:</strong><br>
+                        <code>**texto**</code>
+                    </div>
+                    <div class="markdown-example">
+                        <strong>Cursiva:</strong><br>
+                        <code>*texto*</code>
+                    </div>
+                    <div class="markdown-example">
+                        <strong>Título:</strong><br>
+                        <code># Título grande</code><br>
+                        <code>## Subtítulo</code>
+                    </div>
+                    <div class="markdown-example">
+                        <strong>Lista:</strong><br>
+                        <code>- Elemento 1</code><br>
+                        <code>- Elemento 2</code>
+                    </div>
+                    <div class="markdown-example">
+                        <strong>Enlace:</strong><br>
+                        <code>[texto](url)</code>
+                    </div>
+                    <div class="markdown-example">
+                        <strong>Cita:</strong><br>
+                        <code>> Texto citado</code>
+                    </div>
+                </div>
+            </div>
+            
+            <div id="status-message" class="status-message"></div>
+            
+            <div class="admin-actions">
+                <button id="publicarBtn" style="flex: 2;">
+                    <i class="fas fa-paper-plane"></i> Publicar Historia
+                </button>
+                <button id="logoutBtn" style="flex: 1; background: var(--danger);">
+                    <i class="fas fa-sign-out-alt"></i> Cerrar Sesión
+                </button>
+            </div>
         </div>
     </div>
 
     <script type="module">
-        // Importamos desde firebase.js
         import { db, auth, collection, addDoc, Timestamp, signInWithEmailAndPassword, onAuthStateChanged, signOut } from './firebase.js';
 
         const loginSection = document.getElementById('login-section');
         const postSection = document.getElementById('post-section');
+        const titleInput = document.getElementById('titulo');
+        const contentInput = document.getElementById('contenido');
+        const titleCount = document.getElementById('title-count');
+        const contentCount = document.getElementById('content-count');
+        const previewContent = document.getElementById('preview-content');
+        const preview = document.getElementById('preview');
+        const statusMessage = document.getElementById('status-message');
+
+        // Funciones para el editor
+        window.formatText = function(type) {
+            const textarea = contentInput;
+            const start = textarea.selectionStart;
+            const end = textarea.selectionEnd;
+            const selectedText = textarea.value.substring(start, end);
+            let newText = '';
+            
+            switch(type) {
+                case 'bold':
+                    newText = `**${selectedText || 'texto en negrita'}**`;
+                    break;
+                case 'italic':
+                    newText = `*${selectedText || 'texto en cursiva'}*`;
+                    break;
+                case 'heading':
+                    newText = `## ${selectedText || 'Subtítulo'}`;
+                    break;
+                case 'list':
+                    newText = `- ${selectedText || 'Elemento de lista'}`;
+                    break;
+                case 'link':
+                    newText = `[${selectedText || 'Texto del enlace'}](https://ejemplo.com)`;
+                    break;
+            }
+            
+            textarea.value = textarea.value.substring(0, start) + newText + textarea.value.substring(end);
+            textarea.focus();
+            textarea.selectionStart = textarea.selectionEnd = start + newText.length;
+            updatePreview();
+        };
+
+        window.insertEmoji = function(emoji) {
+            const textarea = contentInput;
+            const start = textarea.selectionStart;
+            const end = textarea.selectionEnd;
+            
+            textarea.value = textarea.value.substring(0, start) + emoji + textarea.value.substring(end);
+            textarea.focus();
+            textarea.selectionStart = textarea.selectionEnd = start + emoji.length;
+            updatePreview();
+        };
+
+        window.togglePreview = function() {
+            if (preview.style.display === 'none' || !preview.style.display) {
+                updatePreview();
+                preview.style.display = 'block';
+            } else {
+                preview.style.display = 'none';
+            }
+        };
+
+        function updatePreview() {
+            const markdownText = contentInput.value;
+            if (window.marked) {
+                try {
+                    const html = marked.parse(markdownText);
+                    previewContent.innerHTML = html;
+                } catch (error) {
+                    previewContent.innerHTML = `<p style="color: var(--danger);">Error al renderizar vista previa: ${error.message}</p>`;
+                }
+            } else {
+                previewContent.innerHTML = '<p style="color: var(--warning);">Librería de Markdown no disponible. Mostrando texto plano.</p>' + 
+                                           '<pre>' + markdownText.replace(/</g, '&lt;').replace(/>/g, '&gt;') + '</pre>';
+            }
+        }
+
+        // Contadores de caracteres
+        function updateCharacterCount(input, countElement, max) {
+            const length = input.value.length;
+            countElement.textContent = `${length}/${max} caracteres`;
+            
+            if (length > max * 0.9) {
+                countElement.classList.add('danger');
+            } else if (length > max * 0.75) {
+                countElement.classList.add('warning');
+            } else {
+                countElement.classList.remove('warning', 'danger');
+            }
+        }
+
+        titleInput.addEventListener('input', () => {
+            updateCharacterCount(titleInput, titleCount, 120);
+        });
+
+        contentInput.addEventListener('input', () => {
+            updateCharacterCount(contentInput, contentCount, 10000);
+            updatePreview();
+        });
+
+        // Mostrar mensaje de estado
+        function showStatus(message, type) {
+            statusMessage.textContent = message;
+            statusMessage.className = `status-message status-${type}`;
+            statusMessage.style.display = 'block';
+            
+            setTimeout(() => {
+                statusMessage.style.display = 'none';
+            }, 3000);
+        }
 
         // Verificar estado del usuario
         onAuthStateChanged(auth, (user) => {
             if (user) {
                 loginSection.style.display = 'none';
                 postSection.style.display = 'block';
+                document.title = `Admin (${user.email}) - Publicar Historia`;
             } else {
                 loginSection.style.display = 'block';
                 postSection.style.display = 'none';
@@ -54,44 +601,117 @@
         document.getElementById('loginBtn').addEventListener('click', () => {
             const email = document.getElementById('email').value;
             const pass = document.getElementById('password').value;
+            
+            if (!email || !pass) {
+                showStatus('Por favor, completa todos los campos.', 'error');
+                return;
+            }
+
+            const btn = document.getElementById('loginBtn');
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Ingresando...';
+            btn.disabled = true;
+
             signInWithEmailAndPassword(auth, email, pass)
-                .catch((error) => alert("Error: " + error.message));
+                .then(() => {
+                    showStatus('Sesión iniciada correctamente', 'success');
+                })
+                .catch((error) => {
+                    let errorMessage = "Error de autenticación";
+                    
+                    switch(error.code) {
+                        case 'auth/invalid-email':
+                            errorMessage = "Correo electrónico no válido";
+                            break;
+                        case 'auth/user-disabled':
+                            errorMessage = "Cuenta deshabilitada";
+                            break;
+                        case 'auth/user-not-found':
+                            errorMessage = "Usuario no encontrado";
+                            break;
+                        case 'auth/wrong-password':
+                            errorMessage = "Contraseña incorrecta";
+                            break;
+                        case 'auth/too-many-requests':
+                            errorMessage = "Demasiados intentos. Intenta más tarde";
+                            break;
+                        default:
+                            errorMessage = error.message;
+                    }
+                    
+                    showStatus(errorMessage, 'error');
+                })
+                .finally(() => {
+                    btn.innerHTML = '<i class="fas fa-sign-in-alt"></i> Ingresar';
+                    btn.disabled = false;
+                });
         });
 
         // Publicar
         document.getElementById('publicarBtn').addEventListener('click', async () => {
             const btn = document.getElementById('publicarBtn');
-            const titulo = document.getElementById('titulo').value;
-            const contenido = document.getElementById('contenido').value;
+            const titulo = titleInput.value.trim();
+            const contenido = contentInput.value.trim();
 
-            if(!titulo || !contenido) return alert("Por favor, llena todos los campos.");
+            if(!titulo || !contenido) {
+                showStatus('Por favor, llena todos los campos.', 'error');
+                return;
+            }
+
+            if(titulo.length > 120) {
+                showStatus('El título no debe exceder 120 caracteres.', 'error');
+                return;
+            }
 
             // Cambio visual
             btn.disabled = true;
-            btn.innerText = "🚀 Publicando historia...";
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Publicando...';
 
             try {
                 await addDoc(collection(db, "posts"), {
                     titulo: titulo,
                     contenido: contenido,
-                    likes: 0,      // Inicializamos en 0 para evitar errores
+                    contenido_html: contenido, // Se renderizará en firebase.js
+                    likes: 0,
                     dislikes: 0,
-                    fecha: Timestamp.now()
+                    fecha: Timestamp.now(),
+                    publicadoPor: auth.currentUser?.email || "admin",
+                    userId: auth.currentUser?.uid || "admin",
+                    formato: 'markdown'
                 });
-                alert("¡Historia publicada con éxito!");
-                document.getElementById('titulo').value = '';
-                document.getElementById('contenido').value = '';
+                
+                showStatus('¡Historia publicada con éxito!', 'success');
+                
+                // Limpiar campos
+                titleInput.value = '';
+                contentInput.value = '';
+                updateCharacterCount(titleInput, titleCount, 120);
+                updateCharacterCount(contentInput, contentCount, 10000);
+                previewContent.innerHTML = '';
+                preview.style.display = 'none';
+                
             } catch (e) {
-                alert("Error de permisos: " + e.message);
+                console.error("Error al publicar:", e);
+                showStatus(`Error: ${e.message}`, 'error');
             } finally {
                 btn.disabled = false;
-                btn.innerText = "Publicar Historia";
+                btn.innerHTML = '<i class="fas fa-paper-plane"></i> Publicar Historia';
             }
         });
 
         // Salir
         document.getElementById('logoutBtn').addEventListener('click', () => {
-            signOut(auth);
+            if(confirm("¿Estás seguro de que quieres cerrar sesión?")) {
+                signOut(auth).then(() => {
+                    showStatus('Sesión cerrada correctamente', 'success');
+                });
+            }
+        });
+
+        // Inicializar
+        document.addEventListener('DOMContentLoaded', () => {
+            updateCharacterCount(titleInput, titleCount, 120);
+            updateCharacterCount(contentInput, contentCount, 10000);
+            updatePreview();
         });
     </script>
 </body>
