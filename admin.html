@@ -276,6 +276,188 @@
             color: var(--danger);
             display: block;
         }
+
+        /* ── Sección de Reportes ── */
+        .reportes-section {
+            margin-top: 40px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            padding-top: 30px;
+        }
+
+        .reportes-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .reportes-stats {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .stat-badge {
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 20px;
+            padding: 6px 14px;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+
+        .stat-badge span {
+            color: var(--primary);
+            font-weight: 700;
+        }
+
+        .reportes-filtros {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .filtro-btn {
+            padding: 7px 16px;
+            border-radius: 20px;
+            border: 1px solid rgba(255,255,255,0.15);
+            background: transparent;
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: 0.2s;
+            box-shadow: none;
+            text-transform: none;
+            letter-spacing: 0;
+        }
+
+        .filtro-btn:hover, .filtro-btn.active {
+            background: var(--primary);
+            color: var(--bg-dark);
+            border-color: var(--primary);
+            transform: none;
+            box-shadow: none;
+        }
+
+        #buscador-reportes {
+            width: 100%;
+            margin-bottom: 15px;
+            padding: 12px 16px;
+        }
+
+        .reporte-card {
+            background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 14px;
+            padding: 20px;
+            margin-bottom: 14px;
+            transition: 0.3s;
+            position: relative;
+        }
+
+        .reporte-card:hover {
+            border-color: rgba(255,255,255,0.2);
+            background: rgba(255,255,255,0.05);
+        }
+
+        .reporte-card.leido {
+            opacity: 0.55;
+            border-style: dashed;
+        }
+
+        .reporte-titulo {
+            font-weight: 700;
+            font-size: 1rem;
+            color: var(--text-main);
+            margin-bottom: 8px;
+            padding-right: 80px;
+        }
+
+        .reporte-descripcion {
+            font-size: 0.92rem;
+            color: var(--text-muted);
+            line-height: 1.6;
+            margin-bottom: 12px;
+            white-space: pre-wrap;
+            word-break: break-word;
+        }
+
+        .reporte-meta {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 0.8rem;
+            color: #555;
+            flex-wrap: wrap;
+        }
+
+        .reporte-acciones {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            display: flex;
+            gap: 8px;
+        }
+
+        .btn-reporte {
+            padding: 5px 10px;
+            border-radius: 8px;
+            border: 1px solid rgba(255,255,255,0.1);
+            background: rgba(255,255,255,0.05);
+            color: var(--text-muted);
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: 0.2s;
+            box-shadow: none;
+            text-transform: none;
+            letter-spacing: 0;
+        }
+
+        .btn-reporte:hover { transform: none; }
+
+        .btn-leer:hover {
+            background: rgba(56,189,248,0.15);
+            color: var(--primary);
+            border-color: var(--primary);
+            box-shadow: none;
+        }
+
+        .btn-eliminar:hover {
+            background: rgba(239,68,68,0.15);
+            color: var(--danger);
+            border-color: var(--danger);
+            box-shadow: none;
+        }
+
+        .reportes-empty {
+            text-align: center;
+            padding: 50px 20px;
+            color: var(--text-muted);
+            font-size: 0.95rem;
+        }
+
+        .reportes-loading {
+            text-align: center;
+            padding: 40px;
+            color: var(--text-muted);
+        }
+
+        .nuevo-badge {
+            display: inline-block;
+            background: var(--danger);
+            color: white;
+            font-size: 0.65rem;
+            font-weight: 700;
+            padding: 2px 7px;
+            border-radius: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            vertical-align: middle;
+            margin-left: 6px;
+        }
     </style>
 </head>
 <body>
@@ -287,7 +469,7 @@
         <a href="videojuegos.html"><i class="fas fa-gamepad"></i> Videojuegos</a>
         <a href="redes.html"><i class="fas fa-users"></i> Redes Sociales</a>
         <a href="grooming.html"><i class="fas fa-exclamation-triangle"></i> Grooming</a>
-        <a href="https://noticias-seguridad.web.app/" target="_blank" rel="noopener noreferrer">
+        <a href="https://pablogalvan22.github.io/NoticiasSanIsidro/" target="_blank" rel="noopener noreferrer">
             <i class="fas fa-newspaper"></i> Noticias
         </a>
         <a href="admin.html" style="margin-left: auto; background: rgba(239, 68, 68, 0.1);">
@@ -468,11 +650,53 @@
                     <i class="fas fa-sign-out-alt"></i> Cerrar Sesión
                 </button>
             </div>
+
+            <!-- ── Sección de Reportes Ciudadanos ── -->
+            <div class="reportes-section">
+                <div class="reportes-header">
+                    <h3><i class="fas fa-flag"></i> Reportes Ciudadanos</h3>
+                    <div class="reportes-stats">
+                        <div class="stat-badge">Total: <span id="total-reportes">–</span></div>
+                        <div class="stat-badge">Sin leer: <span id="sin-leer-count">–</span></div>
+                    </div>
+                </div>
+
+                <div class="reportes-filtros">
+                    <button class="filtro-btn active" data-filtro="todos" onclick="filtrarReportes('todos', this)">
+                        <i class="fas fa-list"></i> Todos
+                    </button>
+                    <button class="filtro-btn" data-filtro="nuevos" onclick="filtrarReportes('nuevos', this)">
+                        <i class="fas fa-circle" style="color:var(--danger); font-size:0.6rem;"></i> Sin leer
+                    </button>
+                    <button class="filtro-btn" data-filtro="leidos" onclick="filtrarReportes('leidos', this)">
+                        <i class="fas fa-check"></i> Leídos
+                    </button>
+                    <button class="filtro-btn" onclick="cargarReportes()" style="margin-left:auto;">
+                        <i class="fas fa-sync-alt"></i> Actualizar
+                    </button>
+                </div>
+
+                <input type="text" id="buscador-reportes" placeholder="🔍 Buscar en reportes..." oninput="buscarReportes(this.value)">
+
+                <div id="reportes-container">
+                    <div class="reportes-loading">
+                        <i class="fas fa-spinner fa-spin" style="font-size:1.5rem; margin-bottom:10px; display:block;"></i>
+                        Cargando reportes...
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 
     <script type="module">
-        import { db, auth, collection, addDoc, Timestamp, signInWithEmailAndPassword, onAuthStateChanged, signOut } from './firebase.js';
+        import { 
+            db, auth, collection, addDoc, getDocs, Timestamp, 
+            signInWithEmailAndPassword, onAuthStateChanged, signOut,
+            query, orderBy
+        } from './firebase.js';
+
+        // deleteDoc y doc importados directo desde Firebase (no están en firebase.js)
+        import { deleteDoc as _deleteDoc, doc as _doc } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
 
         const loginSection = document.getElementById('login-section');
         const postSection = document.getElementById('post-section');
@@ -483,6 +707,138 @@
         const previewContent = document.getElementById('preview-content');
         const preview = document.getElementById('preview');
         const statusMessage = document.getElementById('status-message');
+
+        // ── Estado de reportes ──────────────────────────────
+        let todosLosReportes = [];
+        let filtroActual = 'todos';
+        let leidosSet = new Set(JSON.parse(localStorage.getItem('reportes_leidos') || '[]'));
+
+        function marcarLeido(id) {
+            leidosSet.add(id);
+            localStorage.setItem('reportes_leidos', JSON.stringify([...leidosSet]));
+        }
+
+        function formatFecha(timestamp) {
+            if (!timestamp) return 'Fecha desconocida';
+            try {
+                const d = timestamp.toDate();
+                return d.toLocaleDateString('es-MX', {
+                    day: '2-digit', month: 'short', year: 'numeric',
+                    hour: '2-digit', minute: '2-digit'
+                });
+            } catch { return 'Fecha inválida'; }
+        }
+
+        function renderReportes(lista) {
+            const container = document.getElementById('reportes-container');
+            if (lista.length === 0) {
+                container.innerHTML = `<div class="reportes-empty">
+                    <i class="fas fa-inbox" style="font-size:2rem; margin-bottom:10px; display:block; opacity:0.3;"></i>
+                    No hay reportes para mostrar.
+                </div>`;
+                return;
+            }
+
+            const sinLeer = lista.filter(r => !leidosSet.has(r.id)).length;
+            document.getElementById('sin-leer-count').textContent = sinLeer;
+
+            container.innerHTML = lista.map(r => {
+                const leido = leidosSet.has(r.id);
+                return `
+                <div class="reporte-card ${leido ? 'leido' : ''}" id="card-${r.id}">
+                    <div class="reporte-acciones">
+                        <button class="btn-reporte btn-leer" onclick="toggleLeido('${r.id}')" title="${leido ? 'Marcar como no leído' : 'Marcar como leído'}">
+                            <i class="fas fa-${leido ? 'envelope' : 'envelope-open'}"></i> ${leido ? 'No leído' : 'Leído'}
+                        </button>
+                        <button class="btn-reporte btn-eliminar" onclick="eliminarReporte('${r.id}')" title="Eliminar reporte">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </div>
+                    <div class="reporte-titulo">
+                        ${r.titulo}
+                        ${!leido ? '<span class="nuevo-badge">Nuevo</span>' : ''}
+                    </div>
+                    <div class="reporte-descripcion">${r.descripcion}</div>
+                    <div class="reporte-meta">
+                        <span><i class="fas fa-clock"></i> ${formatFecha(r.fecha)}</span>
+                    </div>
+                </div>`;
+            }).join('');
+        }
+
+        window.cargarReportes = async function() {
+            const container = document.getElementById('reportes-container');
+            container.innerHTML = `<div class="reportes-loading">
+                <i class="fas fa-spinner fa-spin" style="font-size:1.5rem; margin-bottom:10px; display:block;"></i>
+                Cargando reportes...
+            </div>`;
+
+            try {
+                const q = query(collection(db, 'reportes'), orderBy('fecha', 'desc'));
+                const snap = await getDocs(q);
+                todosLosReportes = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+
+                document.getElementById('total-reportes').textContent = todosLosReportes.length;
+                const sinLeer = todosLosReportes.filter(r => !leidosSet.has(r.id)).length;
+                document.getElementById('sin-leer-count').textContent = sinLeer;
+
+                aplicarFiltro();
+            } catch (e) {
+                container.innerHTML = `<div class="reportes-empty" style="color:var(--danger);">
+                    <i class="fas fa-exclamation-triangle"></i> Error al cargar reportes: ${e.message}
+                </div>`;
+            }
+        };
+
+        function aplicarFiltro() {
+            let lista = [...todosLosReportes];
+            if (filtroActual === 'nuevos') lista = lista.filter(r => !leidosSet.has(r.id));
+            if (filtroActual === 'leidos') lista = lista.filter(r => leidosSet.has(r.id));
+            renderReportes(lista);
+        }
+
+        window.filtrarReportes = function(filtro, btn) {
+            filtroActual = filtro;
+            document.querySelectorAll('.filtro-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            aplicarFiltro();
+        };
+
+        window.buscarReportes = function(texto) {
+            const q = texto.toLowerCase().trim();
+            let lista = [...todosLosReportes];
+            if (filtroActual === 'nuevos') lista = lista.filter(r => !leidosSet.has(r.id));
+            if (filtroActual === 'leidos') lista = lista.filter(r => leidosSet.has(r.id));
+            if (q) lista = lista.filter(r =>
+                r.titulo.toLowerCase().includes(q) ||
+                r.descripcion.toLowerCase().includes(q)
+            );
+            renderReportes(lista);
+        };
+
+        window.toggleLeido = function(id) {
+            if (leidosSet.has(id)) {
+                leidosSet.delete(id);
+            } else {
+                marcarLeido(id);
+            }
+            localStorage.setItem('reportes_leidos', JSON.stringify([...leidosSet]));
+            aplicarFiltro();
+        };
+
+        window.eliminarReporte = async function(id) {
+            if (!confirm('¿Eliminar este reporte permanentemente? Esta acción no se puede deshacer.')) return;
+            try {
+                await _deleteDoc(_doc(db, 'reportes', id));
+                todosLosReportes = todosLosReportes.filter(r => r.id !== id);
+                leidosSet.delete(id);
+                localStorage.setItem('reportes_leidos', JSON.stringify([...leidosSet]));
+                document.getElementById('total-reportes').textContent = todosLosReportes.length;
+                aplicarFiltro();
+            } catch (e) {
+                alert('Error al eliminar: ' + e.message);
+            }
+        };
 
         // Funciones para el editor
         window.formatText = function(type) {
@@ -586,14 +942,20 @@
         }
 
         // Verificar estado del usuario
+        let redirectTimer = null;
         onAuthStateChanged(auth, (user) => {
             if (user) {
+                if (redirectTimer) clearTimeout(redirectTimer);
                 loginSection.style.display = 'none';
                 postSection.style.display = 'block';
-                document.title = `Admin (${user.email}) - Publicar Historia`;
+                document.title = `Admin (${user.email}) - Panel`;
+                cargarReportes();
             } else {
                 loginSection.style.display = 'block';
                 postSection.style.display = 'none';
+                redirectTimer = setTimeout(() => {
+                    if (!auth.currentUser) window.location.href = 'index.html';
+                }, 5000);
             }
         });
 
