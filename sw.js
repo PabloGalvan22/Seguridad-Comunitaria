@@ -7,7 +7,7 @@ const BASE = self.location.pathname.replace('/sw.js', '');
 // En GitHub Pages quedará: '/Seguridad-Comunitaria'
 // En localhost quedará:    ''
 
-const CACHE_STATIC = 'segcom-static-v2'; // ← versión incrementada para limpiar caché viejo
+const CACHE_STATIC = 'segcom-static-v3'; // ← versión incrementada para limpiar caché viejo
 
 // Archivos que se cachean en la instalación (shell de la app)
 const PRECACHE_URLS = [
