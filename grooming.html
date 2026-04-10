@@ -401,11 +401,30 @@
             <p style="color: #fca5a5; margin-bottom: 20px;">Si estás en peligro o conoces a alguien que lo esté, contacta inmediatamente:</p>
             <div class="contact-grid">
                 <div class="contact-item">Emergencias Nacionales <span><i class="fas fa-phone"></i> 555 242 5100 (Policía)</span></div>
-                <div class="contact-item">Policía Cibernética <span><i class="fas fa-envelope"></i> <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="c6b6a9aaafa5afa7e8a5afa4a3b4a8a3b2afa5a786b5b5a5e8a5a2abbee8a1a9a4e8abbe">[email&#160;protected]</a></span></div>
+                <div class="contact-item">Policía Cibernética <span><i class="fas fa-envelope"></i> policia.cibernetica@ssc.cdmx.gob.mx</span></div>
                 <div class="contact-item">Denuncia de Abuso Online <span><i class="fas fa-globe"></i> groominglatam.org</span></div>
                 <div class="contact-item">Línea de Ayuda Infantil <span><i class="fas fa-phone"></i> 800 123 4567</span></div>
             </div>
         </section>
+
+        <!-- Formulario de sugerencias de historias -->
+        <div class="sugerencia-box">
+            <h3><i class="fas fa-lightbulb"></i> ¿Conoces un caso real? Sugiérelo</h3>
+            <p>Si conoces una historia o situación de grooming que crees que puede ayudar a la comunidad, compártela aquí. El administrador la revisará antes de publicarla.</p>
+            <form id="sugerencia-form">
+                <input type="text" id="campo-trampa-sug" name="url_sitio" autocomplete="off" tabindex="-1"
+                       style="display:none !important; position:absolute; left:-9999px;" aria-hidden="true">
+                <input type="text" id="sug-titulo" placeholder="Título breve del caso (mínimo 10 caracteres)" required minlength="10" maxlength="120">
+                <textarea id="sug-descripcion" placeholder="Describe el caso con el mayor detalle posible para que sea útil a la comunidad... (mínimo 50 caracteres)" required minlength="50" maxlength="2000"></textarea>
+                <small style="color:var(--text-muted); display:block; margin-top:-10px; margin-bottom:16px; font-size:0.8rem;">
+                    <span id="sug-char-count">0</span>/2000 caracteres
+                </small>
+                <button type="submit" style="background: var(--secondary);">
+                    <i class="fas fa-paper-plane"></i> Enviar Sugerencia
+                </button>
+            </form>
+            <div id="sug-status"></div>
+        </div>
     </div>
 
     <script type="module">
@@ -413,7 +432,11 @@
         import { 
             getPosts, 
             getTotalPosts, 
-            formatDate 
+            formatDate,
+            db,
+            collection,
+            addDoc,
+            Timestamp
         } from './firebase.js';
 
         // Variables para ordenar posts
@@ -535,6 +558,62 @@
                 : '<i class="fas fa-sort-amount-up"></i> Más antiguos primero';
             
             cargarBlog();
+        });
+
+        // ── Formulario de sugerencias ────────────────────────
+        const sugForm = document.getElementById('sugerencia-form');
+        const sugStatus = document.getElementById('sug-status');
+        const sugCharCount = document.getElementById('sug-char-count');
+        const SUG_COOLDOWN = 5 * 60 * 1000; // 5 minutos entre sugerencias
+
+        document.getElementById('sug-descripcion').addEventListener('input', (e) => {
+            sugCharCount.textContent = e.target.value.length;
+        });
+
+        sugForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            if (document.getElementById('campo-trampa-sug').value) return;
+
+            const ultimaSug = localStorage.getItem('ultima_sugerencia');
+            if (ultimaSug && Date.now() - parseInt(ultimaSug) < SUG_COOLDOWN) {
+                const espera = Math.ceil((SUG_COOLDOWN - (Date.now() - parseInt(ultimaSug))) / 1000 / 60);
+                sugStatus.innerHTML = `<p style='color:#f59e0b; margin-top:10px;'>⏳ Espera ${espera} minuto(s) antes de enviar otra sugerencia.</p>`;
+                return;
+            }
+
+            const titulo = document.getElementById('sug-titulo').value.trim();
+            const descripcion = document.getElementById('sug-descripcion').value.trim();
+
+            if (titulo.length < 10) {
+                sugStatus.innerHTML = "<p style='color:#f87171; margin-top:10px;'>⚠️ El título debe tener al menos 10 caracteres.</p>";
+                return;
+            }
+            if (descripcion.length < 50) {
+                sugStatus.innerHTML = "<p style='color:#f87171; margin-top:10px;'>⚠️ La descripción debe tener al menos 50 caracteres.</p>";
+                return;
+            }
+
+            const btn = sugForm.querySelector('button');
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Enviando...';
+
+            try {
+                await addDoc(collection(db, 'sugerencias'), {
+                    titulo,
+                    descripcion,
+                    fecha: Timestamp.now(),
+                    estado: 'pendiente'
+                });
+                localStorage.setItem('ultima_sugerencia', Date.now().toString());
+                sugStatus.innerHTML = "<p style='color:#4ade80; margin-top:10px;'>✅ ¡Gracias! Tu sugerencia fue enviada. El administrador la revisará pronto.</p>";
+                sugForm.reset();
+                sugCharCount.textContent = '0';
+            } catch (err) {
+                sugStatus.innerHTML = "<p style='color:#f87171; margin-top:10px;'>❌ Error al enviar. Intenta más tarde.</p>";
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = '<i class="fas fa-paper-plane"></i> Enviar Sugerencia';
+            }
         });
 
         // Inicializar

@@ -687,6 +687,39 @@
                     </div>
                 </div>
             </div>
+
+            <!-- ── Sección de Sugerencias de Historias ── -->
+            <div class="reportes-section">
+                <div class="reportes-header">
+                    <h3><i class="fas fa-lightbulb"></i> Sugerencias de Historias</h3>
+                    <div class="reportes-stats">
+                        <div class="stat-badge">Total: <span id="total-sugerencias">–</span></div>
+                        <div class="stat-badge">Pendientes: <span id="pendientes-count">–</span></div>
+                    </div>
+                </div>
+
+                <div class="reportes-filtros">
+                    <button class="filtro-btn active" onclick="filtrarSugerencias('todas', this)">
+                        <i class="fas fa-list"></i> Todas
+                    </button>
+                    <button class="filtro-btn" onclick="filtrarSugerencias('pendiente', this)">
+                        <i class="fas fa-clock"></i> Pendientes
+                    </button>
+                    <button class="filtro-btn" onclick="filtrarSugerencias('publicada', this)">
+                        <i class="fas fa-check"></i> Publicadas
+                    </button>
+                    <button class="filtro-btn" onclick="cargarSugerencias()" style="margin-left:auto;">
+                        <i class="fas fa-sync-alt"></i> Actualizar
+                    </button>
+                </div>
+
+                <div id="sugerencias-container">
+                    <div class="reportes-loading">
+                        <i class="fas fa-spinner fa-spin" style="font-size:1.5rem; margin-bottom:10px; display:block;"></i>
+                        Cargando sugerencias...
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -694,7 +727,7 @@
         import { 
             db, auth, collection, addDoc, getDocs, Timestamp, 
             signInWithEmailAndPassword, onAuthStateChanged, signOut,
-            query, orderBy, doc, deleteDoc
+            query, orderBy, doc, deleteDoc, updateDoc
         } from './firebase.js';
 
         const loginSection = document.getElementById('login-section');
@@ -839,6 +872,99 @@
             }
         };
 
+        // ── Sugerencias de historias ────────────────────────
+        let todasLasSugerencias = [];
+        let filtroSugActual = 'todas';
+
+        window.cargarSugerencias = async function() {
+            const container = document.getElementById('sugerencias-container');
+            container.innerHTML = `<div class="reportes-loading">
+                <i class="fas fa-spinner fa-spin" style="font-size:1.5rem; margin-bottom:10px; display:block;"></i>
+                Cargando sugerencias...
+            </div>`;
+            try {
+                const q = query(collection(db, 'sugerencias'), orderBy('fecha', 'desc'));
+                const snap = await getDocs(q);
+                todasLasSugerencias = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+                document.getElementById('total-sugerencias').textContent = todasLasSugerencias.length;
+                document.getElementById('pendientes-count').textContent = todasLasSugerencias.filter(s => s.estado === 'pendiente').length;
+                aplicarFiltroSug();
+            } catch (e) {
+                container.innerHTML = `<div class="reportes-empty" style="color:var(--danger);">
+                    <i class="fas fa-exclamation-triangle"></i> Error: ${e.message}
+                </div>`;
+            }
+        };
+
+        function aplicarFiltroSug() {
+            let lista = [...todasLasSugerencias];
+            if (filtroSugActual !== 'todas') lista = lista.filter(s => s.estado === filtroSugActual);
+            renderSugerencias(lista);
+        }
+
+        window.filtrarSugerencias = function(filtro, btn) {
+            filtroSugActual = filtro;
+            document.querySelectorAll('#sugerencias-container').forEach(() => {});
+            btn.closest('.reportes-filtros').querySelectorAll('.filtro-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            aplicarFiltroSug();
+        };
+
+        function renderSugerencias(lista) {
+            const container = document.getElementById('sugerencias-container');
+            if (lista.length === 0) {
+                container.innerHTML = `<div class="reportes-empty">
+                    <i class="fas fa-inbox" style="font-size:2rem; margin-bottom:10px; display:block; opacity:0.3;"></i>
+                    No hay sugerencias para mostrar.
+                </div>`;
+                return;
+            }
+
+            container.innerHTML = lista.map(s => {
+                const esPendiente = s.estado === 'pendiente' || !s.estado;
+                return `
+                <div class="reporte-card" id="sug-card-${s.id}">
+                    <div class="reporte-acciones">
+                        ${esPendiente ? `<button class="btn-reporte btn-leer" onclick="marcarSugPublicada('${s.id}')" title="Marcar como publicada">
+                            <i class="fas fa-check"></i> Publicada
+                        </button>` : `<span style="font-size:0.8rem; color:var(--success);"><i class="fas fa-check-circle"></i> Publicada</span>`}
+                        <button class="btn-reporte btn-eliminar" onclick="eliminarSugerencia('${s.id}')" title="Eliminar">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </div>
+                    <div class="reporte-titulo">
+                        ${s.titulo}
+                        ${esPendiente ? '<span class="nuevo-badge">Pendiente</span>' : ''}
+                    </div>
+                    <div class="reporte-descripcion">${s.descripcion}</div>
+                    <div class="reporte-meta">
+                        <span><i class="fas fa-clock"></i> ${formatFecha(s.fecha)}</span>
+                    </div>
+                </div>`;
+            }).join('');
+        }
+
+        window.marcarSugPublicada = async function(id) {
+            try {
+                await updateDoc(doc(db, 'sugerencias', id), { estado: 'publicada' });
+                const sug = todasLasSugerencias.find(s => s.id === id);
+                if (sug) sug.estado = 'publicada';
+                document.getElementById('pendientes-count').textContent = todasLasSugerencias.filter(s => s.estado === 'pendiente').length;
+                aplicarFiltroSug();
+            } catch (e) { alert('Error: ' + e.message); }
+        };
+
+        window.eliminarSugerencia = async function(id) {
+            if (!confirm('¿Eliminar esta sugerencia permanentemente?')) return;
+            try {
+                await deleteDoc(doc(db, 'sugerencias', id));
+                todasLasSugerencias = todasLasSugerencias.filter(s => s.id !== id);
+                document.getElementById('total-sugerencias').textContent = todasLasSugerencias.length;
+                document.getElementById('pendientes-count').textContent = todasLasSugerencias.filter(s => s.estado === 'pendiente').length;
+                aplicarFiltroSug();
+            } catch (e) { alert('Error al eliminar: ' + e.message); }
+        };
+
         // ── Validación visual del email ─────────────────────
         window.validarEmail = function(input) {
             const hint = document.getElementById('email-hint');
@@ -967,6 +1093,7 @@
                 postSection.style.display = 'block';
                 document.title = `Admin (${user.email}) - Panel`;
                 cargarReportes();
+                cargarSugerencias();
             } else {
                 loginSection.style.display = 'block';
                 postSection.style.display = 'none';

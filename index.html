@@ -203,9 +203,22 @@
 
         <div class="footer-text">
             &copy; 2026 Seguridad Comunitaria. Todos los derechos reservados.<br>
-            Plataforma educativa para la prevención de delitos informáticos.
+            Plataforma educativa para la prevención de delitos informáticos.<br>
+            <a href="privacidad.html" style="color: var(--text-muted); font-size:0.85rem;">Política de Privacidad y Cookies</a>
         </div>
     </footer>
+
+    <!-- Banner de Cookies -->
+    <div id="cookie-banner" role="dialog" aria-label="Aviso de cookies">
+        <div class="cookie-text">
+            <strong>🍪 Usamos almacenamiento local</strong> para guardar tu progreso en los quizzes y evitar spam en los formularios. No son cookies de seguimiento ni se comparten con terceros.
+            <a href="privacidad.html">Más información</a>
+        </div>
+        <div class="cookie-buttons">
+            <a href="privacidad.html" class="btn-cookie-info">Ver política</a>
+            <button class="btn-cookie-accept" onclick="aceptarCookies()">Entendido ✓</button>
+        </div>
+    </div>
 
     <script type="module">
         import { db, collection, addDoc, Timestamp } from './firebase.js';
@@ -300,6 +313,39 @@
                 }
             });
         });
+
+        // ── Banner de cookies ───────────────────────────────
+        function aceptarCookies() {
+            localStorage.setItem('cookies_aceptadas', '1');
+            document.getElementById('cookie-banner').classList.remove('visible');
+        }
+
+        window.addEventListener('DOMContentLoaded', () => {
+            if (!localStorage.getItem('cookies_aceptadas')) {
+                setTimeout(() => {
+                    document.getElementById('cookie-banner').classList.add('visible');
+                }, 800);
+            }
+        });
     </script>
+
+    <!-- Firebase Analytics -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
+        import { getAnalytics, logEvent } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-analytics.js";
+        const firebaseConfig = {
+            apiKey: "AIzaSyDBbiAZVGkN5em-ZUwISkjP4qCI9QK0Usc",
+            authDomain: "seguridadcomunitaria-22p.firebaseapp.com",
+            projectId: "seguridadcomunitaria-22p",
+            storageBucket: "seguridadcomunitaria-22p.firebasestorage.app",
+            messagingSenderId: "762347660708",
+            appId: "1:762347660708:web:8efb03cbed8dd1bd974d31",
+            measurementId: "G-Z3548XRKQX"
+        };
+        const app = initializeApp(firebaseConfig);
+        const analytics = getAnalytics(app);
+        logEvent(analytics, 'page_view', { page_title: 'Inicio' });
+    </script>
+
 </body>
 </html>

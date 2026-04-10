@@ -1268,3 +1268,138 @@ a[href="admin.html"] {
     margin: 30px 0;
     border: none;
 }
+/* ============================================
+   BANNER DE COOKIES
+   ============================================ */
+#cookie-banner {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: rgba(15, 23, 42, 0.97);
+    backdrop-filter: blur(12px);
+    border-top: 1px solid rgba(56, 189, 248, 0.3);
+    padding: 18px 24px;
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    flex-wrap: wrap;
+    box-shadow: 0 -4px 30px rgba(0,0,0,0.5);
+    transform: translateY(100%);
+    transition: transform 0.4s ease;
+}
+
+#cookie-banner.visible {
+    transform: translateY(0);
+}
+
+.cookie-text {
+    font-size: 0.88rem;
+    color: var(--text-muted);
+    line-height: 1.5;
+    flex: 1;
+    min-width: 200px;
+}
+
+.cookie-text strong {
+    color: var(--text-main);
+}
+
+.cookie-text a {
+    color: var(--primary);
+    text-decoration: none;
+}
+
+.cookie-text a:hover {
+    text-decoration: underline;
+}
+
+.cookie-buttons {
+    display: flex;
+    gap: 10px;
+    flex-shrink: 0;
+}
+
+.btn-cookie-accept {
+    background: var(--primary);
+    color: var(--bg-dark);
+    border: none;
+    padding: 9px 20px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: 0.2s;
+    box-shadow: none;
+    text-transform: none;
+    letter-spacing: 0;
+}
+
+.btn-cookie-accept:hover {
+    background: var(--secondary);
+    transform: none;
+    box-shadow: none;
+}
+
+.btn-cookie-info {
+    background: transparent;
+    color: var(--text-muted);
+    border: 1px solid rgba(255,255,255,0.15);
+    padding: 9px 16px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: 0.2s;
+    box-shadow: none;
+    text-transform: none;
+    letter-spacing: 0;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+}
+
+.btn-cookie-info:hover {
+    border-color: var(--primary);
+    color: var(--primary);
+    transform: none;
+    box-shadow: none;
+}
+
+@media (max-width: 768px) {
+    #cookie-banner {
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 16px;
+    }
+    .cookie-buttons {
+        width: 100%;
+    }
+    .btn-cookie-accept {
+        flex: 1;
+        text-align: center;
+    }
+}
+
+/* ============================================
+   FORMULARIO DE SUGERENCIAS DE HISTORIAS
+   ============================================ */
+.sugerencia-box {
+    background: rgba(129, 140, 248, 0.05);
+    border: 1px solid rgba(129, 140, 248, 0.2);
+    border-radius: 20px;
+    padding: 30px;
+    margin-top: 40px;
+}
+
+.sugerencia-box h3 {
+    color: var(--secondary);
+    margin-bottom: 8px;
+}
+
+.sugerencia-box p {
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    margin-bottom: 20px;
+}
