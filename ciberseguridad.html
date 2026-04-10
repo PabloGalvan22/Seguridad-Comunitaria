@@ -22,42 +22,14 @@
         .strong { background: #38bdf8; width: 100%; box-shadow: 0 0 15px var(--primary); }
 
         /* Estilos del Test */
-        .platform-badge { padding: 4px 10px; border-radius: 6px; font-size: 0.75rem; font-weight: bold; margin-bottom: 10px; display: inline-block; text-transform: uppercase; }
-        .android { background: #3DDC84; color: #073042; }
-        .ios { background: #f5f5f7; color: #1d1d1f; }
-        .windows { background: #0078d4; color: white; }
-        .platform-badge { cursor: pointer; transition: 0.3s; }
-        .platform-badge:hover { transform: scale(1.05); }
-
-        .score-board {
+.score-board {
             position: sticky; top: 80px; background: var(--bg-card); padding: 15px;
             border-radius: 12px; border: 2px solid var(--secondary);
             z-index: 99; margin: 20px 0; box-shadow: 0 10px 30px rgba(0,0,0,0.5);
             display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;
         }
-        .score-text { font-size: 1.2rem; font-weight: bold; color: var(--secondary); }
-        .test-controls { display: flex; gap: 10px; }
-        .test-controls button { padding: 8px 15px; font-size: 0.9rem; }
-
-        .question { background: rgba(255,255,255,0.03); padding: 25px; border-radius: 16px; margin-bottom: 25px; border: 1px solid rgba(255,255,255,0.1); transition: all 0.3s ease; }
-        .options button { display: block; width: 100%; text-align: left; padding: 14px; margin: 10px 0; background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.1); color: var(--text-main); border-radius: 10px; cursor: pointer; transition: 0.3s; font-family: 'Poppins', sans-serif; }
-        .options button:hover { background: rgba(129, 140, 248, 0.1); border-color: var(--secondary); }
-        .feedback { font-weight: 600; margin-top: 15px; display: none; padding: 12px; border-radius: 8px; font-size: 0.95rem; line-height: 1.4; }
-        .correct { color: #4ade80; background: rgba(74, 222, 128, 0.1); border: 1px solid #4ade80; }
-        .incorrect { color: #f87171; background: rgba(248, 113, 113, 0.1); border: 1px solid #f87171; }
-        .info-card { background: rgba(255,255,255,0.05); padding: 25px; border-radius: 15px; margin-bottom: 20px; border-top: 3px solid var(--primary); }
-
-        .section-nav { display: flex; gap: 10px; margin: 20px 0; flex-wrap: wrap; }
-        .section-nav a { padding: 8px 15px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 20px; color: var(--text-muted); text-decoration: none; font-size: 0.9rem; transition: 0.3s; }
-        .section-nav a:hover { background: var(--secondary); color: var(--bg-dark); }
-
-        .results-summary { background: rgba(255,255,255,0.05); padding: 30px; border-radius: 15px; margin: 30px 0; text-align: center; display: none; }
-        .results-summary h3 { color: var(--secondary); margin-bottom: 20px; }
-        .result-stats { display: flex; justify-content: center; gap: 30px; flex-wrap: wrap; margin: 20px 0; }
-        .stat-item { text-align: center; }
-        .stat-value { font-size: 2.5rem; font-weight: bold; color: var(--secondary); display: block; }
-        .stat-label { font-size: 0.9rem; color: var(--text-muted); }
-    </style>
+.info-card { background: rgba(255,255,255,0.05); padding: 25px; border-radius: 15px; margin-bottom: 20px; border-top: 3px solid var(--primary); }
+</style>
 </head>
 <body>
     <header>
@@ -66,18 +38,20 @@
     </header>
 
     <nav>
-        <a href="index.html"><i class="fas fa-home"></i> Inicio</a>
-        <a href="phishing.html"><i class="fas fa-fish"></i> Phishing</a>
-        <a href="ciberseguridad.html"><i class="fas fa-shield-alt"></i> Ciberseguridad</a>
-        <a href="videojuegos.html"><i class="fas fa-gamepad"></i> Videojuegos</a>
-        <a href="redes.html"><i class="fas fa-users"></i> Redes Sociales</a>
-        <a href="grooming.html"><i class="fas fa-exclamation-triangle"></i> Grooming</a>
-        <a href="https://noticias-seguridad.web.app/" target="_blank" rel="noopener noreferrer">
-            <i class="fas fa-newspaper"></i> Noticias para la Comunidad
-        </a>
-        <!--<a href="admin.html" style="margin-left: auto; background: rgba(239, 68, 68, 0.1);">
-            <i class="fas fa-lock"></i> Admin
-        </a>-->
+        <button class="nav-toggle" aria-label="Abrir menú de navegación" aria-expanded="false" onclick="toggleNav(this)">
+            <i class="fas fa-bars"></i>
+        </button>
+        <div class="nav-links">
+            <a href="index.html"><i class="fas fa-home"></i> Inicio</a>
+            <a href="phishing.html"><i class="fas fa-fish"></i> Phishing</a>
+            <a href="ciberseguridad.html"><i class="fas fa-shield-alt"></i> Ciberseguridad</a>
+            <a href="videojuegos.html"><i class="fas fa-gamepad"></i> Videojuegos</a>
+            <a href="redes.html"><i class="fas fa-users"></i> Redes Sociales</a>
+            <a href="grooming.html"><i class="fas fa-exclamation-triangle"></i> Grooming</a>
+            <a href="https://noticias-seguridad.web.app/" target="_blank" rel="noopener noreferrer">
+                <i class="fas fa-newspaper"></i> Noticias para la Comunidad
+            </a>
+        </div>
     </nav>
 
     <div class="container">
@@ -378,6 +352,28 @@
         document.querySelectorAll("nav a").forEach(link => {
             const linkPage = link.getAttribute("href").split("/").pop();
             if (linkPage === currentPage) link.classList.add("active");
+        });
+    </script>
+    <script>
+        function toggleNav(btn) {
+            const links = document.querySelector('.nav-links');
+            const isOpen = links.classList.toggle('open');
+            btn.setAttribute('aria-expanded', isOpen);
+            btn.innerHTML = isOpen
+                ? '<i class="fas fa-times"></i>'
+                : '<i class="fas fa-bars"></i>';
+        }
+        // Cerrar menú al hacer clic en un enlace
+        document.querySelectorAll('.nav-links a').forEach(link => {
+            link.addEventListener('click', () => {
+                const links = document.querySelector('.nav-links');
+                const btn = document.querySelector('.nav-toggle');
+                if (links.classList.contains('open')) {
+                    links.classList.remove('open');
+                    btn.setAttribute('aria-expanded', 'false');
+                    btn.innerHTML = '<i class="fas fa-bars"></i>';
+                }
+            });
         });
     </script>
 </body>

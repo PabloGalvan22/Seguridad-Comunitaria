@@ -125,18 +125,20 @@
     </header>
 
     <nav>
-        <a href="index.html"><i class="fas fa-home"></i> Inicio</a>
-        <a href="phishing.html"><i class="fas fa-fish"></i> Phishing</a>
-        <a href="ciberseguridad.html"><i class="fas fa-shield-alt"></i> Ciberseguridad</a>
-        <a href="videojuegos.html"><i class="fas fa-gamepad"></i> Videojuegos</a>
-        <a href="redes.html"><i class="fas fa-users"></i> Redes Sociales</a>
-        <a href="grooming.html"><i class="fas fa-exclamation-triangle"></i> Grooming</a>
-        <a href="https://noticias-seguridad.web.app/" target="_blank" rel="noopener noreferrer">
-            <i class="fas fa-newspaper"></i> Noticias para la Comunidad
-        </a>
-        <!--<a href="admin.html" style="margin-left: auto; background: rgba(239, 68, 68, 0.1);">
-            <i class="fas fa-lock"></i> Admin
-        </a>-->
+        <button class="nav-toggle" aria-label="Abrir menú de navegación" aria-expanded="false" onclick="toggleNav(this)">
+            <i class="fas fa-bars"></i>
+        </button>
+        <div class="nav-links">
+            <a href="index.html"><i class="fas fa-home"></i> Inicio</a>
+            <a href="phishing.html"><i class="fas fa-fish"></i> Phishing</a>
+            <a href="ciberseguridad.html"><i class="fas fa-shield-alt"></i> Ciberseguridad</a>
+            <a href="videojuegos.html"><i class="fas fa-gamepad"></i> Videojuegos</a>
+            <a href="redes.html"><i class="fas fa-users"></i> Redes Sociales</a>
+            <a href="grooming.html"><i class="fas fa-exclamation-triangle"></i> Grooming</a>
+            <a href="https://noticias-seguridad.web.app/" target="_blank" rel="noopener noreferrer">
+                <i class="fas fa-newspaper"></i> Noticias para la Comunidad
+            </a>
+        </div>
     </nav>
 
     <div class="container">
@@ -192,11 +194,11 @@
         <p>Síguenos para recibir consejos de seguridad diarios y alertas de nuevas estafas.</p>
         
         <div class="social-links">
-            <a href="#" class="social-icon fb" title="Facebook"><i class="fab fa-facebook-f"></i></a>
-            <a href="#" class="social-icon ig" title="Instagram"><i class="fab fa-instagram"></i></a>
-            <a href="https://x.com/Seguridad_Com22" class="social-icon x" title="X (Twitter)"><i class="fab fa-twitter"></i></a>
-            <a href="https://youtube.com/@pablogalvan-m9v?si=UHn10_6mypqj2ZBX" class="social-icon yt" title="YouTube"><i class="fab fa-youtube"></i></a>
-            <a href="https://www.tiktok.com/@pablo.galvan63?_r=1&_t=ZS-92gm3nkfNd1" class="social-icon tk" title="TikTok"><i class="fab fa-tiktok"></i></a>
+            <a href="#" class="social-icon fb" title="Facebook" aria-label="Síguenos en Facebook"><i class="fab fa-facebook-f" aria-hidden="true"></i></a>
+            <a href="#" class="social-icon ig" title="Instagram" aria-label="Síguenos en Instagram"><i class="fab fa-instagram" aria-hidden="true"></i></a>
+            <a href="https://x.com/Seguridad_Com22" class="social-icon x" title="X (Twitter)" aria-label="Síguenos en X (Twitter)"><i class="fab fa-twitter" aria-hidden="true"></i></a>
+            <a href="https://youtube.com/@pablogalvan-m9v?si=UHn10_6mypqj2ZBX" class="social-icon yt" title="YouTube" aria-label="Visita nuestro canal de YouTube"><i class="fab fa-youtube" aria-hidden="true"></i></a>
+            <a href="https://www.tiktok.com/@pablo.galvan63?_r=1&_t=ZS-92gm3nkfNd1" class="social-icon tk" title="TikTok" aria-label="Síguenos en TikTok"><i class="fab fa-tiktok" aria-hidden="true"></i></a>
         </div>
 
         <div class="footer-text">
@@ -277,5 +279,27 @@
         });
     </script>
 
+    <script>
+        function toggleNav(btn) {
+            const links = document.querySelector('.nav-links');
+            const isOpen = links.classList.toggle('open');
+            btn.setAttribute('aria-expanded', isOpen);
+            btn.innerHTML = isOpen
+                ? '<i class="fas fa-times"></i>'
+                : '<i class="fas fa-bars"></i>';
+        }
+        // Cerrar menú al hacer clic en un enlace
+        document.querySelectorAll('.nav-links a').forEach(link => {
+            link.addEventListener('click', () => {
+                const links = document.querySelector('.nav-links');
+                const btn = document.querySelector('.nav-toggle');
+                if (links.classList.contains('open')) {
+                    links.classList.remove('open');
+                    btn.setAttribute('aria-expanded', 'false');
+                    btn.innerHTML = '<i class="fas fa-bars"></i>';
+                }
+            });
+        });
+    </script>
 </body>
 </html>

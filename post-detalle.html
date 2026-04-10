@@ -358,18 +358,20 @@
 </head>
 <body>
     <nav>
-        <a href="index.html"><i class="fas fa-home"></i> Inicio</a>
-        <a href="phishing.html"><i class="fas fa-fish"></i> Phishing</a>
-        <a href="ciberseguridad.html"><i class="fas fa-shield-alt"></i> Ciberseguridad</a>
-        <a href="videojuegos.html"><i class="fas fa-gamepad"></i> Videojuegos</a>
-        <a href="redes.html"><i class="fas fa-users"></i> Redes Sociales</a>
-        <a href="grooming.html"><i class="fas fa-exclamation-triangle"></i> Grooming</a>
-        <a href="https://noticias-seguridad.web.app/" target="_blank" rel="noopener noreferrer">
-            <i class="fas fa-newspaper"></i> Noticias para la Comunidad
-        </a>
-        <a href="admin.html" style="margin-left: auto; background: rgba(239, 68, 68, 0.1);">
-            <i class="fas fa-lock"></i> Admin
-        </a>
+        <button class="nav-toggle" aria-label="Abrir menú de navegación" aria-expanded="false" onclick="toggleNav(this)">
+            <i class="fas fa-bars"></i>
+        </button>
+        <div class="nav-links">
+            <a href="index.html"><i class="fas fa-home"></i> Inicio</a>
+            <a href="phishing.html"><i class="fas fa-fish"></i> Phishing</a>
+            <a href="ciberseguridad.html"><i class="fas fa-shield-alt"></i> Ciberseguridad</a>
+            <a href="videojuegos.html"><i class="fas fa-gamepad"></i> Videojuegos</a>
+            <a href="redes.html"><i class="fas fa-users"></i> Redes Sociales</a>
+            <a href="grooming.html"><i class="fas fa-exclamation-triangle"></i> Grooming</a>
+            <a href="https://noticias-seguridad.web.app/" target="_blank" rel="noopener noreferrer">
+                <i class="fas fa-newspaper"></i> Noticias para la Comunidad
+            </a>
+        </div>
     </nav>
 
     <div class="container">
@@ -543,14 +545,16 @@
                         
                         <div class="vote-buttons">
                             <button id="btn-like" class="btn-vote btn-like ${yaVoto === 'likes' ? 'active-like' : ''}" 
-                                    ${yaVoto ? 'disabled' : ''}>
-                                <i class="far fa-thumbs-up"></i> 
+                                    ${yaVoto ? 'disabled' : ''}
+                                    aria-label="${yaVoto === 'likes' ? 'Ya votaste positivo' : 'Me gusta esta historia'}">
+                                <i class="far fa-thumbs-up" aria-hidden="true"></i> 
                                 <span class="count">${data.likes || 0}</span> 
                                 ${yaVoto === 'likes' ? 'Ya votaste' : 'Me gusta'}
                             </button>
                             <button id="btn-dislike" class="btn-vote btn-dislike ${yaVoto === 'dislikes' ? 'active-dislike' : ''}" 
-                                    ${yaVoto ? 'disabled' : ''}>
-                                <i class="far fa-thumbs-down"></i> 
+                                    ${yaVoto ? 'disabled' : ''}
+                                    aria-label="${yaVoto === 'dislikes' ? 'Ya votaste negativo' : 'No me gusta esta historia'}">
+                                <i class="far fa-thumbs-down" aria-hidden="true"></i> 
                                 <span class="count">${data.dislikes || 0}</span> 
                                 ${yaVoto === 'dislikes' ? 'Ya votaste' : 'No me gusta'}
                             </button>
@@ -646,6 +650,27 @@
         document.querySelectorAll("nav a").forEach(link => {
             const linkPage = link.getAttribute("href").split("/").pop();
             if (linkPage === currentPage) link.classList.add("active");
+        });
+    </script>
+    <script>
+        function toggleNav(btn) {
+            const links = document.querySelector('.nav-links');
+            const isOpen = links.classList.toggle('open');
+            btn.setAttribute('aria-expanded', isOpen);
+            btn.innerHTML = isOpen
+                ? '<i class="fas fa-times"></i>'
+                : '<i class="fas fa-bars"></i>';
+        }
+        document.querySelectorAll('.nav-links a').forEach(link => {
+            link.addEventListener('click', () => {
+                const links = document.querySelector('.nav-links');
+                const btn = document.querySelector('.nav-toggle');
+                if (links.classList.contains('open')) {
+                    links.classList.remove('open');
+                    btn.setAttribute('aria-expanded', 'false');
+                    btn.innerHTML = '<i class="fas fa-bars"></i>';
+                }
+            });
         });
     </script>
 </body>
