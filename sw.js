@@ -17,8 +17,11 @@ const PRECACHE_URLS = [
     '/privacidad.html',
     '/style.css',
     '/firebase.js',
+    '/pwa.js',
     '/icons/icon-192.png',
     '/icons/icon-512.png',
+    '/icons/icon-192-maskable.png',
+    '/icons/icon-512-maskable.png',
     '/manifest.json'
 ];
 

@@ -372,96 +372,23 @@
             }
         });
 
-        // ── PWA: Registro del Service Worker ───────────────
-        let swRegistration = null;
-        let swActualizacion = null;
-
-        if ('serviceWorker' in navigator) {
-            window.addEventListener('load', async () => {
-                try {
-                    swRegistration = await navigator.serviceWorker.register('/sw.js');
-                    console.log('[PWA] Service Worker registrado');
-
-                    // Detectar actualización disponible
-                    swRegistration.addEventListener('updatefound', () => {
-                        const nuevoSW = swRegistration.installing;
-                        nuevoSW.addEventListener('statechange', () => {
-                            if (nuevoSW.state === 'installed' && navigator.serviceWorker.controller) {
-                                // Hay una nueva versión esperando — guardar referencia
-                                swActualizacion = nuevoSW;
-                                localStorage.setItem('sw_update_pending', '1');
-                                mostrarBannerActualizacion();
-                            }
-                        });
-                    });
-
-                    // Si había una actualización pendiente de una sesión anterior
-                    if (localStorage.getItem('sw_update_pending') === '1') {
-                        mostrarBannerActualizacion();
-                    }
-
-                } catch (err) {
-                    console.warn('[PWA] Error registrando SW:', err);
-                }
-            });
-
-            // Recargar cuando el nuevo SW tome control
-            navigator.serviceWorker.addEventListener('controllerchange', () => {
-                window.location.reload();
-            });
-        }
-
         // ── PWA: Botón de instalación ───────────────────────
-        let deferredPrompt = null;
         const btnInstalar = document.getElementById('btn-instalar');
 
-        window.addEventListener('beforeinstallprompt', e => {
-            e.preventDefault();
-            deferredPrompt = e;
-            // Mostrar solo si no está instalada
-            if (window.matchMedia('(display-mode: standalone)').matches) return;
-            btnInstalar.style.display = 'inline-block';
-        });
-
         btnInstalar.addEventListener('click', async () => {
-            if (!deferredPrompt) return;
-            deferredPrompt.prompt();
-            const { outcome } = await deferredPrompt.userChoice;
+            if (!window.__pwaInstallPrompt) return;
+            window.__pwaInstallPrompt.prompt();
+            const { outcome } = await window.__pwaInstallPrompt.userChoice;
             if (outcome === 'accepted') {
                 btnInstalar.style.display = 'none';
                 console.log('[PWA] App instalada');
             }
-            deferredPrompt = null;
+            window.__pwaInstallPrompt = null;
         });
-
-        // Ocultar botón si ya está instalada
-        window.addEventListener('appinstalled', () => {
-            btnInstalar.style.display = 'none';
-            deferredPrompt = null;
-        });
-
-        // ── PWA: Banner de actualización ────────────────────
-        function mostrarBannerActualizacion() {
-            const banner = document.getElementById('update-banner');
-            banner.style.display = 'flex';
-        }
-
-        function aplicarActualizacion() {
-            localStorage.removeItem('sw_update_pending');
-            if (swActualizacion) {
-                swActualizacion.postMessage('SKIP_WAITING');
-            } else if (swRegistration && swRegistration.waiting) {
-                swRegistration.waiting.postMessage('SKIP_WAITING');
-            } else {
-                window.location.reload();
-            }
-        }
-
-        function posponerActualizacion() {
-            document.getElementById('update-banner').style.display = 'none';
-            // El banner reaparecerá la próxima vez que abra la app
-        }
     </script>
+
+    <!-- PWA: registro del SW compartido -->
+    <script src="pwa.js"></script>
 
     <!-- Firebase Analytics -->
     <script type="module">
