@@ -16,8 +16,11 @@
             font-weight: bold; 
             margin-bottom: 10px; 
             display: inline-block; 
-            text-transform: uppercase; 
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: 0.3s;
         }
+        .platform-badge:hover { transform: scale(1.05); }
         .android { background: #3DDC84; color: #073042; }
         .ios { background: #f5f5f7; color: #1d1d1f; }
         .windows { background: #0078d4; color: white; }
@@ -29,11 +32,15 @@
             padding: 15px; 
             border-radius: 12px; 
             border: 2px solid var(--danger); 
-            text-align: center; 
             z-index: 99; 
             margin: 20px 0; 
             box-shadow: 0 10px 30px rgba(0,0,0,0.5); 
             transition: all 0.3s ease;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
         }
         
         .score-text { 
@@ -41,6 +48,8 @@
             font-weight: bold; 
             color: var(--danger); 
         }
+        .test-controls { display: flex; gap: 10px; }
+        .test-controls button { padding: 8px 15px; font-size: 0.9rem; }
         
         .question { 
             background: rgba(255,255,255,0.03); 
@@ -297,7 +306,7 @@
 
         <hr>
         
-        <h2><i class="fas fa-newspaper"></i> Historias y Alertas Recientes</h2>
+        <h2 id="blog"><i class="fas fa-newspaper"></i> Historias y Alertas Recientes</h2>
         <p>Casos reportados para prevenir a la comunidad. Haz clic para leer el detalle.</p>
         
         <div class="blog-controls">
@@ -323,14 +332,41 @@
 
         <hr>
 
+        <div class="section-nav" style="display:flex; gap:10px; margin:20px 0; flex-wrap:wrap;">
+            <a href="#blog" style="padding:8px 15px; background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.1); border-radius:20px; color:var(--text-muted); text-decoration:none; font-size:0.9rem; transition:0.3s;">📰 Blog</a>
+            <a href="#android-test" style="padding:8px 15px; background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.1); border-radius:20px; color:var(--text-muted); text-decoration:none; font-size:0.9rem; transition:0.3s;">🤖 Test Android</a>
+            <a href="#ios-test" style="padding:8px 15px; background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.1); border-radius:20px; color:var(--text-muted); text-decoration:none; font-size:0.9rem; transition:0.3s;">🍎 Test iOS</a>
+            <a href="#windows-test" style="padding:8px 15px; background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.1); border-radius:20px; color:var(--text-muted); text-decoration:none; font-size:0.9rem; transition:0.3s;">🖥️ Test Windows</a>
+        </div>
+
         <div class="score-board">
-            <div class="score-text">Detección de Riesgos: <span id="puntos">0</span>/12 | <span id="porcentaje">0</span>% Seguro</div>
+            <div>
+                <div class="score-text">Detección de Riesgos: <span id="puntos">0</span>/12 | <span id="porcentaje">0</span>% Seguro</div>
+                <div id="lastAttempt" style="font-size:0.8em; color:var(--text-muted); margin-top:5px;">Último intento: No registrado</div>
+            </div>
+            <div class="test-controls">
+                <button onclick="reiniciarTestGrooming()" style="background:var(--danger);">🔄 Reiniciar Test</button>
+                <button onclick="mostrarResultadosGrooming()" style="background:var(--secondary);">📊 Ver Resultados</button>
+            </div>
         </div>
 
         <h2><i class="fas fa-tools"></i> Test de Prevención Integral</h2>
 
-        <div class="platform-badge android"><i class="fab fa-android"></i> Android</div>
-        <div class="question">
+        <!-- Resultados finales -->
+        <div id="resultsSummaryGrooming" style="background:rgba(255,255,255,0.05); padding:30px; border-radius:15px; margin:30px 0; text-align:center; display:none;">
+            <h3 style="color:var(--danger); margin-bottom:20px;">📊 Resultados del Test</h3>
+            <div style="display:flex; justify-content:center; gap:30px; flex-wrap:wrap; margin:20px 0;">
+                <div style="text-align:center;"><span id="gFinalScore" style="font-size:2.5rem; font-weight:bold; color:var(--danger); display:block;">0</span><span style="font-size:0.9rem; color:var(--text-muted);">Puntuación</span></div>
+                <div style="text-align:center;"><span id="gFinalPct" style="font-size:2.5rem; font-weight:bold; color:var(--danger); display:block;">0%</span><span style="font-size:0.9rem; color:var(--text-muted);">Efectividad</span></div>
+                <div style="text-align:center;"><span id="gTimeSpent" style="font-size:2.5rem; font-weight:bold; color:var(--danger); display:block;">0s</span><span style="font-size:0.9rem; color:var(--text-muted);">Tiempo</span></div>
+            </div>
+            <div id="gFeedback" style="margin-top:20px;"><p>Cargando evaluación...</p></div>
+            <button onclick="document.getElementById('resultsSummaryGrooming').style.display='none'" style="margin-top:20px;">Cerrar Resultados</button>
+        </div>
+
+        <h3 id="android-test">🤖 Android</h3>
+        <div class="platform-badge android" onclick="scrollToSection('grooming-a1')"><i class="fab fa-android"></i> Android</div>
+        <div class="question" id="grooming-a1">
             <p><strong>1. Un usuario de un juego móvil te pide tu WhatsApp para "regalarte diamantes".</strong></p>
             <div class="options">
                 <button class="opt" data-status="correct" data-msg="¡CORRECTO! Mover la charla a medios privados es la primera táctica para iniciar el acoso.">No dárselo. Seguiré hablando por el chat del juego.</button>
@@ -363,8 +399,9 @@
             <div class="feedback"></div>
         </div>
 
-        <div class="platform-badge ios"><i class="fab fa-apple"></i> iOS</div>
-        <div class="question">
+        <h3 id="ios-test">🍎 iOS (iPhone)</h3>
+        <div class="platform-badge ios" onclick="scrollToSection('grooming-i1')"><i class="fab fa-apple"></i> iOS</div>
+        <div class="question" id="grooming-i1">
             <p><strong>1. Alguien que dice tener tu edad te pide hacer videollamada a escondidas de noche.</strong></p>
             <div class="options">
                 <button class="opt" data-status="correct" data-msg="¡CORRECTO! Las videollamadas nocturnas a escondidas son tácticas de manipulación emocional.">Rechazar. Solo hago videollamadas con gente que conozco en persona.</button>
@@ -397,8 +434,9 @@
             <div class="feedback"></div>
         </div>
 
-        <div class="platform-badge windows"><i class="fab fa-windows"></i> Windows</div>
-        <div class="question">
+        <h3 id="windows-test">🖥️ Windows</h3>
+        <div class="platform-badge windows" onclick="scrollToSection('grooming-w1')"><i class="fab fa-windows"></i> Windows</div>
+        <div class="question" id="grooming-w1">
             <p><strong>1. Un usuario de Discord te pide transmitir pantalla mientras estás en tu habitación.</strong></p>
             <div class="options">
                 <button class="opt" data-status="correct" data-msg="¡CORRECTO! Tu privacidad es sagrada. No cedas a exhibirte ante desconocidos.">Cerrar la llamada y reportar el abuso inmediatamente.</button>
@@ -577,36 +615,69 @@
         // LÓGICA DEL TEST (SCORE)
         let corr = 0; 
         let resp = 0;
+        let groomStartTime = new Date();
+        const G_KEY = 'groomingTestProgress';
+
+        // Cargar progreso guardado
+        (function cargarProgresoGrooming() {
+            const saved = localStorage.getItem(G_KEY);
+            if (!saved) return;
+            try {
+                const data = JSON.parse(saved);
+                corr = data.corr || 0; resp = data.resp || 0;
+                groomStartTime = data.startTime ? new Date(data.startTime) : new Date();
+                data.respuestas && Object.entries(data.respuestas).forEach(([id, info]) => {
+                    const q = document.getElementById(id);
+                    if (!q) return;
+                    const feed = q.querySelector('.feedback');
+                    feed.innerText = info.msg; feed.style.display = 'block';
+                    feed.className = 'feedback ' + (info.correct ? 'correct' : 'incorrect');
+                    q.querySelectorAll('.opt').forEach(b => { b.style.pointerEvents='none'; b.style.opacity='0.5'; });
+                    q.classList.add('respondida');
+                    if (info.correct) { q.style.borderColor='var(--success)'; } else { q.style.borderColor='var(--danger)'; }
+                });
+                document.getElementById('puntos').innerText = corr;
+                const porcentajeInicial = resp > 0 ? Math.round((corr/resp)*100) : 0;
+                document.getElementById('porcentaje').innerText = porcentajeInicial;
+                const last = localStorage.getItem('groomingTestTime');
+                if (last) document.getElementById('lastAttempt').innerText = 'Último intento: ' + new Date(last).toLocaleString('es-MX');
+            } catch(e) { console.warn('Error cargando progreso grooming:', e); }
+        })();
         
         document.querySelectorAll('.opt').forEach(btn => {
             btn.addEventListener('click', (e) => {
                 const parent = e.target.closest('.question');
+                if (parent.classList.contains('respondida')) return;
                 const feed = parent.querySelector('.feedback');
                 resp++;
                 
                 feed.innerText = e.target.getAttribute('data-msg');
                 feed.style.display = 'block';
                 
-                if(e.target.getAttribute('data-status') === 'correct') {
+                const isCorrect = e.target.getAttribute('data-status') === 'correct';
+                if(isCorrect) {
                     feed.className = 'feedback correct'; 
                     corr++;
+                    parent.style.borderColor = 'var(--success)';
+                    parent.style.boxShadow = '0 5px 15px rgba(74, 222, 128, 0.2)';
                 } else { 
-                    feed.className = 'feedback incorrect'; 
+                    feed.className = 'feedback incorrect';
+                    parent.style.borderColor = 'var(--danger)';
+                    parent.style.boxShadow = '0 5px 15px rgba(239, 68, 68, 0.2)';
                 }
                 
                 document.getElementById('puntos').innerText = corr;
                 const porcentaje = Math.round((corr/resp)*100);
                 document.getElementById('porcentaje').innerText = porcentaje;
                 
-                // Deshabilitar botones de esta pregunta
                 parent.querySelectorAll('.opt').forEach(b => { 
                     b.style.pointerEvents = 'none'; 
                     b.style.opacity = '0.5'; 
                 });
+                parent.classList.add('respondida');
                 
                 // Actualizar score-board visualmente
                 const scoreBoard = document.querySelector('.score-board');
-                
                 if (porcentaje >= 75) {
                     scoreBoard.style.borderColor = 'var(--success)';
                     scoreBoard.style.boxShadow = '0 10px 30px rgba(74, 222, 128, 0.3)';
@@ -620,17 +691,55 @@
                     scoreBoard.style.boxShadow = '0 10px 30px rgba(239, 68, 68, 0.3)';
                     scoreBoard.querySelector('.score-text').style.color = 'var(--danger)';
                 }
-                
-                // Agregar animación de acierto/error
-                if (e.target.getAttribute('data-status') === 'correct') {
-                    parent.style.borderColor = 'var(--success)';
-                    parent.style.boxShadow = '0 5px 15px rgba(74, 222, 128, 0.2)';
-                } else {
-                    parent.style.borderColor = 'var(--danger)';
-                    parent.style.boxShadow = '0 5px 15px rgba(239, 68, 68, 0.2)';
-                }
+
+                // Guardar progreso
+                const saved = localStorage.getItem(G_KEY);
+                const data = saved ? JSON.parse(saved) : { corr:0, resp:0, respuestas:{} };
+                data.corr = corr; data.resp = resp;
+                data.startTime = groomStartTime.toISOString();
+                data.respuestas[parent.id] = { correct: isCorrect, msg: feed.innerText };
+                localStorage.setItem(G_KEY, JSON.stringify(data));
+                localStorage.setItem('groomingTestTime', new Date().toISOString());
             });
         });
+
+        function reiniciarTestGrooming() {
+            if (!confirm('¿Estás seguro de que quieres reiniciar el test?')) return;
+            corr = 0; resp = 0; groomStartTime = new Date();
+            document.querySelectorAll('.question').forEach(q => {
+                q.classList.remove('respondida'); q.style.borderColor=''; q.style.boxShadow='';
+                q.querySelector('.feedback').style.display = 'none';
+                q.querySelectorAll('.opt').forEach(b => { b.style.pointerEvents='auto'; b.style.opacity='1'; });
+            });
+            document.getElementById('puntos').innerText = '0';
+            document.getElementById('porcentaje').innerText = '0';
+            document.getElementById('lastAttempt').innerText = 'Último intento: No registrado';
+            document.getElementById('resultsSummaryGrooming').style.display = 'none';
+            const scoreBoard = document.querySelector('.score-board');
+            scoreBoard.style.borderColor = 'var(--danger)';
+            scoreBoard.style.boxShadow = '';
+            scoreBoard.querySelector('.score-text').style.color = 'var(--danger)';
+            localStorage.removeItem(G_KEY); localStorage.removeItem('groomingTestTime');
+        }
+
+        function mostrarResultadosGrooming() {
+            const timeDiff = Math.floor((new Date() - groomStartTime) / 1000);
+            const m = Math.floor(timeDiff / 60), s = timeDiff % 60;
+            document.getElementById('gFinalScore').textContent = corr;
+            document.getElementById('gFinalPct').textContent = Math.round((corr / 12) * 100) + '%';
+            document.getElementById('gTimeSpent').textContent = `${m > 0 ? m + 'm ' : ''}${s}s`;
+            const pct = (corr / 12) * 100;
+            let emoji, msg;
+            if (pct >= 90) { emoji = '🏆'; msg = '¡Excelente! Sabes identificar el grooming y protegerte.'; }
+            else if (pct >= 70) { emoji = '👍'; msg = '¡Muy bien! Conoces las tácticas de manipulación online.'; }
+            else if (pct >= 50) { emoji = '💡'; msg = 'Bien, pero hay situaciones de riesgo que aún debes reconocer.'; }
+            else { emoji = '📚'; msg = 'Es importante que leas la guía antes de volver a intentarlo.'; }
+            document.getElementById('gFeedback').innerHTML = `<p style="font-size:1.2rem;">${emoji} ${msg}</p>`;
+            const rs = document.getElementById('resultsSummaryGrooming');
+            rs.style.display = 'block'; rs.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function scrollToSection(id) { const el = document.getElementById(id); if (el) el.scrollIntoView({ behavior: 'smooth' }); }
 
         // Inicializar
         document.addEventListener('DOMContentLoaded', () => {

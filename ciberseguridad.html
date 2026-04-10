@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0 maximum-scale=5.0">
     <title>Ciberseguridad - Blindaje Digital</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -26,13 +26,37 @@
         .android { background: #3DDC84; color: #073042; }
         .ios { background: #f5f5f7; color: #1d1d1f; }
         .windows { background: #0078d4; color: white; }
-        .score-board { position: sticky; top: 80px; background: var(--bg-card); padding: 15px; border-radius: 12px; border: 2px solid var(--secondary); text-align: center; z-index: 99; margin: 20px 0; }
-        .question { background: rgba(255,255,255,0.03); padding: 25px; border-radius: 16px; margin-bottom: 25px; border: 1px solid rgba(255,255,255,0.1); }
+        .platform-badge { cursor: pointer; transition: 0.3s; }
+        .platform-badge:hover { transform: scale(1.05); }
+
+        .score-board {
+            position: sticky; top: 80px; background: var(--bg-card); padding: 15px;
+            border-radius: 12px; border: 2px solid var(--secondary);
+            z-index: 99; margin: 20px 0; box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;
+        }
+        .score-text { font-size: 1.2rem; font-weight: bold; color: var(--secondary); }
+        .test-controls { display: flex; gap: 10px; }
+        .test-controls button { padding: 8px 15px; font-size: 0.9rem; }
+
+        .question { background: rgba(255,255,255,0.03); padding: 25px; border-radius: 16px; margin-bottom: 25px; border: 1px solid rgba(255,255,255,0.1); transition: all 0.3s ease; }
         .options button { display: block; width: 100%; text-align: left; padding: 14px; margin: 10px 0; background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.1); color: var(--text-main); border-radius: 10px; cursor: pointer; transition: 0.3s; font-family: 'Poppins', sans-serif; }
-        .feedback { font-weight: 600; margin-top: 15px; display: none; padding: 12px; border-radius: 8px; font-size: 0.95rem; }
+        .options button:hover { background: rgba(129, 140, 248, 0.1); border-color: var(--secondary); }
+        .feedback { font-weight: 600; margin-top: 15px; display: none; padding: 12px; border-radius: 8px; font-size: 0.95rem; line-height: 1.4; }
         .correct { color: #4ade80; background: rgba(74, 222, 128, 0.1); border: 1px solid #4ade80; }
         .incorrect { color: #f87171; background: rgba(248, 113, 113, 0.1); border: 1px solid #f87171; }
         .info-card { background: rgba(255,255,255,0.05); padding: 25px; border-radius: 15px; margin-bottom: 20px; border-top: 3px solid var(--primary); }
+
+        .section-nav { display: flex; gap: 10px; margin: 20px 0; flex-wrap: wrap; }
+        .section-nav a { padding: 8px 15px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 20px; color: var(--text-muted); text-decoration: none; font-size: 0.9rem; transition: 0.3s; }
+        .section-nav a:hover { background: var(--secondary); color: var(--bg-dark); }
+
+        .results-summary { background: rgba(255,255,255,0.05); padding: 30px; border-radius: 15px; margin: 30px 0; text-align: center; display: none; }
+        .results-summary h3 { color: var(--secondary); margin-bottom: 20px; }
+        .result-stats { display: flex; justify-content: center; gap: 30px; flex-wrap: wrap; margin: 20px 0; }
+        .stat-item { text-align: center; }
+        .stat-value { font-size: 2.5rem; font-weight: bold; color: var(--secondary); display: block; }
+        .stat-label { font-size: 0.9rem; color: var(--text-muted); }
     </style>
 </head>
 <body>
@@ -57,7 +81,15 @@
     </nav>
 
     <div class="container">
-        <h2>Defensa Digital Paso a Paso</h2>
+        <div class="section-nav">
+            <a href="#info">📚 Guía</a>
+            <a href="#password-tool">🔐 Probador</a>
+            <a href="#android-test">🤖 Test Android</a>
+            <a href="#ios-test">🍎 Test iOS</a>
+            <a href="#windows-test">🖥️ Test Windows</a>
+        </div>
+
+        <h2 id="info">Defensa Digital Paso a Paso</h2>
         <p>Protegerte en internet no es difícil si conoces las reglas. Imagina que tu información es dinero: no lo dejarías en la calle, ¿verdad? Aquí aprenderás a guardarlo en una caja fuerte.</p>
 
         <div class="info-card">
@@ -77,7 +109,7 @@
 
         <hr>
 
-        <div class="password-checker">
+        <div class="password-checker" id="password-tool">
             <h3>🔐 Asistente de Contraseñas</h3>
             <p>Prueba qué tan segura es tu contraseña ideal:</p>
             <input type="text" id="passInput" placeholder="Escribe aquí..." oninput="checkPass()">
@@ -94,12 +126,32 @@
         <hr>
 
         <div class="score-board">
-            <div class="score-text">Puntaje: <span id="puntos">0</span>/12 | Efectividad: <span id="porcentaje">0</span>%</div>
+            <div>
+                <div class="score-text">Puntaje: <span id="puntos">0</span>/12 | Efectividad: <span id="porcentaje">0</span>%</div>
+                <div id="lastAttempt" style="font-size:0.8em; color:var(--text-muted); margin-top:5px;">Último intento: No registrado</div>
+            </div>
+            <div class="test-controls">
+                <button onclick="reiniciarTest()" style="background:var(--accent);">🔄 Reiniciar Test</button>
+                <button onclick="mostrarResultados()" style="background:var(--secondary);">📊 Ver Resultados</button>
+            </div>
         </div>
 
         <h2>🛠️ Test de Resistencia Digital</h2>
 
-        <div class="platform-badge android">Android</div>
+        <!-- Resultados finales -->
+        <div class="results-summary" id="resultsSummary">
+            <h3>📊 Resultados del Test</h3>
+            <div class="result-stats">
+                <div class="stat-item"><span class="stat-value" id="finalScore">0</span><span class="stat-label">Puntuación</span></div>
+                <div class="stat-item"><span class="stat-value" id="finalPercentage">0%</span><span class="stat-label">Efectividad</span></div>
+                <div class="stat-item"><span class="stat-value" id="timeSpent">0s</span><span class="stat-label">Tiempo</span></div>
+            </div>
+            <div id="performanceFeedback" style="margin-top:20px;"><p>Cargando evaluación...</p></div>
+            <button onclick="ocultarResultados()" style="margin-top:20px;">Cerrar Resultados</button>
+        </div>
+
+        <h3 id="android-test">🤖 Android</h3>
+        <div class="platform-badge android" onclick="scrollToSection('a1')">Android</div>
         <div class="question" id="a1">
             <p><strong>1. ¿Por qué es riesgoso bajar apps de sitios desconocidos (archivos APK)?</strong></p>
             <div class="options">
@@ -133,7 +185,8 @@
             <div class="feedback"></div>
         </div>
 
-        <div class="platform-badge ios">iOS</div>
+        <h3 id="ios-test">🍎 iOS (iPhone)</h3>
+        <div class="platform-badge ios" onclick="scrollToSection('i1')">iOS</div>
         <div class="question" id="i1">
             <p><strong>1. ¿Qué es el Cifrado de extremo a extremo?</strong></p>
             <div class="options">
@@ -167,7 +220,8 @@
             <div class="feedback"></div>
         </div>
 
-        <div class="platform-badge windows">Windows</div>
+        <h3 id="windows-test">🖥️ Windows</h3>
+        <div class="platform-badge windows" onclick="scrollToSection('w1')">Windows</div>
         <div class="question" id="w1">
             <p><strong>1. ¿Qué es el Ransomware?</strong></p>
             <div class="options">
@@ -203,12 +257,12 @@
     </div>
 
     <script>
+        // ── Probador de contraseñas ──────────────────────────
         function checkPass() {
             const v = document.getElementById('passInput').value;
             const b = document.getElementById('strengthBar');
             const t = document.getElementById('strengthText');
             const r = { len: v.length>=8, up: /[A-Z]/.test(v), num: /[0-9]/.test(v), sp: /[^A-Za-z0-9]/.test(v) };
-            
             updateR('charLength', r.len); updateR('upperCase', r.up); updateR('numberCheck', r.num); updateR('specialCheck', r.sp);
             let s = Object.values(r).filter(Boolean).length;
             b.className = 'strength-bar';
@@ -224,16 +278,100 @@
             e.innerText = valid ? e.innerText.replace('✖', '✔') : e.innerText.replace('✔', '✖');
         }
 
-        let cor = 0; let res = 0;
-        function check(id, status, msg) {
-            const q = document.getElementById(id); const f = q.querySelector('.feedback'); res++;
-            f.innerText = msg; f.style.display = 'block';
-            if(status==='correct'){ f.className='feedback correct'; cor++; }
-            else { f.className='feedback incorrect'; }
-            document.getElementById('puntos').innerText = cor;
-            document.getElementById('porcentaje').innerText = Math.round((cor/res)*100);
-            q.querySelectorAll('button').forEach(b => { b.style.pointerEvents='none'; b.style.opacity='0.5'; });
+        // ── Test de seguridad ────────────────────────────────
+        let correctas = 0;
+        let respondidas = 0;
+        let startTime = null;
+        let testCompleted = false;
+        const TOTAL = 12;
+        const STORAGE_KEY = 'ciberseguridadTestProgress';
+
+        function cargarProgreso() {
+            startTime = new Date();
+            const saved = localStorage.getItem(STORAGE_KEY);
+            if (!saved) return;
+            try {
+                const data = JSON.parse(saved);
+                correctas = data.correctas || 0;
+                respondidas = data.respondidas || 0;
+                startTime = data.startTime ? new Date(data.startTime) : new Date();
+                data.respuestas && Object.entries(data.respuestas).forEach(([id, info]) => {
+                    const q = document.getElementById(id);
+                    if (!q) return;
+                    const feedback = q.querySelector('.feedback');
+                    feedback.innerText = info.msg; feedback.style.display = 'block';
+                    feedback.className = 'feedback ' + (info.correct ? 'correct' : 'incorrect');
+                    q.querySelectorAll('button').forEach(b => { b.style.pointerEvents = 'none'; b.style.opacity = '0.5'; });
+                    q.classList.add('respondida');
+                    if (info.correct) { q.style.borderColor = 'var(--success)'; } else { q.style.borderColor = 'var(--danger)'; }
+                });
+                document.getElementById('puntos').innerText = correctas;
+                document.getElementById('porcentaje').innerText = respondidas > 0 ? Math.round((correctas / respondidas) * 100) : 0;
+                const last = localStorage.getItem('ciberseguridadTestTime');
+                if (last) document.getElementById('lastAttempt').innerText = 'Último intento: ' + new Date(last).toLocaleString('es-MX');
+            } catch(e) { console.warn('Error cargando progreso:', e); }
         }
+
+        function check(id, status, msg) {
+            const q = document.getElementById(id);
+            if (q.classList.contains('respondida')) return;
+            respondidas++;
+            const f = q.querySelector('.feedback');
+            f.innerText = msg; f.style.display = 'block';
+            const isCorrect = status === 'correct';
+            if (isCorrect) { f.className='feedback correct'; correctas++; q.style.borderColor='var(--success)'; q.style.boxShadow='0 5px 15px rgba(74,222,128,0.2)'; }
+            else { f.className='feedback incorrect'; q.style.borderColor='var(--danger)'; q.style.boxShadow='0 5px 15px rgba(239,68,68,0.2)'; }
+            document.getElementById('puntos').innerText = correctas;
+            document.getElementById('porcentaje').innerText = Math.round((correctas/respondidas)*100);
+            q.querySelectorAll('button').forEach(b => { b.style.pointerEvents='none'; b.style.opacity='0.5'; });
+            q.classList.add('respondida');
+            // Guardar
+            const saved = localStorage.getItem(STORAGE_KEY);
+            const data = saved ? JSON.parse(saved) : { correctas: 0, respondidas: 0, respuestas: {} };
+            data.correctas = correctas; data.respondidas = respondidas;
+            data.startTime = startTime.toISOString();
+            data.respuestas[id] = { correct: isCorrect, msg };
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+            localStorage.setItem('ciberseguridadTestTime', new Date().toISOString());
+            if (respondidas === TOTAL && !testCompleted) { testCompleted = true; }
+        }
+
+        function reiniciarTest() {
+            if (!confirm('¿Estás seguro de que quieres reiniciar el test?')) return;
+            correctas = 0; respondidas = 0; testCompleted = false; startTime = new Date();
+            document.querySelectorAll('.question').forEach(q => {
+                q.classList.remove('respondida'); q.style.borderColor = ''; q.style.boxShadow = '';
+                q.querySelector('.feedback').style.display = 'none';
+                q.querySelectorAll('button').forEach(b => { b.style.pointerEvents = 'auto'; b.style.opacity = '1'; });
+            });
+            document.getElementById('puntos').innerText = '0';
+            document.getElementById('porcentaje').innerText = '0';
+            document.getElementById('lastAttempt').innerText = 'Último intento: No registrado';
+            document.getElementById('resultsSummary').style.display = 'none';
+            localStorage.removeItem(STORAGE_KEY); localStorage.removeItem('ciberseguridadTestTime');
+        }
+
+        function mostrarResultados() {
+            const timeDiff = Math.floor((new Date() - startTime) / 1000);
+            const m = Math.floor(timeDiff / 60), s = timeDiff % 60;
+            document.getElementById('finalScore').textContent = correctas;
+            document.getElementById('finalPercentage').textContent = Math.round((correctas / TOTAL) * 100) + '%';
+            document.getElementById('timeSpent').textContent = `${m > 0 ? m + 'm ' : ''}${s}s`;
+            const pct = (correctas / TOTAL) * 100;
+            let emoji, msg;
+            if (pct >= 90) { emoji = '🏆'; msg = '¡Excelente! Eres un experto en ciberseguridad.'; }
+            else if (pct >= 70) { emoji = '👍'; msg = '¡Muy bien! Conoces los pilares de la seguridad digital.'; }
+            else if (pct >= 50) { emoji = '💡'; msg = 'Bien, pero hay conceptos que vale la pena repasar.'; }
+            else { emoji = '📚'; msg = 'Revisa la guía y vuelve a intentarlo. ¡Puedes mejorar!'; }
+            document.getElementById('performanceFeedback').innerHTML = `<p style="font-size:1.2rem;">${emoji} ${msg}</p>`;
+            const rs = document.getElementById('resultsSummary');
+            rs.style.display = 'block'; rs.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function ocultarResultados() { document.getElementById('resultsSummary').style.display = 'none'; }
+        function scrollToSection(id) { const el = document.getElementById(id); if (el) el.scrollIntoView({ behavior: 'smooth' }); }
+
+        document.addEventListener('DOMContentLoaded', cargarProgreso);
     </script>
     <script>
         const currentPage = window.location.pathname.split("/").pop() || "index.html";
