@@ -23,6 +23,7 @@
             color: white;
             margin: 0;
             padding: 0;
+            overflow-x: hidden;
         }
 
         .container {
@@ -41,6 +42,9 @@
             font-size: 1.1rem;
             color: var(--text-main);
             white-space: pre-wrap;
+            word-break: break-word;
+            overflow-wrap: break-word;
+            overflow-x: hidden;
             position: relative;
         }
 
@@ -354,6 +358,46 @@
             background: transparent;
             padding: 0;
         }
+
+        /* --- Móvil --- */
+        @media (max-width: 768px) {
+            .container {
+                padding: 15px 12px;
+            }
+
+            .content-card {
+                padding: 20px 16px;
+                font-size: 1rem;
+                border-radius: 16px;
+            }
+
+            .post-header h1 {
+                font-size: 1.5rem;
+            }
+
+            .vote-buttons {
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            .btn-vote {
+                width: 100%;
+                padding: 14px;
+            }
+
+            .share-buttons {
+                flex-direction: column;
+            }
+
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .post-meta-detalle {
+                flex-direction: column;
+                gap: 8px;
+            }
+        }
     </style>
 </head>
 <body>
@@ -545,16 +589,14 @@
                         
                         <div class="vote-buttons">
                             <button id="btn-like" class="btn-vote btn-like ${yaVoto === 'likes' ? 'active-like' : ''}" 
-                                    ${yaVoto ? 'disabled' : ''}
-                                    aria-label="${yaVoto === 'likes' ? 'Ya votaste positivo' : 'Me gusta esta historia'}">
-                                <i class="far fa-thumbs-up" aria-hidden="true"></i> 
+                                    ${yaVoto ? 'disabled' : ''}>
+                                <i class="far fa-thumbs-up"></i> 
                                 <span class="count">${data.likes || 0}</span> 
                                 ${yaVoto === 'likes' ? 'Ya votaste' : 'Me gusta'}
                             </button>
                             <button id="btn-dislike" class="btn-vote btn-dislike ${yaVoto === 'dislikes' ? 'active-dislike' : ''}" 
-                                    ${yaVoto ? 'disabled' : ''}
-                                    aria-label="${yaVoto === 'dislikes' ? 'Ya votaste negativo' : 'No me gusta esta historia'}">
-                                <i class="far fa-thumbs-down" aria-hidden="true"></i> 
+                                    ${yaVoto ? 'disabled' : ''}>
+                                <i class="far fa-thumbs-down"></i> 
                                 <span class="count">${data.dislikes || 0}</span> 
                                 ${yaVoto === 'dislikes' ? 'Ya votaste' : 'No me gusta'}
                             </button>

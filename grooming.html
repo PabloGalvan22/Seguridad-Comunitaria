@@ -408,7 +408,7 @@
         </section>
     </div>
 
-    <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script type="module">
+    <script type="module">
         // Importar funciones necesarias de firebase.js
         import { 
             getPosts, 
@@ -537,14 +537,21 @@
             cargarBlog();
         });
 
-        // LÓGICA DEL TEST (SCORE)
-        let corr = 0; 
+        // Inicializar
+        document.addEventListener('DOMContentLoaded', () => {
+            cargarBlog();
+        });
+    </script>
+
+    <!-- Script del quiz: separado del módulo Firebase para que onclick funcione -->
+    <script>
+        let corr = 0;
         let resp = 0;
         let groomStartTime = new Date();
         const G_KEY = 'groomingTestProgress';
 
         // Cargar progreso guardado
-        (function cargarProgresoGrooming() {
+        document.addEventListener('DOMContentLoaded', function() {
             const saved = localStorage.getItem(G_KEY);
             if (!saved) return;
             try {
@@ -559,72 +566,72 @@
                     feed.className = 'feedback ' + (info.correct ? 'correct' : 'incorrect');
                     q.querySelectorAll('.opt').forEach(b => { b.style.pointerEvents='none'; b.style.opacity='0.5'; });
                     q.classList.add('respondida');
-                    if (info.correct) { q.style.borderColor='var(--success)'; } else { q.style.borderColor='var(--danger)'; }
+                    q.style.borderColor = info.correct ? 'var(--success)' : 'var(--danger)';
                 });
                 document.getElementById('puntos').innerText = corr;
-                const porcentajeInicial = resp > 0 ? Math.round((corr/resp)*100) : 0;
-                document.getElementById('porcentaje').innerText = porcentajeInicial;
+                document.getElementById('porcentaje').innerText = resp > 0 ? Math.round((corr/resp)*100) : 0;
                 const last = localStorage.getItem('groomingTestTime');
                 if (last) document.getElementById('lastAttempt').innerText = 'Último intento: ' + new Date(last).toLocaleString('es-MX');
             } catch(e) { console.warn('Error cargando progreso grooming:', e); }
-        })();
-        
-        document.querySelectorAll('.opt').forEach(btn => {
-            btn.addEventListener('click', (e) => {
-                const parent = e.target.closest('.question');
-                if (parent.classList.contains('respondida')) return;
-                const feed = parent.querySelector('.feedback');
-                resp++;
-                
-                feed.innerText = e.target.getAttribute('data-msg');
-                feed.style.display = 'block';
-                
-                const isCorrect = e.target.getAttribute('data-status') === 'correct';
-                if(isCorrect) {
-                    feed.className = 'feedback correct'; 
-                    corr++;
-                    parent.style.borderColor = 'var(--success)';
-                    parent.style.boxShadow = '0 5px 15px rgba(74, 222, 128, 0.2)';
-                } else { 
-                    feed.className = 'feedback incorrect';
-                    parent.style.borderColor = 'var(--danger)';
-                    parent.style.boxShadow = '0 5px 15px rgba(239, 68, 68, 0.2)';
-                }
-                
-                document.getElementById('puntos').innerText = corr;
-                const porcentaje = Math.round((corr/resp)*100);
-                document.getElementById('porcentaje').innerText = porcentaje;
-                
-                parent.querySelectorAll('.opt').forEach(b => { 
-                    b.style.pointerEvents = 'none'; 
-                    b.style.opacity = '0.5'; 
-                });
-                parent.classList.add('respondida');
-                
-                // Actualizar score-board visualmente
-                const scoreBoard = document.querySelector('.score-board');
-                if (porcentaje >= 75) {
-                    scoreBoard.style.borderColor = 'var(--success)';
-                    scoreBoard.style.boxShadow = '0 10px 30px rgba(74, 222, 128, 0.3)';
-                    scoreBoard.querySelector('.score-text').style.color = 'var(--success)';
-                } else if (porcentaje >= 50) {
-                    scoreBoard.style.borderColor = 'var(--warning)';
-                    scoreBoard.style.boxShadow = '0 10px 30px rgba(245, 158, 11, 0.3)';
-                    scoreBoard.querySelector('.score-text').style.color = 'var(--warning)';
-                } else {
-                    scoreBoard.style.borderColor = 'var(--danger)';
-                    scoreBoard.style.boxShadow = '0 10px 30px rgba(239, 68, 68, 0.3)';
-                    scoreBoard.querySelector('.score-text').style.color = 'var(--danger)';
-                }
 
-                // Guardar progreso
-                const saved = localStorage.getItem(G_KEY);
-                const data = saved ? JSON.parse(saved) : { corr:0, resp:0, respuestas:{} };
-                data.corr = corr; data.resp = resp;
-                data.startTime = groomStartTime.toISOString();
-                data.respuestas[parent.id] = { correct: isCorrect, msg: feed.innerText };
-                localStorage.setItem(G_KEY, JSON.stringify(data));
-                localStorage.setItem('groomingTestTime', new Date().toISOString());
+            // Listeners del quiz
+            document.querySelectorAll('.opt').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    const parent = e.target.closest('.question');
+                    if (parent.classList.contains('respondida')) return;
+                    const feed = parent.querySelector('.feedback');
+                    resp++;
+
+                    feed.innerText = e.target.getAttribute('data-msg');
+                    feed.style.display = 'block';
+
+                    const isCorrect = e.target.getAttribute('data-status') === 'correct';
+                    if (isCorrect) {
+                        feed.className = 'feedback correct';
+                        corr++;
+                        parent.style.borderColor = 'var(--success)';
+                        parent.style.boxShadow = '0 5px 15px rgba(74, 222, 128, 0.2)';
+                    } else {
+                        feed.className = 'feedback incorrect';
+                        parent.style.borderColor = 'var(--danger)';
+                        parent.style.boxShadow = '0 5px 15px rgba(239, 68, 68, 0.2)';
+                    }
+
+                    document.getElementById('puntos').innerText = corr;
+                    const porcentaje = Math.round((corr/resp)*100);
+                    document.getElementById('porcentaje').innerText = porcentaje;
+
+                    parent.querySelectorAll('.opt').forEach(b => {
+                        b.style.pointerEvents = 'none';
+                        b.style.opacity = '0.5';
+                    });
+                    parent.classList.add('respondida');
+
+                    // Color dinámico del score-board
+                    const scoreBoard = document.querySelector('.score-board');
+                    if (porcentaje >= 75) {
+                        scoreBoard.style.borderColor = 'var(--success)';
+                        scoreBoard.style.boxShadow = '0 10px 30px rgba(74, 222, 128, 0.3)';
+                        scoreBoard.querySelector('.score-text').style.color = 'var(--success)';
+                    } else if (porcentaje >= 50) {
+                        scoreBoard.style.borderColor = 'var(--warning)';
+                        scoreBoard.style.boxShadow = '0 10px 30px rgba(245, 158, 11, 0.3)';
+                        scoreBoard.querySelector('.score-text').style.color = 'var(--warning)';
+                    } else {
+                        scoreBoard.style.borderColor = 'var(--danger)';
+                        scoreBoard.style.boxShadow = '0 10px 30px rgba(239, 68, 68, 0.3)';
+                        scoreBoard.querySelector('.score-text').style.color = 'var(--danger)';
+                    }
+
+                    // Guardar progreso
+                    const savedData = localStorage.getItem(G_KEY);
+                    const d = savedData ? JSON.parse(savedData) : { corr:0, resp:0, respuestas:{} };
+                    d.corr = corr; d.resp = resp;
+                    d.startTime = groomStartTime.toISOString();
+                    d.respuestas[parent.id] = { correct: isCorrect, msg: feed.innerText };
+                    localStorage.setItem(G_KEY, JSON.stringify(d));
+                    localStorage.setItem('groomingTestTime', new Date().toISOString());
+                });
             });
         });
 
@@ -644,7 +651,8 @@
             scoreBoard.style.borderColor = 'var(--danger)';
             scoreBoard.style.boxShadow = '';
             scoreBoard.querySelector('.score-text').style.color = 'var(--danger)';
-            localStorage.removeItem(G_KEY); localStorage.removeItem('groomingTestTime');
+            localStorage.removeItem(G_KEY);
+            localStorage.removeItem('groomingTestTime');
         }
 
         function mostrarResultadosGrooming() {
@@ -661,15 +669,10 @@
             else { emoji = '📚'; msg = 'Es importante que leas la guía antes de volver a intentarlo.'; }
             document.getElementById('gFeedback').innerHTML = `<p style="font-size:1.2rem;">${emoji} ${msg}</p>`;
             const rs = document.getElementById('resultsSummaryGrooming');
-            rs.style.display = 'block'; rs.scrollIntoView({ behavior: 'smooth' });
+            rs.style.display = 'block';
+            rs.scrollIntoView({ behavior: 'smooth' });
         }
 
-        function scrollToSection(id) { const el = document.getElementById(id); if (el) el.scrollIntoView({ behavior: 'smooth' }); }
-
-        // Inicializar
-        document.addEventListener('DOMContentLoaded', () => {
-            cargarBlog();
-        });
     </script>
 
     <script>
