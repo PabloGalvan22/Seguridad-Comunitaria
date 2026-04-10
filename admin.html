@@ -653,6 +653,31 @@
                 </button>
             </div>
 
+            <!-- ── Sección de Historias Publicadas ── -->
+            <div class="reportes-section">
+                <div class="reportes-header">
+                    <h3><i class="fas fa-newspaper"></i> Historias Publicadas</h3>
+                    <div class="reportes-stats">
+                        <div class="stat-badge">Total: <span id="total-posts">–</span></div>
+                    </div>
+                </div>
+
+                <div class="reportes-filtros">
+                    <button class="filtro-btn" onclick="cargarPosts()" style="margin-left:auto;">
+                        <i class="fas fa-sync-alt"></i> Actualizar
+                    </button>
+                </div>
+
+                <input type="text" id="buscador-posts" placeholder="🔍 Buscar historia por título..." oninput="buscarPosts(this.value)">
+
+                <div id="posts-container">
+                    <div class="reportes-loading">
+                        <i class="fas fa-spinner fa-spin" style="font-size:1.5rem; margin-bottom:10px; display:block;"></i>
+                        Cargando historias...
+                    </div>
+                </div>
+            </div>
+
             <!-- ── Sección de Reportes Ciudadanos ── -->
             <div class="reportes-section">
                 <div class="reportes-header">
@@ -867,6 +892,81 @@
                 localStorage.setItem('reportes_leidos', JSON.stringify([...leidosSet]));
                 document.getElementById('total-reportes').textContent = todosLosReportes.length;
                 aplicarFiltro();
+            } catch (e) {
+                alert('Error al eliminar: ' + e.message);
+            }
+        };
+
+        // ── Historias publicadas ─────────────────────────────
+        let todosLosPosts = [];
+
+        window.cargarPosts = async function() {
+            const container = document.getElementById('posts-container');
+            container.innerHTML = `<div class="reportes-loading">
+                <i class="fas fa-spinner fa-spin" style="font-size:1.5rem; margin-bottom:10px; display:block;"></i>
+                Cargando historias...
+            </div>`;
+            try {
+                const q = query(collection(db, 'posts'), orderBy('fecha', 'desc'));
+                const snap = await getDocs(q);
+                todosLosPosts = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+                document.getElementById('total-posts').textContent = todosLosPosts.length;
+                renderPosts(todosLosPosts);
+            } catch (e) {
+                container.innerHTML = `<div class="reportes-empty" style="color:var(--danger);">
+                    <i class="fas fa-exclamation-triangle"></i> Error: ${e.message}
+                </div>`;
+            }
+        };
+
+        function renderPosts(lista) {
+            const container = document.getElementById('posts-container');
+            if (lista.length === 0) {
+                container.innerHTML = `<div class="reportes-empty">
+                    <i class="fas fa-inbox" style="font-size:2rem; margin-bottom:10px; display:block; opacity:0.3;"></i>
+                    No hay historias publicadas.
+                </div>`;
+                return;
+            }
+            container.innerHTML = lista.map(p => `
+                <div class="reporte-card" id="post-card-${p.id}">
+                    <div class="reporte-acciones">
+                        <a href="post-detalle.html?id=${p.id}" target="_blank" class="btn-reporte btn-leer" title="Ver historia">
+                            <i class="fas fa-eye"></i> Ver
+                        </a>
+                        <button class="btn-reporte btn-eliminar" onclick="eliminarPost('${p.id}')" title="Eliminar historia">
+                            <i class="fas fa-trash"></i> Eliminar
+                        </button>
+                    </div>
+                    <div class="reporte-titulo">${p.titulo}</div>
+                    <div class="reporte-meta" style="margin-top:8px;">
+                        <span><i class="fas fa-clock"></i> ${formatFecha(p.fecha)}</span>
+                        <span><i class="fas fa-thumbs-up"></i> ${p.likes || 0}</span>
+                        <span><i class="fas fa-thumbs-down"></i> ${p.dislikes || 0}</span>
+                        <span><i class="fas fa-eye"></i> ${p.visitas || 0} visitas</span>
+                        <span><i class="fas fa-user"></i> ${p.publicadoPor || 'admin'}</span>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        window.buscarPosts = function(texto) {
+            const q = texto.toLowerCase().trim();
+            const lista = q
+                ? todosLosPosts.filter(p => p.titulo.toLowerCase().includes(q))
+                : todosLosPosts;
+            renderPosts(lista);
+        };
+
+        window.eliminarPost = async function(id) {
+            const post = todosLosPosts.find(p => p.id === id);
+            if (!confirm(`¿Eliminar la historia "${post?.titulo}"?\n\nEsta acción no se puede deshacer.`)) return;
+            try {
+                await deleteDoc(doc(db, 'posts', id));
+                todosLosPosts = todosLosPosts.filter(p => p.id !== id);
+                document.getElementById('total-posts').textContent = todosLosPosts.length;
+                document.getElementById(`post-card-${id}`)?.remove();
+                if (todosLosPosts.length === 0) renderPosts([]);
             } catch (e) {
                 alert('Error al eliminar: ' + e.message);
             }
@@ -1094,6 +1194,7 @@
                 document.title = `Admin (${user.email}) - Panel`;
                 cargarReportes();
                 cargarSugerencias();
+                cargarPosts();
             } else {
                 loginSection.style.display = 'block';
                 postSection.style.display = 'none';
@@ -1194,6 +1295,9 @@
                 updateCharacterCount(contentInput, contentCount, 10000);
                 previewContent.innerHTML = '';
                 preview.style.display = 'none';
+
+                // Recargar lista de historias
+                cargarPosts();
                 
             } catch (e) {
                 console.error("Error al publicar:", e);
