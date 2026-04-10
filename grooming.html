@@ -438,14 +438,14 @@
             <p style="color: #fca5a5; margin-bottom: 20px;">Si estás en peligro o conoces a alguien que lo esté, contacta inmediatamente:</p>
             <div class="contact-grid">
                 <div class="contact-item">Emergencias Nacionales <span><i class="fas fa-phone"></i> 555 242 5100 (Policía)</span></div>
-                <div class="contact-item">Policía Cibernética <span><i class="fas fa-envelope"></i> policia.cibernetica@ssc.cdmx.gob.mx</span></div>
+                <div class="contact-item">Policía Cibernética <span><i class="fas fa-envelope"></i> <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="c6b6a9aaafa5afa7e8a5afa4a3b4a8a3b2afa5a786b5b5a5e8a5a2abbee8a1a9a4e8abbe">[email&#160;protected]</a></span></div>
                 <div class="contact-item">Denuncia de Abuso Online <span><i class="fas fa-globe"></i> groominglatam.org</span></div>
                 <div class="contact-item">Línea de Ayuda Infantil <span><i class="fas fa-phone"></i> 800 123 4567</span></div>
             </div>
         </section>
     </div>
 
-    <script type="module">
+    <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script type="module">
         // Importar funciones necesarias de firebase.js
         import { 
             getPosts, 
@@ -635,11 +635,16 @@
         // Inicializar
         document.addEventListener('DOMContentLoaded', () => {
             cargarBlog();
-            
-            // Inicializar botón de ordenar
-            document.getElementById('sort-posts').innerHTML = 
-                '<i class="fas fa-sort-amount-down"></i> Más recientes primero';
         });
     </script>
+
+    <script>
+        const currentPage = window.location.pathname.split("/").pop() || "index.html";
+        document.querySelectorAll("nav a").forEach(link => {
+            const linkPage = link.getAttribute("href").split("/").pop();
+            if (linkPage === currentPage) link.classList.add("active");
+        });
+    </script>
+
 </body>
 </html>

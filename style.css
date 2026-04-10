@@ -107,6 +107,13 @@ nav a:hover {
     box-shadow: 0 0 15px var(--primary);
 }
 
+nav a.active {
+    color: var(--bg-dark);
+    background: var(--primary);
+    box-shadow: 0 0 15px rgba(56, 189, 248, 0.5);
+    font-weight: 700;
+}
+
 /* --- Contenedor Principal --- */
 .container {
     max-width: 900px;

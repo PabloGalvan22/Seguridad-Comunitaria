@@ -14,7 +14,7 @@
         .hero-section {
             padding: 60px 0;
             text-align: center;
-            background: linear-gradient(rgba(13, 14, 20, 0.8), rgba(13, 14, 20, 0.8)), url('https://images.unsplash.com/photo-1550751827-4bd374c3f58b?auto=format&fit=crop&w=1920');
+            background: linear-gradient(rgba(13, 14, 20, 0.8), rgba(13, 14, 20, 0.8)), url('https://images.unsplash.com/photo-1550751827-4bd374c3f58b?auto=format&fit=crop&w=1200&q=80');
             background-size: cover;
             border-radius: 30px;
             margin-bottom: 40px;
@@ -122,11 +122,6 @@
     <header>
         <h1>Seguridad Comunitaria</h1>
         <p>Tu escudo contra las amenazas del mundo digital</p>
-        <br>
-        <h4>He agregado una sección de noticias para informar sobre la nuevas becas, sucesos en México, etc...</h4>
-        <br>
-        <h5>Si encuantran algun error usen la sección de "reportes ciudadanos" para informarme, y tratando de explicar el error de la mejor manera posible. Gracias</h5>
-
     </header>
 
     <nav>
@@ -148,7 +143,7 @@
         <section class="hero-section">
             <h2 style="color: #fff; font-size: 2.5rem;">Unidos por un Internet Seguro</h2>
             <p class="objective-text" style="max-width: 800px; margin: 20px auto;">
-                Esta plataforma nace como una respuesta colectiva ante el incremento de delitos informáticos. Nuestro objetivo es **educar, prevenir y brindar herramientas** prácticas para que niños, jóvenes y adultos puedan navegar sin riesgos.
+                Esta plataforma nace como una respuesta colectiva ante el incremento de delitos informáticos. Nuestro objetivo es <strong>educar, prevenir y brindar herramientas</strong> prácticas para que niños, jóvenes y adultos puedan navegar sin riesgos.
             </p>
         </section>
 
@@ -173,8 +168,12 @@
             <h2>📢 Centro de Reportes Ciudadanos</h2>
             <p>Si crees que estás siendo victima de Estafa, Grooming, Hackeo o Suplantación de identidad haz una denuncia anónima para alertar a la comunidad y tratar de solucionarlo.</p>
             <form id="reporte-form">
-                <input type="text" id="titulo" placeholder="Título del reporte" required>
-                <textarea id="descripcion" placeholder="Describe lo sucedido..." required></textarea>
+                <!-- Campo honeypot: invisible para humanos, los bots lo llenan -->
+                <input type="text" id="campo-trampa" name="sitio_web" autocomplete="off" tabindex="-1" style="display:none !important; position:absolute; left:-9999px;" aria-hidden="true">
+                <input type="text" id="titulo" placeholder="Título del reporte (mínimo 10 caracteres)" required minlength="10" maxlength="100">
+                <small style="color: var(--text-muted); display:block; margin-top:-10px; margin-bottom:10px; font-size:0.8rem;">Máximo 100 caracteres</small>
+                <textarea id="descripcion" placeholder="Describe lo sucedido... (mínimo 30 caracteres)" required minlength="30" maxlength="1000"></textarea>
+                <small style="color: var(--text-muted); display:block; margin-top:-10px; margin-bottom:16px; font-size:0.8rem;"><span id="char-count">0</span>/1000 caracteres</small>
                 <button type="submit">Enviar Reporte a la Comunidad</button>
             </form>
             <div id="status"></div>
@@ -184,7 +183,7 @@
 
         <section style="margin-top: 40px; text-align: center; color: #888;">
             <h3>¿Cómo usar esta página?</h3>
-            <p>Navega a través de las pestañas superiores para explorar cada temática. En la sección de **Grooming**, encontrarás un blog con casos actualizados donde podrás interactuar y aprender de experiencias reales compartidas por otros usuarios.</p>
+            <p>Navega a través de las pestañas superiores para explorar cada temática. En la sección de <strong>Grooming</strong>, encontrarás un blog con casos actualizados donde podrás interactuar y aprender de experiencias reales compartidas por otros usuarios.</p>
         </section>
     </div>
 
@@ -209,13 +208,55 @@
     <script type="module">
         import { db, collection, addDoc, Timestamp } from './firebase.js';
 
+        // ── Active nav ──────────────────────────────────────────
+        const currentPage = window.location.pathname.split('/').pop() || 'index.html';
+        document.querySelectorAll('nav a').forEach(link => {
+            const linkPage = link.getAttribute('href').split('/').pop();
+            if (linkPage === currentPage) link.classList.add('active');
+        });
+
+        // ── Contador de caracteres ──────────────────────────────
+        const descripcionEl = document.getElementById('descripcion');
+        const charCount = document.getElementById('char-count');
+        descripcionEl.addEventListener('input', () => {
+            charCount.textContent = descripcionEl.value.length;
+        });
+
+        // ── Formulario de reporte ───────────────────────────────
         const form = document.getElementById('reporte-form');
         const status = document.getElementById('status');
+        const COOLDOWN_MS = 60 * 1000; // 1 minuto entre envíos
 
         form.addEventListener('submit', async (e) => {
             e.preventDefault();
-            const titulo = document.getElementById('titulo').value;
-            const descripcion = document.getElementById('descripcion').value;
+
+            // 1. Anti-bot honeypot
+            if (document.getElementById('campo-trampa').value) return;
+
+            // 2. Cooldown anti-spam
+            const ultimoEnvio = localStorage.getItem('ultimo_reporte');
+            if (ultimoEnvio && Date.now() - parseInt(ultimoEnvio) < COOLDOWN_MS) {
+                const espera = Math.ceil((COOLDOWN_MS - (Date.now() - parseInt(ultimoEnvio))) / 1000);
+                status.innerHTML = `<p style='color:#f59e0b;'>⏳ Espera ${espera} segundos antes de enviar otro reporte.</p>`;
+                return;
+            }
+
+            const titulo = document.getElementById('titulo').value.trim();
+            const descripcion = document.getElementById('descripcion').value.trim();
+
+            // 3. Validaciones de longitud mínima
+            if (titulo.length < 10) {
+                status.innerHTML = "<p style='color:#f87171;'>⚠️ El título debe tener al menos 10 caracteres.</p>";
+                return;
+            }
+            if (descripcion.length < 30) {
+                status.innerHTML = "<p style='color:#f87171;'>⚠️ La descripción debe tener al menos 30 caracteres.</p>";
+                return;
+            }
+
+            const btn = form.querySelector('button');
+            btn.disabled = true;
+            btn.textContent = 'Enviando...';
 
             try {
                 await addDoc(collection(db, "reportes"), {
@@ -223,12 +264,18 @@
                     descripcion,
                     fecha: Timestamp.now()
                 });
-                status.innerHTML = "<p style='color: #4ade80;'>✅ Reporte enviado con éxito.</p>";
+                localStorage.setItem('ultimo_reporte', Date.now().toString());
+                status.innerHTML = "<p style='color:#4ade80;'>✅ Reporte enviado. ¡Gracias por ayudar a la comunidad!</p>";
                 form.reset();
+                charCount.textContent = '0';
             } catch (error) {
-                status.innerHTML = "<p style='color: #f87171;'>❌ Error al enviar.</p>";
+                status.innerHTML = "<p style='color:#f87171;'>❌ Error al enviar. Intenta más tarde.</p>";
+            } finally {
+                btn.disabled = false;
+                btn.textContent = 'Enviar Reporte a la Comunidad';
             }
         });
     </script>
 
+</body>
 </html>
