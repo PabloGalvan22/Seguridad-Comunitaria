@@ -15,7 +15,8 @@ import {
   getDoc, 
   updateDoc, 
   increment,
-  serverTimestamp
+  serverTimestamp,
+  deleteDoc
 } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
 
 import { 
@@ -394,6 +395,7 @@ export {
   updateDoc,
   increment,
   serverTimestamp,
+  deleteDoc,
   
   // Funciones de Authentication básicas
   signInWithEmailAndPassword,

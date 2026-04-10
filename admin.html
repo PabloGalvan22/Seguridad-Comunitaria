@@ -495,8 +495,10 @@
             <div class="form-group">
                 <div class="input-with-icon">
                     <i class="input-icon fas fa-envelope"></i>
-                    <input type="email" id="email" placeholder="Correo de administrador" autocomplete="username">
+                    <input type="email" id="email" placeholder="Correo de administrador" autocomplete="username"
+                           oninput="validarEmail(this)">
                 </div>
+                <div id="email-hint" style="font-size:0.8rem; margin-top:-14px; margin-bottom:10px; display:none;"></div>
             </div>
             
             <div class="form-group">
@@ -692,11 +694,8 @@
         import { 
             db, auth, collection, addDoc, getDocs, Timestamp, 
             signInWithEmailAndPassword, onAuthStateChanged, signOut,
-            query, orderBy
+            query, orderBy, doc, deleteDoc
         } from './firebase.js';
-
-        // deleteDoc y doc importados directo desde Firebase (no están en firebase.js)
-        import { deleteDoc as _deleteDoc, doc as _doc } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
 
         const loginSection = document.getElementById('login-section');
         const postSection = document.getElementById('post-section');
@@ -829,7 +828,7 @@
         window.eliminarReporte = async function(id) {
             if (!confirm('¿Eliminar este reporte permanentemente? Esta acción no se puede deshacer.')) return;
             try {
-                await _deleteDoc(_doc(db, 'reportes', id));
+                await deleteDoc(doc(db, 'reportes', id));
                 todosLosReportes = todosLosReportes.filter(r => r.id !== id);
                 leidosSet.delete(id);
                 localStorage.setItem('reportes_leidos', JSON.stringify([...leidosSet]));
@@ -840,7 +839,25 @@
             }
         };
 
-        // Funciones para el editor
+        // ── Validación visual del email ─────────────────────
+        window.validarEmail = function(input) {
+            const hint = document.getElementById('email-hint');
+            const val = input.value.trim();
+            if (!val) { hint.style.display = 'none'; input.style.borderColor = ''; return; }
+            const valid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val);
+            hint.style.display = 'block';
+            if (valid) {
+                hint.textContent = '✔ Correo válido';
+                hint.style.color = 'var(--success)';
+                input.style.borderColor = 'var(--success)';
+            } else {
+                hint.textContent = '✖ Escribe un correo válido (ejemplo@dominio.com)';
+                hint.style.color = 'var(--danger)';
+                input.style.borderColor = 'var(--danger)';
+            }
+        };
+
+        // ── Editor de Markdown ───────────────────────────────
         window.formatText = function(type) {
             const textarea = contentInput;
             const start = textarea.selectionStart;
