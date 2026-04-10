@@ -1,37 +1,50 @@
 // sw.js — Service Worker de Seguridad Comunitaria
 // Estrategia: Cache First para assets, Network First para páginas HTML
+// ✅ CORREGIDO: rutas ajustadas para GitHub Pages (/Seguridad-Comunitaria/)
 
-const CACHE_NAME = 'segcom-v1';
-const CACHE_STATIC = 'segcom-static-v1';
+// ── Detectar el base path automáticamente desde la URL del SW ──
+const BASE = self.location.pathname.replace('/sw.js', '');
+// En GitHub Pages quedará: '/Seguridad-Comunitaria'
+// En localhost quedará:    ''
+
+const CACHE_STATIC = 'segcom-static-v2'; // ← versión incrementada para limpiar caché viejo
 
 // Archivos que se cachean en la instalación (shell de la app)
 const PRECACHE_URLS = [
-    '/',
-    '/index.html',
-    '/phishing.html',
-    '/ciberseguridad.html',
-    '/videojuegos.html',
-    '/redes.html',
-    '/grooming.html',
-    '/post-detalle.html',
-    '/privacidad.html',
-    '/style.css',
-    '/firebase.js',
-    '/pwa.js',
-    '/icons/icon-192.png',
-    '/icons/icon-512.png',
-    '/icons/icon-192-maskable.png',
-    '/icons/icon-512-maskable.png',
-    '/manifest.json'
+    BASE + '/',
+    BASE + '/index.html',
+    BASE + '/phishing.html',
+    BASE + '/ciberseguridad.html',
+    BASE + '/videojuegos.html',
+    BASE + '/redes.html',
+    BASE + '/grooming.html',
+    BASE + '/post-detalle.html',
+    BASE + '/privacidad.html',
+    BASE + '/style.css',
+    BASE + '/firebase.js',
+    BASE + '/pwa.js',
+    BASE + '/icons/icon-192.png',
+    BASE + '/icons/icon-512.png',
+    BASE + '/icons/icon-192-maskable.png',
+    BASE + '/icons/icon-512-maskable.png',
+    BASE + '/manifest.json'
 ];
 
 // ── INSTALACIÓN ─────────────────────────────────────────────
 self.addEventListener('install', event => {
-    // NO hacer self.skipWaiting() — el usuario decide cuándo actualizar
+    // NO hacer self.skipWaiting() aquí — el usuario decide cuándo actualizar
     event.waitUntil(
         caches.open(CACHE_STATIC)
-            .then(cache => cache.addAll(PRECACHE_URLS))
-            .then(() => console.log('[SW] Instalado y caché listo'))
+            .then(cache => {
+                // addAll falla si un solo recurso no existe; usamos add individual
+                // para que errores en un archivo no rompan toda la instalación
+                return Promise.allSettled(
+                    PRECACHE_URLS.map(url => cache.add(url).catch(err => {
+                        console.warn('[SW] No se pudo cachear:', url, err.message);
+                    }))
+                );
+            })
+            .then(() => console.log('[SW] Instalado y caché listo. BASE:', BASE))
     );
 });
 
@@ -41,7 +54,7 @@ self.addEventListener('activate', event => {
         caches.keys().then(keys =>
             Promise.all(
                 keys
-                    .filter(key => key !== CACHE_STATIC && key !== CACHE_NAME)
+                    .filter(key => key !== CACHE_STATIC)
                     .map(key => {
                         console.log('[SW] Eliminando caché viejo:', key);
                         return caches.delete(key);
@@ -49,7 +62,6 @@ self.addEventListener('activate', event => {
             )
         ).then(() => {
             console.log('[SW] Activado');
-            // Tomar control de todas las pestañas abiertas
             return self.clients.claim();
         })
     );
@@ -60,7 +72,7 @@ self.addEventListener('fetch', event => {
     const { request } = event;
     const url = new URL(request.url);
 
-    // Ignorar peticiones de Firebase, Google APIs y CDNs externos
+    // Ignorar peticiones externas: Firebase, Google APIs, CDNs
     if (
         url.hostname.includes('firebase') ||
         url.hostname.includes('googleapis') ||
@@ -77,7 +89,7 @@ self.addEventListener('fetch', event => {
 
     // Estrategia: Network First para HTML, Cache First para assets
     if (request.destination === 'document' || request.mode === 'navigate') {
-        // HTML → Network First (contenido siempre fresco si hay conexión)
+        // HTML → Network First (siempre fresco si hay conexión)
         event.respondWith(
             fetch(request)
                 .then(response => {
@@ -85,8 +97,10 @@ self.addEventListener('fetch', event => {
                     caches.open(CACHE_STATIC).then(cache => cache.put(request, clone));
                     return response;
                 })
-                .catch(() => caches.match(request)
-                    .then(cached => cached || caches.match('/index.html'))
+                .catch(() =>
+                    caches.match(request).then(cached =>
+                        cached || caches.match(BASE + '/index.html')
+                    )
                 )
         );
     } else {
@@ -109,7 +123,6 @@ self.addEventListener('fetch', event => {
 // ── MENSAJE DESDE LA PÁGINA ─────────────────────────────────
 self.addEventListener('message', event => {
     if (event.data === 'SKIP_WAITING') {
-        // El usuario aceptó la actualización
         console.log('[SW] Aplicando actualización por solicitud del usuario');
         self.skipWaiting();
     }

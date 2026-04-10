@@ -1,5 +1,5 @@
 // pwa.js — Registro del Service Worker compartido para todas las páginas
-// Se incluye en todos los HTML del proyecto
+// ✅ CORREGIDO: registro con ruta relativa para funcionar en GitHub Pages subdirectorios
 
 (function () {
     if (!('serviceWorker' in navigator)) return;
@@ -10,8 +10,10 @@
     // ── Registro del Service Worker ─────────────────────────
     window.addEventListener('load', async () => {
         try {
-            swRegistration = await navigator.serviceWorker.register('/sw.js');
-            console.log('[PWA] Service Worker registrado');
+            // ✅ CLAVE: usar './sw.js' (ruta relativa) en lugar de '/sw.js' (absoluta)
+            // Esto funciona tanto en localhost como en GitHub Pages /Seguridad-Comunitaria/
+            swRegistration = await navigator.serviceWorker.register('./sw.js');
+            console.log('[PWA] Service Worker registrado correctamente');
 
             // Detectar nueva versión disponible
             swRegistration.addEventListener('updatefound', () => {
@@ -44,7 +46,6 @@
     function mostrarBannerActualizacion() {
         let banner = document.getElementById('update-banner');
 
-        // Si la página no tiene el banner en el HTML, lo creamos dinámicamente
         if (!banner) {
             banner = document.createElement('div');
             banner.id = 'update-banner';
@@ -99,7 +100,6 @@
     function posponerActualizacion() {
         const banner = document.getElementById('update-banner');
         if (banner) banner.style.display = 'none';
-        // El banner reaparecerá la próxima vez que abra la app
     }
 
     // Exponer funciones por si index.html las llama directamente
