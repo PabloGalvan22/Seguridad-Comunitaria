@@ -16,7 +16,8 @@ import {
   updateDoc, 
   increment,
   serverTimestamp,
-  deleteDoc
+  deleteDoc,
+  enableIndexedDbPersistence
 } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
 
 import { 
@@ -43,6 +44,17 @@ const app = initializeApp(firebaseConfig);
 // Inicializar servicios
 const db = getFirestore(app);
 const auth = getAuth(app);
+
+// Activar persistencia offline (datos disponibles sin conexión)
+enableIndexedDbPersistence(db).catch(err => {
+  if (err.code === 'failed-precondition') {
+    // Múltiples pestañas abiertas — solo funciona en una a la vez
+    console.warn('[Firebase] Persistencia no disponible: múltiples pestañas abiertas');
+  } else if (err.code === 'unimplemented') {
+    // El navegador no soporta IndexedDB
+    console.warn('[Firebase] Persistencia no soportada en este navegador');
+  }
+});
 
 // ============================================
 // FUNCIONES DE UTILIDAD

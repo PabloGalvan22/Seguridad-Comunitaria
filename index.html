@@ -5,7 +5,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
     <title>Seguridad Comunitaria - Protección Digital</title>
 
-    <link rel="icon" type="image/png" href= "https://static.vecteezy.com/system/resources/thumbnails/002/737/976/small/closed-padlock-on-digital-background-cyber-security-free-photo.jpg" sizes="16x16">  
+    <!-- PWA -->
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#38bdf8">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Seg. Comunitaria">
+    <link rel="apple-touch-icon" href="icons/icon-192.png">
+
+    <link rel="icon" type="image/png" href="icons/icon-192.png" sizes="192x192">
 
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
@@ -122,7 +131,42 @@
     <header>
         <h1>Seguridad Comunitaria</h1>
         <p>Tu escudo contra las amenazas del mundo digital</p>
+        <button id="btn-instalar" aria-label="Instalar aplicación"
+                style="display:none; margin-top:14px; background:rgba(56,189,248,0.15);
+                       border:1px solid var(--primary); color:var(--primary);
+                       padding:8px 20px; border-radius:20px; font-size:0.85rem;
+                       cursor:pointer; transition:0.3s; box-shadow:none;
+                       text-transform:none; letter-spacing:0;">
+            <i class="fas fa-download"></i> Instalar app
+        </button>
     </header>
+
+    <!-- Banner de actualización disponible -->
+    <div id="update-banner"
+         style="display:none; position:fixed; top:0; left:0; right:0; z-index:10000;
+                background:#1e293b; border-bottom:2px solid var(--primary);
+                padding:12px 20px; display:none; align-items:center;
+                justify-content:space-between; flex-wrap:wrap; gap:10px;
+                box-shadow:0 4px 20px rgba(0,0,0,0.5);">
+        <span style="font-size:0.9rem; color:var(--text-main);">
+            🔄 <strong>Nueva versión disponible.</strong> ¿Actualizar ahora?
+        </span>
+        <div style="display:flex; gap:8px;">
+            <button onclick="aplicarActualizacion()"
+                    style="background:var(--primary); color:var(--bg-dark); border:none;
+                           padding:7px 16px; border-radius:16px; font-size:0.85rem;
+                           font-weight:700; cursor:pointer; box-shadow:none;
+                           text-transform:none; letter-spacing:0;">
+                Actualizar
+            </button>
+            <button onclick="posponerActualizacion()"
+                    style="background:transparent; color:var(--text-muted); border:1px solid rgba(255,255,255,0.2);
+                           padding:7px 14px; border-radius:16px; font-size:0.85rem;
+                           cursor:pointer; box-shadow:none; text-transform:none; letter-spacing:0;">
+                Ahora no
+            </button>
+        </div>
+    </div>
 
     <nav>
         <button class="nav-toggle" aria-label="Abrir menú de navegación" aria-expanded="false" onclick="toggleNav(this)">
@@ -327,6 +371,96 @@
                 }, 800);
             }
         });
+
+        // ── PWA: Registro del Service Worker ───────────────
+        let swRegistration = null;
+        let swActualizacion = null;
+
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', async () => {
+                try {
+                    swRegistration = await navigator.serviceWorker.register('/sw.js');
+                    console.log('[PWA] Service Worker registrado');
+
+                    // Detectar actualización disponible
+                    swRegistration.addEventListener('updatefound', () => {
+                        const nuevoSW = swRegistration.installing;
+                        nuevoSW.addEventListener('statechange', () => {
+                            if (nuevoSW.state === 'installed' && navigator.serviceWorker.controller) {
+                                // Hay una nueva versión esperando — guardar referencia
+                                swActualizacion = nuevoSW;
+                                localStorage.setItem('sw_update_pending', '1');
+                                mostrarBannerActualizacion();
+                            }
+                        });
+                    });
+
+                    // Si había una actualización pendiente de una sesión anterior
+                    if (localStorage.getItem('sw_update_pending') === '1') {
+                        mostrarBannerActualizacion();
+                    }
+
+                } catch (err) {
+                    console.warn('[PWA] Error registrando SW:', err);
+                }
+            });
+
+            // Recargar cuando el nuevo SW tome control
+            navigator.serviceWorker.addEventListener('controllerchange', () => {
+                window.location.reload();
+            });
+        }
+
+        // ── PWA: Botón de instalación ───────────────────────
+        let deferredPrompt = null;
+        const btnInstalar = document.getElementById('btn-instalar');
+
+        window.addEventListener('beforeinstallprompt', e => {
+            e.preventDefault();
+            deferredPrompt = e;
+            // Mostrar solo si no está instalada
+            if (window.matchMedia('(display-mode: standalone)').matches) return;
+            btnInstalar.style.display = 'inline-block';
+        });
+
+        btnInstalar.addEventListener('click', async () => {
+            if (!deferredPrompt) return;
+            deferredPrompt.prompt();
+            const { outcome } = await deferredPrompt.userChoice;
+            if (outcome === 'accepted') {
+                btnInstalar.style.display = 'none';
+                console.log('[PWA] App instalada');
+            }
+            deferredPrompt = null;
+        });
+
+        // Ocultar botón si ya está instalada
+        window.addEventListener('appinstalled', () => {
+            btnInstalar.style.display = 'none';
+            deferredPrompt = null;
+        });
+
+        // ── PWA: Banner de actualización ────────────────────
+        function mostrarBannerActualizacion() {
+            const banner = document.getElementById('update-banner');
+            banner.style.display = 'flex';
+        }
+
+        function aplicarActualizacion() {
+            localStorage.removeItem('sw_update_pending');
+            if (swActualizacion) {
+                swActualizacion.postMessage('SKIP_WAITING');
+            } else if (swRegistration && swRegistration.waiting) {
+                swRegistration.waiting.postMessage('SKIP_WAITING');
+            } else {
+                window.location.reload();
+            }
+        }
+
+        function posponerActualizacion() {
+            document.getElementById('update-banner').style.display = 'none';
+            // El banner reaparecerá la próxima vez que abra la app
+        }
     </script>
 
     <!-- Firebase Analytics -->
