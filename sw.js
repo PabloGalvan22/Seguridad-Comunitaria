@@ -27,6 +27,20 @@ const PRECACHE_URLS = [
     BASE + '/assets/icons/icon-512.png',
     BASE + '/assets/icons/icon-192-maskable.png',
     BASE + '/assets/icons/icon-512-maskable.png',
+    BASE + '/phishing.html',
+    BASE + '/ciberseguridad.html',
+    BASE + '/videojuegos.html',
+    BASE + '/redes.html',
+    BASE + '/grooming.html',
+    BASE + '/post-detalle.html',
+    BASE + '/privacidad.html',
+    BASE + '/style.css',
+    BASE + '/firebase.js',
+    BASE + '/pwa.js',
+    BASE + '/icons/icon-192.png',
+    BASE + '/icons/icon-512.png',
+    BASE + '/icons/icon-192-maskable.png',
+    BASE + '/icons/icon-512-maskable.png',
     BASE + '/manifest.json'
 ];
 

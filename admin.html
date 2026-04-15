@@ -1,0 +1,1340 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <!-- PWA -->
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#38bdf8">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Seg. Comunitaria">
+    <link rel="apple-touch-icon" href="icon-192.png">
+    <link rel="icon" type="image/png" href="icon-192.png" sizes="192x192">
+    <title>Admin - Publicar Historia</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        /* Estilos adicionales para el admin */
+        .admin-panel {
+            max-width: 900px;
+            margin: 40px auto;
+            padding: 40px;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 24px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: var(--primary);
+            font-weight: 600;
+            font-size: 0.95rem;
+        }
+
+        .input-with-icon {
+            position: relative;
+        }
+
+        .input-icon {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-muted);
+            font-size: 1.2rem;
+        }
+
+        .input-with-icon input {
+            padding-left: 45px;
+        }
+
+        .character-count {
+            text-align: right;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin-top: -15px;
+            margin-bottom: 10px;
+        }
+
+        .character-count.warning {
+            color: var(--warning);
+        }
+
+        .character-count.danger {
+            color: var(--danger);
+        }
+
+        /* Editor Markdown */
+        .editor-container {
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        .editor-toolbar {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 10px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .tool-btn {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: var(--text-main);
+            padding: 8px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .tool-btn:hover {
+            background: var(--primary);
+            color: var(--bg-dark);
+            border-color: var(--primary);
+        }
+
+        .emoji-picker {
+            position: relative;
+        }
+
+        .emoji-grid {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            background: var(--bg-card);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            padding: 10px;
+            display: none;
+            grid-template-columns: repeat(6, 1fr);
+            gap: 5px;
+            z-index: 1000;
+            max-width: 200px;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+
+        .emoji-picker:hover .emoji-grid {
+            display: grid;
+        }
+
+        .emoji {
+            cursor: pointer;
+            padding: 5px;
+            border-radius: 4px;
+            text-align: center;
+            font-size: 1.2rem;
+        }
+
+        .emoji:hover {
+            background: rgba(56, 189, 248, 0.2);
+        }
+
+        #contenido {
+            min-height: 300px;
+            font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+            font-size: 14px;
+            line-height: 1.6;
+            tab-size: 4;
+        }
+
+        .editor-preview {
+            background: rgba(0, 0, 0, 0.2);
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            display: none;
+        }
+
+        .preview-content {
+            font-family: 'Poppins', sans-serif;
+            line-height: 1.8;
+        }
+
+        .preview-content h1, .preview-content h2, .preview-content h3 {
+            color: var(--primary);
+            margin: 20px 0 10px 0;
+        }
+
+        .preview-content strong {
+            color: var(--secondary);
+            font-weight: 700;
+        }
+
+        .preview-content em {
+            color: var(--accent);
+            font-style: italic;
+        }
+
+        .preview-content ul, .preview-content ol {
+            padding-left: 20px;
+            margin: 10px 0;
+        }
+
+        .preview-content li {
+            margin-bottom: 5px;
+        }
+
+        .preview-content blockquote {
+            border-left: 4px solid var(--primary);
+            padding-left: 15px;
+            margin: 15px 0;
+            color: var(--text-muted);
+            font-style: italic;
+        }
+
+        .preview-content code {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: monospace;
+            font-size: 0.9em;
+        }
+
+        .preview-content pre {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 15px;
+            border-radius: 8px;
+            overflow-x: auto;
+            margin: 15px 0;
+        }
+
+        .markdown-guide {
+            margin-top: 20px;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 8px;
+            border-left: 4px solid var(--secondary);
+        }
+
+        .markdown-guide h4 {
+            color: var(--secondary);
+            margin-bottom: 10px;
+        }
+
+        .markdown-examples {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 10px;
+            font-size: 0.85rem;
+        }
+
+        .markdown-example {
+            background: rgba(0, 0, 0, 0.2);
+            padding: 8px;
+            border-radius: 4px;
+        }
+
+        .markdown-example code {
+            font-family: monospace;
+            color: var(--accent);
+        }
+
+        .admin-actions {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .admin-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .admin-icon {
+            font-size: 2.5rem;
+            color: var(--danger);
+        }
+
+        .status-message {
+            padding: 12px;
+            border-radius: 10px;
+            margin-top: 15px;
+            text-align: center;
+            font-weight: 600;
+            display: none;
+        }
+
+        .status-success {
+            background: rgba(74, 222, 128, 0.15);
+            border: 1px solid var(--success);
+            color: var(--success);
+            display: block;
+        }
+
+        .status-error {
+            background: rgba(239, 68, 68, 0.15);
+            border: 1px solid var(--danger);
+            color: var(--danger);
+            display: block;
+        }
+
+        /* ── Sección de Reportes ── */
+        .reportes-section {
+            margin-top: 40px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            padding-top: 30px;
+        }
+
+        .reportes-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .reportes-stats {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .stat-badge {
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 20px;
+            padding: 6px 14px;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+
+        .stat-badge span {
+            color: var(--primary);
+            font-weight: 700;
+        }
+
+        .reportes-filtros {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .filtro-btn {
+            padding: 7px 16px;
+            border-radius: 20px;
+            border: 1px solid rgba(255,255,255,0.15);
+            background: transparent;
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: 0.2s;
+            box-shadow: none;
+            text-transform: none;
+            letter-spacing: 0;
+        }
+
+        .filtro-btn:hover, .filtro-btn.active {
+            background: var(--primary);
+            color: var(--bg-dark);
+            border-color: var(--primary);
+            transform: none;
+            box-shadow: none;
+        }
+
+        #buscador-reportes {
+            width: 100%;
+            margin-bottom: 15px;
+            padding: 12px 16px;
+        }
+
+        .reporte-card {
+            background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 14px;
+            padding: 20px;
+            margin-bottom: 14px;
+            transition: 0.3s;
+            position: relative;
+        }
+
+        .reporte-card:hover {
+            border-color: rgba(255,255,255,0.2);
+            background: rgba(255,255,255,0.05);
+        }
+
+        .reporte-card.leido {
+            opacity: 0.55;
+            border-style: dashed;
+        }
+
+        .reporte-titulo {
+            font-weight: 700;
+            font-size: 1rem;
+            color: var(--text-main);
+            margin-bottom: 8px;
+            padding-right: 80px;
+        }
+
+        .reporte-descripcion {
+            font-size: 0.92rem;
+            color: var(--text-muted);
+            line-height: 1.6;
+            margin-bottom: 12px;
+            white-space: pre-wrap;
+            word-break: break-word;
+        }
+
+        .reporte-meta {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 0.8rem;
+            color: #555;
+            flex-wrap: wrap;
+        }
+
+        .reporte-acciones {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            display: flex;
+            gap: 8px;
+        }
+
+        .btn-reporte {
+            padding: 5px 10px;
+            border-radius: 8px;
+            border: 1px solid rgba(255,255,255,0.1);
+            background: rgba(255,255,255,0.05);
+            color: var(--text-muted);
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: 0.2s;
+            box-shadow: none;
+            text-transform: none;
+            letter-spacing: 0;
+        }
+
+        .btn-reporte:hover { transform: none; }
+
+        .btn-leer:hover {
+            background: rgba(56,189,248,0.15);
+            color: var(--primary);
+            border-color: var(--primary);
+            box-shadow: none;
+        }
+
+        .btn-eliminar:hover {
+            background: rgba(239,68,68,0.15);
+            color: var(--danger);
+            border-color: var(--danger);
+            box-shadow: none;
+        }
+
+        .reportes-empty {
+            text-align: center;
+            padding: 50px 20px;
+            color: var(--text-muted);
+            font-size: 0.95rem;
+        }
+
+        .reportes-loading {
+            text-align: center;
+            padding: 40px;
+            color: var(--text-muted);
+        }
+
+        .nuevo-badge {
+            display: inline-block;
+            background: var(--danger);
+            color: white;
+            font-size: 0.65rem;
+            font-weight: 700;
+            padding: 2px 7px;
+            border-radius: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            vertical-align: middle;
+            margin-left: 6px;
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <a href="grooming.html"><i class="fas fa-arrow-left"></i> Volver al Blog</a>
+        <a href="index.html"><i class="fas fa-home"></i> Inicio</a>
+        <a href="phishing.html"><i class="fas fa-fish"></i> Phishing</a>
+        <a href="ciberseguridad.html"><i class="fas fa-shield-alt"></i> Ciberseguridad</a>
+        <a href="videojuegos.html"><i class="fas fa-gamepad"></i> Videojuegos</a>
+        <a href="redes.html"><i class="fas fa-users"></i> Redes Sociales</a>
+        <a href="grooming.html"><i class="fas fa-exclamation-triangle"></i> Grooming</a>
+        <a href="https://pablogalvan22.github.io/NoticiasSanIsidro/" target="_blank" rel="noopener noreferrer">
+            <i class="fas fa-newspaper"></i> Noticias
+        </a>
+        <a href="admin.html" style="margin-left: auto; background: rgba(239, 68, 68, 0.1);">
+            <i class="fas fa-lock"></i> Admin
+        </a>
+    </nav>
+
+    <div class="admin-panel">
+        <div class="admin-header">
+            <div class="admin-icon">
+                <i class="fas fa-user-shield"></i>
+            </div>
+            <div>
+                <h2>Panel de Administrador</h2>
+                <p style="color: var(--text-muted); font-size: 0.9rem;">Gestiona y publica historias para la comunidad</p>
+            </div>
+        </div>
+        
+        <div id="login-section">
+            <h3><i class="fas fa-sign-in-alt"></i> Identifícate</h3>
+            <p style="font-size: 0.9em; color: #666; margin-bottom: 20px;">Ingresa con el correo y contraseña que creaste en Firebase Authentication.</p>
+            
+            <div class="form-group">
+                <div class="input-with-icon">
+                    <i class="input-icon fas fa-envelope"></i>
+                    <input type="email" id="email" placeholder="Correo de administrador" autocomplete="username"
+                           oninput="validarEmail(this)">
+                </div>
+                <div id="email-hint" style="font-size:0.8rem; margin-top:-14px; margin-bottom:10px; display:none;"></div>
+            </div>
+            
+            <div class="form-group">
+                <div class="input-with-icon">
+                    <i class="input-icon fas fa-lock"></i>
+                    <input type="password" id="password" placeholder="Contraseña" autocomplete="current-password">
+                </div>
+            </div>
+            
+            <button id="loginBtn" style="width: 100%;">
+                <i class="fas fa-sign-in-alt"></i> Ingresar
+            </button>
+        </div>
+
+        <div id="post-section" style="display: none;">
+            <h3><i class="fas fa-edit"></i> Escribir nueva historia</h3>
+            <p style="color: var(--text-muted); margin-bottom: 20px;">Usa Markdown para formatear tu historia. Puedes usar negritas, listas, títulos y más.</p>
+            
+            <div class="form-group">
+                <label for="titulo"><i class="fas fa-heading"></i> Título de la historia</label>
+                <div class="input-with-icon">
+                    <i class="input-icon fas fa-pen"></i>
+                    <input type="text" id="titulo" placeholder="Ej: Nuevo caso de grooming detectado en Instagram...">
+                </div>
+                <div class="character-count" id="title-count">0/120 caracteres</div>
+            </div>
+            
+            <div class="form-group">
+                <label for="contenido"><i class="fas fa-align-left"></i> Contenido (soporta Markdown)</label>
+                
+                <div class="editor-container">
+                    <div class="editor-toolbar">
+                        <button type="button" class="tool-btn" onclick="formatText('bold')">
+                            <i class="fas fa-bold"></i> Negrita
+                        </button>
+                        <button type="button" class="tool-btn" onclick="formatText('italic')">
+                            <i class="fas fa-italic"></i> Cursiva
+                        </button>
+                        <button type="button" class="tool-btn" onclick="formatText('heading')">
+                            <i class="fas fa-heading"></i> Título
+                        </button>
+                        <button type="button" class="tool-btn" onclick="formatText('list')">
+                            <i class="fas fa-list"></i> Lista
+                        </button>
+                        <button type="button" class="tool-btn" onclick="formatText('link')">
+                            <i class="fas fa-link"></i> Enlace
+                        </button>
+                        <div class="emoji-picker">
+                            <button type="button" class="tool-btn">
+                                <i class="fas fa-smile"></i> Emoji
+                            </button>
+                            <div class="emoji-grid">
+                                <!-- Emojis de seguridad -->
+                                <span class="emoji" onclick="insertEmoji('⚠️')">⚠️</span>
+                                <span class="emoji" onclick="insertEmoji('🔒')">🔒</span>
+                                <span class="emoji" onclick="insertEmoji('🔑')">🔑</span>
+                                <span class="emoji" onclick="insertEmoji('💻')">💻</span>
+                                <span class="emoji" onclick="insertEmoji('📱')">📱</span>
+                                <span class="emoji" onclick="insertEmoji('🌐')">🌐</span>
+                                <span class="emoji" onclick="insertEmoji('🚨')">🚨</span>
+                                <span class="emoji" onclick="insertEmoji('✅')">✅</span>
+                                <span class="emoji" onclick="insertEmoji('❌')">❌</span>
+                                <span class="emoji" onclick="insertEmoji('❗')">❗</span>
+                                <span class="emoji" onclick="insertEmoji('❓')">❓</span>
+                                <span class="emoji" onclick="insertEmoji('💡')">💡</span>
+                                <span class="emoji" onclick="insertEmoji('🔔')">🔔</span>
+                                <span class="emoji" onclick="insertEmoji('👤')">👤</span>
+                                <span class="emoji" onclick="insertEmoji('🛡️')">🛡️</span>
+                                <span class="emoji" onclick="insertEmoji('🎯')">🎯</span>
+                                <span class="emoji" onclick="insertEmoji('📢')">📢</span>
+                                <span class="emoji" onclick="insertEmoji('🔍')">🔍</span>
+                                <span class="emoji" onclick="insertEmoji('📝')">📝</span>
+                                <span class="emoji" onclick="insertEmoji('💬')">💬</span>
+                                <span class="emoji" onclick="insertEmoji('👁️')">👁️</span>
+                                <span class="emoji" onclick="insertEmoji('🤝')">🤝</span>
+                                <span class="emoji" onclick="insertEmoji('🙏')">🙏</span>
+                                <span class="emoji" onclick="insertEmoji('❤️')">❤️</span>
+                            </div>
+                        </div>
+                        <button type="button" class="tool-btn" onclick="togglePreview()">
+                            <i class="fas fa-eye"></i> Vista previa
+                        </button>
+                    </div>
+                    
+                    <textarea id="contenido" rows="15" placeholder="Escribe tu historia aquí usando Markdown...
+
+# Título principal
+## Subtítulo
+**Texto en negrita** *texto en cursiva*
+
+- Lista con puntos
+- Segundo elemento
+
+1. Lista numerada
+2. Segundo elemento
+
+> Cita o bloque importante
+
+[Texto del enlace](https://ejemplo.com)
+
+¡No olvides los emojis! 🚨⚠️🔒"></textarea>
+                </div>
+                
+                <div class="character-count" id="content-count">0/10000 caracteres</div>
+                
+                <div class="editor-preview" id="preview">
+                    <h4><i class="fas fa-eye"></i> Vista previa:</h4>
+                    <div class="preview-content" id="preview-content"></div>
+                </div>
+            </div>
+            
+            <div class="markdown-guide">
+                <h4><i class="fas fa-info-circle"></i> Guía rápida de Markdown:</h4>
+                <div class="markdown-examples">
+                    <div class="markdown-example">
+                        <strong>Negritas:</strong><br>
+                        <code>**texto**</code>
+                    </div>
+                    <div class="markdown-example">
+                        <strong>Cursiva:</strong><br>
+                        <code>*texto*</code>
+                    </div>
+                    <div class="markdown-example">
+                        <strong>Título:</strong><br>
+                        <code># Título grande</code><br>
+                        <code>## Subtítulo</code>
+                    </div>
+                    <div class="markdown-example">
+                        <strong>Lista:</strong><br>
+                        <code>- Elemento 1</code><br>
+                        <code>- Elemento 2</code>
+                    </div>
+                    <div class="markdown-example">
+                        <strong>Enlace:</strong><br>
+                        <code>[texto](url)</code>
+                    </div>
+                    <div class="markdown-example">
+                        <strong>Cita:</strong><br>
+                        <code>> Texto citado</code>
+                    </div>
+                </div>
+            </div>
+            
+            <div id="status-message" class="status-message"></div>
+            
+            <div class="admin-actions">
+                <button id="publicarBtn" style="flex: 2;">
+                    <i class="fas fa-paper-plane"></i> Publicar Historia
+                </button>
+                <button id="logoutBtn" style="flex: 1; background: var(--danger);">
+                    <i class="fas fa-sign-out-alt"></i> Cerrar Sesión
+                </button>
+            </div>
+
+            <!-- ── Sección de Historias Publicadas ── -->
+            <div class="reportes-section">
+                <div class="reportes-header">
+                    <h3><i class="fas fa-newspaper"></i> Historias Publicadas</h3>
+                    <div class="reportes-stats">
+                        <div class="stat-badge">Total: <span id="total-posts">–</span></div>
+                    </div>
+                </div>
+
+                <div class="reportes-filtros">
+                    <button class="filtro-btn" onclick="cargarPosts()" style="margin-left:auto;">
+                        <i class="fas fa-sync-alt"></i> Actualizar
+                    </button>
+                </div>
+
+                <input type="text" id="buscador-posts" placeholder="🔍 Buscar historia por título..." oninput="buscarPosts(this.value)">
+
+                <div id="posts-container">
+                    <div class="reportes-loading">
+                        <i class="fas fa-spinner fa-spin" style="font-size:1.5rem; margin-bottom:10px; display:block;"></i>
+                        Cargando historias...
+                    </div>
+                </div>
+            </div>
+
+            <!-- ── Sección de Reportes Ciudadanos ── -->
+            <div class="reportes-section">
+                <div class="reportes-header">
+                    <h3><i class="fas fa-flag"></i> Reportes Ciudadanos</h3>
+                    <div class="reportes-stats">
+                        <div class="stat-badge">Total: <span id="total-reportes">–</span></div>
+                        <div class="stat-badge">Sin leer: <span id="sin-leer-count">–</span></div>
+                    </div>
+                </div>
+
+                <div class="reportes-filtros">
+                    <button class="filtro-btn active" data-filtro="todos" onclick="filtrarReportes('todos', this)">
+                        <i class="fas fa-list"></i> Todos
+                    </button>
+                    <button class="filtro-btn" data-filtro="nuevos" onclick="filtrarReportes('nuevos', this)">
+                        <i class="fas fa-circle" style="color:var(--danger); font-size:0.6rem;"></i> Sin leer
+                    </button>
+                    <button class="filtro-btn" data-filtro="leidos" onclick="filtrarReportes('leidos', this)">
+                        <i class="fas fa-check"></i> Leídos
+                    </button>
+                    <button class="filtro-btn" onclick="cargarReportes()" style="margin-left:auto;">
+                        <i class="fas fa-sync-alt"></i> Actualizar
+                    </button>
+                </div>
+
+                <input type="text" id="buscador-reportes" placeholder="🔍 Buscar en reportes..." oninput="buscarReportes(this.value)">
+
+                <div id="reportes-container">
+                    <div class="reportes-loading">
+                        <i class="fas fa-spinner fa-spin" style="font-size:1.5rem; margin-bottom:10px; display:block;"></i>
+                        Cargando reportes...
+                    </div>
+                </div>
+            </div>
+
+            <!-- ── Sección de Sugerencias de Historias ── -->
+            <div class="reportes-section">
+                <div class="reportes-header">
+                    <h3><i class="fas fa-lightbulb"></i> Sugerencias de Historias</h3>
+                    <div class="reportes-stats">
+                        <div class="stat-badge">Total: <span id="total-sugerencias">–</span></div>
+                        <div class="stat-badge">Pendientes: <span id="pendientes-count">–</span></div>
+                    </div>
+                </div>
+
+                <div class="reportes-filtros">
+                    <button class="filtro-btn active" onclick="filtrarSugerencias('todas', this)">
+                        <i class="fas fa-list"></i> Todas
+                    </button>
+                    <button class="filtro-btn" onclick="filtrarSugerencias('pendiente', this)">
+                        <i class="fas fa-clock"></i> Pendientes
+                    </button>
+                    <button class="filtro-btn" onclick="filtrarSugerencias('publicada', this)">
+                        <i class="fas fa-check"></i> Publicadas
+                    </button>
+                    <button class="filtro-btn" onclick="cargarSugerencias()" style="margin-left:auto;">
+                        <i class="fas fa-sync-alt"></i> Actualizar
+                    </button>
+                </div>
+
+                <div id="sugerencias-container">
+                    <div class="reportes-loading">
+                        <i class="fas fa-spinner fa-spin" style="font-size:1.5rem; margin-bottom:10px; display:block;"></i>
+                        Cargando sugerencias...
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script type="module">
+        import { 
+            db, auth, collection, addDoc, getDocs, Timestamp, 
+            signInWithEmailAndPassword, onAuthStateChanged, signOut,
+            query, orderBy, doc, deleteDoc, updateDoc
+        } from './firebase.js';
+
+        const loginSection = document.getElementById('login-section');
+        const postSection = document.getElementById('post-section');
+        const titleInput = document.getElementById('titulo');
+        const contentInput = document.getElementById('contenido');
+        const titleCount = document.getElementById('title-count');
+        const contentCount = document.getElementById('content-count');
+        const previewContent = document.getElementById('preview-content');
+        const preview = document.getElementById('preview');
+        const statusMessage = document.getElementById('status-message');
+
+        // ── Estado de reportes ──────────────────────────────
+        let todosLosReportes = [];
+        let filtroActual = 'todos';
+        let leidosSet = new Set(JSON.parse(localStorage.getItem('reportes_leidos') || '[]'));
+
+        function marcarLeido(id) {
+            leidosSet.add(id);
+            localStorage.setItem('reportes_leidos', JSON.stringify([...leidosSet]));
+        }
+
+        function formatFecha(timestamp) {
+            if (!timestamp) return 'Fecha desconocida';
+            try {
+                const d = timestamp.toDate();
+                return d.toLocaleDateString('es-MX', {
+                    day: '2-digit', month: 'short', year: 'numeric',
+                    hour: '2-digit', minute: '2-digit'
+                });
+            } catch { return 'Fecha inválida'; }
+        }
+
+        function renderReportes(lista) {
+            const container = document.getElementById('reportes-container');
+            if (lista.length === 0) {
+                container.innerHTML = `<div class="reportes-empty">
+                    <i class="fas fa-inbox" style="font-size:2rem; margin-bottom:10px; display:block; opacity:0.3;"></i>
+                    No hay reportes para mostrar.
+                </div>`;
+                return;
+            }
+
+            const sinLeer = lista.filter(r => !leidosSet.has(r.id)).length;
+            document.getElementById('sin-leer-count').textContent = sinLeer;
+
+            container.innerHTML = lista.map(r => {
+                const leido = leidosSet.has(r.id);
+                return `
+                <div class="reporte-card ${leido ? 'leido' : ''}" id="card-${r.id}">
+                    <div class="reporte-acciones">
+                        <button class="btn-reporte btn-leer" onclick="toggleLeido('${r.id}')" title="${leido ? 'Marcar como no leído' : 'Marcar como leído'}">
+                            <i class="fas fa-${leido ? 'envelope' : 'envelope-open'}"></i> ${leido ? 'No leído' : 'Leído'}
+                        </button>
+                        <button class="btn-reporte btn-eliminar" onclick="eliminarReporte('${r.id}')" title="Eliminar reporte">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </div>
+                    <div class="reporte-titulo">
+                        ${r.titulo}
+                        ${!leido ? '<span class="nuevo-badge">Nuevo</span>' : ''}
+                    </div>
+                    <div class="reporte-descripcion">${r.descripcion}</div>
+                    <div class="reporte-meta">
+                        <span><i class="fas fa-clock"></i> ${formatFecha(r.fecha)}</span>
+                    </div>
+                </div>`;
+            }).join('');
+        }
+
+        window.cargarReportes = async function() {
+            const container = document.getElementById('reportes-container');
+            container.innerHTML = `<div class="reportes-loading">
+                <i class="fas fa-spinner fa-spin" style="font-size:1.5rem; margin-bottom:10px; display:block;"></i>
+                Cargando reportes...
+            </div>`;
+
+            try {
+                const q = query(collection(db, 'reportes'), orderBy('fecha', 'desc'));
+                const snap = await getDocs(q);
+                todosLosReportes = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+
+                document.getElementById('total-reportes').textContent = todosLosReportes.length;
+                const sinLeer = todosLosReportes.filter(r => !leidosSet.has(r.id)).length;
+                document.getElementById('sin-leer-count').textContent = sinLeer;
+
+                aplicarFiltro();
+            } catch (e) {
+                container.innerHTML = `<div class="reportes-empty" style="color:var(--danger);">
+                    <i class="fas fa-exclamation-triangle"></i> Error al cargar reportes: ${e.message}
+                </div>`;
+            }
+        };
+
+        function aplicarFiltro() {
+            let lista = [...todosLosReportes];
+            if (filtroActual === 'nuevos') lista = lista.filter(r => !leidosSet.has(r.id));
+            if (filtroActual === 'leidos') lista = lista.filter(r => leidosSet.has(r.id));
+            renderReportes(lista);
+        }
+
+        window.filtrarReportes = function(filtro, btn) {
+            filtroActual = filtro;
+            document.querySelectorAll('.filtro-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            aplicarFiltro();
+        };
+
+        window.buscarReportes = function(texto) {
+            const q = texto.toLowerCase().trim();
+            let lista = [...todosLosReportes];
+            if (filtroActual === 'nuevos') lista = lista.filter(r => !leidosSet.has(r.id));
+            if (filtroActual === 'leidos') lista = lista.filter(r => leidosSet.has(r.id));
+            if (q) lista = lista.filter(r =>
+                r.titulo.toLowerCase().includes(q) ||
+                r.descripcion.toLowerCase().includes(q)
+            );
+            renderReportes(lista);
+        };
+
+        window.toggleLeido = function(id) {
+            if (leidosSet.has(id)) {
+                leidosSet.delete(id);
+            } else {
+                marcarLeido(id);
+            }
+            localStorage.setItem('reportes_leidos', JSON.stringify([...leidosSet]));
+            aplicarFiltro();
+        };
+
+        window.eliminarReporte = async function(id) {
+            if (!confirm('¿Eliminar este reporte permanentemente? Esta acción no se puede deshacer.')) return;
+            try {
+                await deleteDoc(doc(db, 'reportes', id));
+                todosLosReportes = todosLosReportes.filter(r => r.id !== id);
+                leidosSet.delete(id);
+                localStorage.setItem('reportes_leidos', JSON.stringify([...leidosSet]));
+                document.getElementById('total-reportes').textContent = todosLosReportes.length;
+                aplicarFiltro();
+            } catch (e) {
+                alert('Error al eliminar: ' + e.message);
+            }
+        };
+
+        // ── Historias publicadas ─────────────────────────────
+        let todosLosPosts = [];
+
+        window.cargarPosts = async function() {
+            const container = document.getElementById('posts-container');
+            container.innerHTML = `<div class="reportes-loading">
+                <i class="fas fa-spinner fa-spin" style="font-size:1.5rem; margin-bottom:10px; display:block;"></i>
+                Cargando historias...
+            </div>`;
+            try {
+                const q = query(collection(db, 'posts'), orderBy('fecha', 'desc'));
+                const snap = await getDocs(q);
+                todosLosPosts = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+                document.getElementById('total-posts').textContent = todosLosPosts.length;
+                renderPosts(todosLosPosts);
+            } catch (e) {
+                container.innerHTML = `<div class="reportes-empty" style="color:var(--danger);">
+                    <i class="fas fa-exclamation-triangle"></i> Error: ${e.message}
+                </div>`;
+            }
+        };
+
+        function renderPosts(lista) {
+            const container = document.getElementById('posts-container');
+            if (lista.length === 0) {
+                container.innerHTML = `<div class="reportes-empty">
+                    <i class="fas fa-inbox" style="font-size:2rem; margin-bottom:10px; display:block; opacity:0.3;"></i>
+                    No hay historias publicadas.
+                </div>`;
+                return;
+            }
+            container.innerHTML = lista.map(p => `
+                <div class="reporte-card" id="post-card-${p.id}">
+                    <div class="reporte-acciones">
+                        <a href="post-detalle.html?id=${p.id}" target="_blank" class="btn-reporte btn-leer" title="Ver historia">
+                            <i class="fas fa-eye"></i> Ver
+                        </a>
+                        <button class="btn-reporte btn-eliminar" onclick="eliminarPost('${p.id}')" title="Eliminar historia">
+                            <i class="fas fa-trash"></i> Eliminar
+                        </button>
+                    </div>
+                    <div class="reporte-titulo">${p.titulo}</div>
+                    <div class="reporte-meta" style="margin-top:8px;">
+                        <span><i class="fas fa-clock"></i> ${formatFecha(p.fecha)}</span>
+                        <span><i class="fas fa-thumbs-up"></i> ${p.likes || 0}</span>
+                        <span><i class="fas fa-thumbs-down"></i> ${p.dislikes || 0}</span>
+                        <span><i class="fas fa-eye"></i> ${p.visitas || 0} visitas</span>
+                        <span><i class="fas fa-user"></i> ${p.publicadoPor || 'admin'}</span>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        window.buscarPosts = function(texto) {
+            const q = texto.toLowerCase().trim();
+            const lista = q
+                ? todosLosPosts.filter(p => p.titulo.toLowerCase().includes(q))
+                : todosLosPosts;
+            renderPosts(lista);
+        };
+
+        window.eliminarPost = async function(id) {
+            const post = todosLosPosts.find(p => p.id === id);
+            if (!confirm(`¿Eliminar la historia "${post?.titulo}"?\n\nEsta acción no se puede deshacer.`)) return;
+            try {
+                await deleteDoc(doc(db, 'posts', id));
+                todosLosPosts = todosLosPosts.filter(p => p.id !== id);
+                document.getElementById('total-posts').textContent = todosLosPosts.length;
+                document.getElementById(`post-card-${id}`)?.remove();
+                if (todosLosPosts.length === 0) renderPosts([]);
+            } catch (e) {
+                alert('Error al eliminar: ' + e.message);
+            }
+        };
+
+        // ── Sugerencias de historias ────────────────────────
+        let todasLasSugerencias = [];
+        let filtroSugActual = 'todas';
+
+        window.cargarSugerencias = async function() {
+            const container = document.getElementById('sugerencias-container');
+            container.innerHTML = `<div class="reportes-loading">
+                <i class="fas fa-spinner fa-spin" style="font-size:1.5rem; margin-bottom:10px; display:block;"></i>
+                Cargando sugerencias...
+            </div>`;
+            try {
+                const q = query(collection(db, 'sugerencias'), orderBy('fecha', 'desc'));
+                const snap = await getDocs(q);
+                todasLasSugerencias = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+                document.getElementById('total-sugerencias').textContent = todasLasSugerencias.length;
+                document.getElementById('pendientes-count').textContent = todasLasSugerencias.filter(s => s.estado === 'pendiente').length;
+                aplicarFiltroSug();
+            } catch (e) {
+                container.innerHTML = `<div class="reportes-empty" style="color:var(--danger);">
+                    <i class="fas fa-exclamation-triangle"></i> Error: ${e.message}
+                </div>`;
+            }
+        };
+
+        function aplicarFiltroSug() {
+            let lista = [...todasLasSugerencias];
+            if (filtroSugActual !== 'todas') lista = lista.filter(s => s.estado === filtroSugActual);
+            renderSugerencias(lista);
+        }
+
+        window.filtrarSugerencias = function(filtro, btn) {
+            filtroSugActual = filtro;
+            document.querySelectorAll('#sugerencias-container').forEach(() => {});
+            btn.closest('.reportes-filtros').querySelectorAll('.filtro-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            aplicarFiltroSug();
+        };
+
+        function renderSugerencias(lista) {
+            const container = document.getElementById('sugerencias-container');
+            if (lista.length === 0) {
+                container.innerHTML = `<div class="reportes-empty">
+                    <i class="fas fa-inbox" style="font-size:2rem; margin-bottom:10px; display:block; opacity:0.3;"></i>
+                    No hay sugerencias para mostrar.
+                </div>`;
+                return;
+            }
+
+            container.innerHTML = lista.map(s => {
+                const esPendiente = s.estado === 'pendiente' || !s.estado;
+                return `
+                <div class="reporte-card" id="sug-card-${s.id}">
+                    <div class="reporte-acciones">
+                        ${esPendiente ? `<button class="btn-reporte btn-leer" onclick="marcarSugPublicada('${s.id}')" title="Marcar como publicada">
+                            <i class="fas fa-check"></i> Publicada
+                        </button>` : `<span style="font-size:0.8rem; color:var(--success);"><i class="fas fa-check-circle"></i> Publicada</span>`}
+                        <button class="btn-reporte btn-eliminar" onclick="eliminarSugerencia('${s.id}')" title="Eliminar">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </div>
+                    <div class="reporte-titulo">
+                        ${s.titulo}
+                        ${esPendiente ? '<span class="nuevo-badge">Pendiente</span>' : ''}
+                    </div>
+                    <div class="reporte-descripcion">${s.descripcion}</div>
+                    <div class="reporte-meta">
+                        <span><i class="fas fa-clock"></i> ${formatFecha(s.fecha)}</span>
+                    </div>
+                </div>`;
+            }).join('');
+        }
+
+        window.marcarSugPublicada = async function(id) {
+            try {
+                await updateDoc(doc(db, 'sugerencias', id), { estado: 'publicada' });
+                const sug = todasLasSugerencias.find(s => s.id === id);
+                if (sug) sug.estado = 'publicada';
+                document.getElementById('pendientes-count').textContent = todasLasSugerencias.filter(s => s.estado === 'pendiente').length;
+                aplicarFiltroSug();
+            } catch (e) { alert('Error: ' + e.message); }
+        };
+
+        window.eliminarSugerencia = async function(id) {
+            if (!confirm('¿Eliminar esta sugerencia permanentemente?')) return;
+            try {
+                await deleteDoc(doc(db, 'sugerencias', id));
+                todasLasSugerencias = todasLasSugerencias.filter(s => s.id !== id);
+                document.getElementById('total-sugerencias').textContent = todasLasSugerencias.length;
+                document.getElementById('pendientes-count').textContent = todasLasSugerencias.filter(s => s.estado === 'pendiente').length;
+                aplicarFiltroSug();
+            } catch (e) { alert('Error al eliminar: ' + e.message); }
+        };
+
+        // ── Validación visual del email ─────────────────────
+        window.validarEmail = function(input) {
+            const hint = document.getElementById('email-hint');
+            const val = input.value.trim();
+            if (!val) { hint.style.display = 'none'; input.style.borderColor = ''; return; }
+            const valid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val);
+            hint.style.display = 'block';
+            if (valid) {
+                hint.textContent = '✔ Correo válido';
+                hint.style.color = 'var(--success)';
+                input.style.borderColor = 'var(--success)';
+            } else {
+                hint.textContent = '✖ Escribe un correo válido (ejemplo@dominio.com)';
+                hint.style.color = 'var(--danger)';
+                input.style.borderColor = 'var(--danger)';
+            }
+        };
+
+        // ── Editor de Markdown ───────────────────────────────
+        window.formatText = function(type) {
+            const textarea = contentInput;
+            const start = textarea.selectionStart;
+            const end = textarea.selectionEnd;
+            const selectedText = textarea.value.substring(start, end);
+            let newText = '';
+            
+            switch(type) {
+                case 'bold':
+                    newText = `**${selectedText || 'texto en negrita'}**`;
+                    break;
+                case 'italic':
+                    newText = `*${selectedText || 'texto en cursiva'}*`;
+                    break;
+                case 'heading':
+                    newText = `## ${selectedText || 'Subtítulo'}`;
+                    break;
+                case 'list':
+                    newText = `- ${selectedText || 'Elemento de lista'}`;
+                    break;
+                case 'link':
+                    newText = `[${selectedText || 'Texto del enlace'}](https://ejemplo.com)`;
+                    break;
+            }
+            
+            textarea.value = textarea.value.substring(0, start) + newText + textarea.value.substring(end);
+            textarea.focus();
+            textarea.selectionStart = textarea.selectionEnd = start + newText.length;
+            updatePreview();
+        };
+
+        window.insertEmoji = function(emoji) {
+            const textarea = contentInput;
+            const start = textarea.selectionStart;
+            const end = textarea.selectionEnd;
+            
+            textarea.value = textarea.value.substring(0, start) + emoji + textarea.value.substring(end);
+            textarea.focus();
+            textarea.selectionStart = textarea.selectionEnd = start + emoji.length;
+            updatePreview();
+        };
+
+        window.togglePreview = function() {
+            if (preview.style.display === 'none' || !preview.style.display) {
+                updatePreview();
+                preview.style.display = 'block';
+            } else {
+                preview.style.display = 'none';
+            }
+        };
+
+        function updatePreview() {
+            const markdownText = contentInput.value;
+            if (window.marked) {
+                try {
+                    const html = marked.parse(markdownText);
+                    previewContent.innerHTML = html;
+                } catch (error) {
+                    previewContent.innerHTML = `<p style="color: var(--danger);">Error al renderizar vista previa: ${error.message}</p>`;
+                }
+            } else {
+                previewContent.innerHTML = '<p style="color: var(--warning);">Librería de Markdown no disponible. Mostrando texto plano.</p>' + 
+                                           '<pre>' + markdownText.replace(/</g, '&lt;').replace(/>/g, '&gt;') + '</pre>';
+            }
+        }
+
+        // Contadores de caracteres
+        function updateCharacterCount(input, countElement, max) {
+            const length = input.value.length;
+            countElement.textContent = `${length}/${max} caracteres`;
+            
+            if (length > max * 0.9) {
+                countElement.classList.add('danger');
+            } else if (length > max * 0.75) {
+                countElement.classList.add('warning');
+            } else {
+                countElement.classList.remove('warning', 'danger');
+            }
+        }
+
+        titleInput.addEventListener('input', () => {
+            updateCharacterCount(titleInput, titleCount, 120);
+        });
+
+        contentInput.addEventListener('input', () => {
+            updateCharacterCount(contentInput, contentCount, 10000);
+            updatePreview();
+        });
+
+        // Mostrar mensaje de estado
+        function showStatus(message, type) {
+            statusMessage.textContent = message;
+            statusMessage.className = `status-message status-${type}`;
+            statusMessage.style.display = 'block';
+            
+            setTimeout(() => {
+                statusMessage.style.display = 'none';
+            }, 3000);
+        }
+
+        // Verificar estado del usuario
+        let redirectTimer = null;
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                if (redirectTimer) clearTimeout(redirectTimer);
+                loginSection.style.display = 'none';
+                postSection.style.display = 'block';
+                document.title = `Admin (${user.email}) - Panel`;
+                cargarReportes();
+                cargarSugerencias();
+                cargarPosts();
+            } else {
+                loginSection.style.display = 'block';
+                postSection.style.display = 'none';
+                redirectTimer = setTimeout(() => {
+                    if (!auth.currentUser) window.location.href = 'index.html';
+                }, 5000);
+            }
+        });
+
+        // Login
+        document.getElementById('loginBtn').addEventListener('click', () => {
+            const email = document.getElementById('email').value;
+            const pass = document.getElementById('password').value;
+            
+            if (!email || !pass) {
+                showStatus('Por favor, completa todos los campos.', 'error');
+                return;
+            }
+
+            const btn = document.getElementById('loginBtn');
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Ingresando...';
+            btn.disabled = true;
+
+            signInWithEmailAndPassword(auth, email, pass)
+                .then(() => {
+                    showStatus('Sesión iniciada correctamente', 'success');
+                })
+                .catch((error) => {
+                    let errorMessage = "Error de autenticación";
+                    
+                    switch(error.code) {
+                        case 'auth/invalid-email':
+                            errorMessage = "Correo electrónico no válido";
+                            break;
+                        case 'auth/user-disabled':
+                            errorMessage = "Cuenta deshabilitada";
+                            break;
+                        case 'auth/user-not-found':
+                            errorMessage = "Usuario no encontrado";
+                            break;
+                        case 'auth/wrong-password':
+                            errorMessage = "Contraseña incorrecta";
+                            break;
+                        case 'auth/too-many-requests':
+                            errorMessage = "Demasiados intentos. Intenta más tarde";
+                            break;
+                        default:
+                            errorMessage = error.message;
+                    }
+                    
+                    showStatus(errorMessage, 'error');
+                })
+                .finally(() => {
+                    btn.innerHTML = '<i class="fas fa-sign-in-alt"></i> Ingresar';
+                    btn.disabled = false;
+                });
+        });
+
+        // Publicar
+        document.getElementById('publicarBtn').addEventListener('click', async () => {
+            const btn = document.getElementById('publicarBtn');
+            const titulo = titleInput.value.trim();
+            const contenido = contentInput.value.trim();
+
+            if(!titulo || !contenido) {
+                showStatus('Por favor, llena todos los campos.', 'error');
+                return;
+            }
+
+            if(titulo.length > 120) {
+                showStatus('El título no debe exceder 120 caracteres.', 'error');
+                return;
+            }
+
+            // Cambio visual
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Publicando...';
+
+            try {
+                await addDoc(collection(db, "posts"), {
+                    titulo: titulo,
+                    contenido: contenido,
+                    contenido_html: contenido, // Se renderizará en firebase.js
+                    likes: 0,
+                    dislikes: 0,
+                    fecha: Timestamp.now(),
+                    publicadoPor: auth.currentUser?.email || "admin",
+                    userId: auth.currentUser?.uid || "admin",
+                    formato: 'markdown'
+                });
+                
+                showStatus('¡Historia publicada con éxito!', 'success');
+                
+                // Limpiar campos
+                titleInput.value = '';
+                contentInput.value = '';
+                updateCharacterCount(titleInput, titleCount, 120);
+                updateCharacterCount(contentInput, contentCount, 10000);
+                previewContent.innerHTML = '';
+                preview.style.display = 'none';
+
+                // Recargar lista de historias
+                cargarPosts();
+                
+            } catch (e) {
+                console.error("Error al publicar:", e);
+                showStatus(`Error: ${e.message}`, 'error');
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = '<i class="fas fa-paper-plane"></i> Publicar Historia';
+            }
+        });
+
+        // Salir
+        document.getElementById('logoutBtn').addEventListener('click', () => {
+            if(confirm("¿Estás seguro de que quieres cerrar sesión?")) {
+                signOut(auth).then(() => {
+                    showStatus('Sesión cerrada correctamente', 'success');
+                });
+            }
+        });
+
+        // Inicializar
+        document.addEventListener('DOMContentLoaded', () => {
+            updateCharacterCount(titleInput, titleCount, 120);
+            updateCharacterCount(contentInput, contentCount, 10000);
+            updatePreview();
+        });
+    </script>
+
+    <!-- PWA: registro del SW compartido -->
+    <script src="pwa.js"></script>
+</body>
+</html>

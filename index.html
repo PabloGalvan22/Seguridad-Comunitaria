@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -409,4 +410,417 @@
     </script>
 
 </body>
+=======
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+    <title>Seguridad Comunitaria - Protección Digital</title>
+
+    <!-- PWA -->
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#38bdf8">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Seg. Comunitaria">
+    <link rel="apple-touch-icon" href="icon-192.png">
+
+    <link rel="icon" type="image/png" href="icon-192.png" sizes="192x192">
+
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .hero-section {
+            padding: 60px 0;
+            text-align: center;
+            background: linear-gradient(rgba(13, 14, 20, 0.8), rgba(13, 14, 20, 0.8)), url('https://images.unsplash.com/photo-1550751827-4bd374c3f58b?auto=format&fit=crop&w=1200&q=80');
+            background-size: cover;
+            border-radius: 30px;
+            margin-bottom: 40px;
+        }
+        .mission-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin: 40px 0;
+        }
+        .mission-card {
+            background: rgba(255,255,255,0.05);
+            padding: 30px;
+            border-radius: 20px;
+            border: 1px solid rgba(255,255,255,0.1);
+            transition: 0.3s;
+        }
+        .mission-card:hover { transform: translateY(-10px); background: rgba(255,255,255,0.08); }
+        .mission-card h3 { color: var(--secondary); margin-bottom: 15px; }
+        
+        .report-box {
+            background: #1a1c26;
+            padding: 40px;
+            border-radius: 25px;
+            border: 1px solid var(--primary);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+        }
+        .objective-text {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            color: #cbd5e1;
+            margin-bottom: 30px;
+        }
+
+        /* Estilos de Información y Objetivos */
+        .info-section {
+            margin: 60px 0;
+            text-align: center;
+        }
+        .mission-box {
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 20px;
+            padding: 40px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            margin-bottom: 40px;
+        }
+        .objective-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+            margin-top: 30px;
+        }
+        .obj-card {
+            padding: 25px;
+            background: #1a1c26;
+            border-bottom: 3px solid #ef4444; /* Usando tu color de acento */
+            border-radius: 15px;
+        }
+
+        /* Estilos del Footer y Redes Sociales */
+        footer {
+            background: #090a0f;
+            padding: 50px 20px;
+            margin-top: 80px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            text-align: center;
+        }
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+            margin: 30px 0;
+        }
+        .social-icon {
+            width: 55px;
+            height: 55px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.05);
+            color: white;
+            text-decoration: none;
+            font-size: 1.6rem;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        /* Colores de marca al pasar el mouse */
+        .social-icon.fb:hover { background: #1877F2; border-color: #1877F2; transform: translateY(-5px); }
+        .social-icon.ig:hover { background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%); border-color: transparent; transform: translateY(-5px); }
+        .social-icon.x:hover { background: #000; border-color: #fff; transform: translateY(-5px); }
+        .social-icon.yt:hover { background: #FF0000; border-color: #FF0000; transform: translateY(-5px); }
+        .social-icon.tk:hover { background: #000; border-color: #00f2ea; color: #00f2ea; text-shadow: 2px 0 #ff0050; transform: translateY(-5px); }
+
+        .footer-text {
+            color: #666;
+            font-size: 0.9rem;
+            margin-top: 20px;
+            line-height: 1.6;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Seguridad Comunitaria</h1>
+        <p>Tu escudo contra las amenazas del mundo digital</p>
+        <button id="btn-instalar" aria-label="Instalar aplicación"
+                style="display:none; margin-top:14px; background:rgba(56,189,248,0.15);
+                       border:1px solid var(--primary); color:var(--primary);
+                       padding:8px 20px; border-radius:20px; font-size:0.85rem;
+                       cursor:pointer; transition:0.3s; box-shadow:none;
+                       text-transform:none; letter-spacing:0;">
+            <i class="fas fa-download"></i> Instalar app
+        </button>
+    </header>
+
+    <!-- Banner de actualización disponible -->
+    <div id="update-banner"
+         style="display:none; position:fixed; top:0; left:0; right:0; z-index:10000;
+                background:#1e293b; border-bottom:2px solid var(--primary);
+                padding:12px 20px; display:none; align-items:center;
+                justify-content:space-between; flex-wrap:wrap; gap:10px;
+                box-shadow:0 4px 20px rgba(0,0,0,0.5);">
+        <span style="font-size:0.9rem; color:var(--text-main);">
+            🔄 <strong>Nueva versión disponible.</strong> ¿Actualizar ahora?
+        </span>
+        <div style="display:flex; gap:8px;">
+            <button onclick="aplicarActualizacion()"
+                    style="background:var(--primary); color:var(--bg-dark); border:none;
+                           padding:7px 16px; border-radius:16px; font-size:0.85rem;
+                           font-weight:700; cursor:pointer; box-shadow:none;
+                           text-transform:none; letter-spacing:0;">
+                Actualizar
+            </button>
+            <button onclick="posponerActualizacion()"
+                    style="background:transparent; color:var(--text-muted); border:1px solid rgba(255,255,255,0.2);
+                           padding:7px 14px; border-radius:16px; font-size:0.85rem;
+                           cursor:pointer; box-shadow:none; text-transform:none; letter-spacing:0;">
+                Ahora no
+            </button>
+        </div>
+    </div>
+
+    <nav>
+        <button class="nav-toggle" aria-label="Abrir menú de navegación" aria-expanded="false" onclick="toggleNav(this)">
+            <i class="fas fa-bars"></i>
+        </button>
+        <div class="nav-links">
+            <a href="index.html"><i class="fas fa-home"></i> Inicio</a>
+            <a href="phishing.html"><i class="fas fa-fish"></i> Phishing</a>
+            <a href="ciberseguridad.html"><i class="fas fa-shield-alt"></i> Ciberseguridad</a>
+            <a href="videojuegos.html"><i class="fas fa-gamepad"></i> Videojuegos</a>
+            <a href="redes.html"><i class="fas fa-users"></i> Redes Sociales</a>
+            <a href="grooming.html"><i class="fas fa-exclamation-triangle"></i> Grooming</a>
+            <a href="https://noticias-seguridad.web.app/" target="_blank" rel="noopener noreferrer">
+                <i class="fas fa-newspaper"></i> Noticias para la Comunidad
+            </a>
+        </div>
+    </nav>
+
+    <div class="container">
+        <section class="hero-section">
+            <h2 style="color: #fff; font-size: 2.5rem;">Unidos por un Internet Seguro</h2>
+            <p class="objective-text" style="max-width: 800px; margin: 20px auto;">
+                Esta plataforma nace como una respuesta colectiva ante el incremento de delitos informáticos. Nuestro objetivo es <strong>educar, prevenir y brindar herramientas</strong> prácticas para que niños, jóvenes y adultos puedan navegar sin riesgos.
+            </p>
+        </section>
+
+        <div class="mission-grid">
+            <div class="mission-card">
+                <h3>🔍 Educación</h3>
+                <p>Proporcionamos guías detalladas sobre las técnicas más usadas por ciberdelincuentes, como el Phishing y el Grooming, para que aprendas a identificarlas al instante.</p>
+            </div>
+            <div class="mission-card">
+                <h3>🛡️ Prevención</h3>
+                <p>A través de nuestros simuladores dinámicos, ponemos a prueba tus conocimientos en situaciones reales de riesgo antes de que sucedan en la vida real.</p>
+            </div>
+            <div class="mission-card">
+                <h3>📣 Denuncia</h3>
+                <p>Fomentamos la cultura del reporte. Tu denuncia puede prevenir que otros usuarios caigan en las mismas estafas o redes de acoso.</p>
+            </div>
+        </div>
+
+        <hr>
+
+        <div class="report-box">
+            <h2>📢 Centro de Reportes Ciudadanos</h2>
+            <p>Si crees que estás siendo victima de Estafa, Grooming, Hackeo o Suplantación de identidad haz una denuncia anónima para alertar a la comunidad y tratar de solucionarlo.</p>
+            <form id="reporte-form">
+                <!-- Campo honeypot: invisible para humanos, los bots lo llenan -->
+                <input type="text" id="campo-trampa" name="sitio_web" autocomplete="off" tabindex="-1" style="display:none !important; position:absolute; left:-9999px;" aria-hidden="true">
+                <input type="text" id="titulo" placeholder="Título del reporte (mínimo 10 caracteres)" required minlength="10" maxlength="100">
+                <small style="color: var(--text-muted); display:block; margin-top:-10px; margin-bottom:10px; font-size:0.8rem;">Máximo 100 caracteres</small>
+                <textarea id="descripcion" placeholder="Describe lo sucedido... (mínimo 30 caracteres)" required minlength="30" maxlength="1000"></textarea>
+                <small style="color: var(--text-muted); display:block; margin-top:-10px; margin-bottom:16px; font-size:0.8rem;"><span id="char-count">0</span>/1000 caracteres</small>
+                <button type="submit">Enviar Reporte a la Comunidad</button>
+            </form>
+            <div id="status"></div>
+        </div>
+
+        <hr>
+
+        <section style="margin-top: 40px; text-align: center; color: #888;">
+            <h3>¿Cómo usar esta página?</h3>
+            <p>Navega a través de las pestañas superiores para explorar cada temática. En la sección de <strong>Grooming</strong>, encontrarás un blog con casos actualizados donde podrás interactuar y aprender de experiencias reales compartidas por otros usuarios.</p>
+        </section>
+    </div>
+
+    <footer>
+        <h3>Nuestras Redes Sociales</h3>
+        <p>Síguenos para recibir consejos de seguridad diarios y alertas de nuevas estafas.</p>
+        
+        <div class="social-links">
+            <a href="#" class="social-icon fb" title="Facebook" aria-label="Síguenos en Facebook"><i class="fab fa-facebook-f" aria-hidden="true"></i></a>
+            <a href="#" class="social-icon ig" title="Instagram" aria-label="Síguenos en Instagram"><i class="fab fa-instagram" aria-hidden="true"></i></a>
+            <a href="https://x.com/Seguridad_Com22" class="social-icon x" title="X (Twitter)" aria-label="Síguenos en X (Twitter)"><i class="fab fa-twitter" aria-hidden="true"></i></a>
+            <a href="https://youtube.com/@pablogalvan-m9v?si=UHn10_6mypqj2ZBX" class="social-icon yt" title="YouTube" aria-label="Visita nuestro canal de YouTube"><i class="fab fa-youtube" aria-hidden="true"></i></a>
+            <a href="https://www.tiktok.com/@pablo.galvan63?_r=1&_t=ZS-92gm3nkfNd1" class="social-icon tk" title="TikTok" aria-label="Síguenos en TikTok"><i class="fab fa-tiktok" aria-hidden="true"></i></a>
+        </div>
+
+        <div class="footer-text">
+            &copy; 2026 Seguridad Comunitaria. Todos los derechos reservados.<br>
+            Plataforma educativa para la prevención de delitos informáticos.<br>
+            <a href="privacidad.html" style="color: var(--text-muted); font-size:0.85rem;">Política de Privacidad y Cookies</a>
+        </div>
+    </footer>
+
+    <!-- Banner de Cookies -->
+    <div id="cookie-banner" role="dialog" aria-label="Aviso de cookies">
+        <div class="cookie-text">
+            <strong>🍪 Usamos almacenamiento local</strong> para guardar tu progreso en los quizzes y evitar spam en los formularios. No son cookies de seguimiento ni se comparten con terceros.
+            <a href="privacidad.html">Más información</a>
+        </div>
+        <div class="cookie-buttons">
+            <a href="privacidad.html" class="btn-cookie-info">Ver política</a>
+            <button class="btn-cookie-accept" onclick="aceptarCookies()">Entendido ✓</button>
+        </div>
+    </div>
+
+    <script type="module">
+        import { db, collection, addDoc, Timestamp } from './firebase.js';
+
+        // ── Active nav ──────────────────────────────────────────
+        const currentPage = window.location.pathname.split('/').pop() || 'index.html';
+        document.querySelectorAll('nav a').forEach(link => {
+            const linkPage = link.getAttribute('href').split('/').pop();
+            if (linkPage === currentPage) link.classList.add('active');
+        });
+
+        // ── Contador de caracteres ──────────────────────────────
+        const descripcionEl = document.getElementById('descripcion');
+        const charCount = document.getElementById('char-count');
+        descripcionEl.addEventListener('input', () => {
+            charCount.textContent = descripcionEl.value.length;
+        });
+
+        // ── Formulario de reporte ───────────────────────────────
+        const form = document.getElementById('reporte-form');
+        const status = document.getElementById('status');
+        const COOLDOWN_MS = 60 * 1000; // 1 minuto entre envíos
+
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            // 1. Anti-bot honeypot
+            if (document.getElementById('campo-trampa').value) return;
+
+            // 2. Cooldown anti-spam
+            const ultimoEnvio = localStorage.getItem('ultimo_reporte');
+            if (ultimoEnvio && Date.now() - parseInt(ultimoEnvio) < COOLDOWN_MS) {
+                const espera = Math.ceil((COOLDOWN_MS - (Date.now() - parseInt(ultimoEnvio))) / 1000);
+                status.innerHTML = `<p style='color:#f59e0b;'>⏳ Espera ${espera} segundos antes de enviar otro reporte.</p>`;
+                return;
+            }
+
+            const titulo = document.getElementById('titulo').value.trim();
+            const descripcion = document.getElementById('descripcion').value.trim();
+
+            // 3. Validaciones de longitud mínima
+            if (titulo.length < 10) {
+                status.innerHTML = "<p style='color:#f87171;'>⚠️ El título debe tener al menos 10 caracteres.</p>";
+                return;
+            }
+            if (descripcion.length < 30) {
+                status.innerHTML = "<p style='color:#f87171;'>⚠️ La descripción debe tener al menos 30 caracteres.</p>";
+                return;
+            }
+
+            const btn = form.querySelector('button');
+            btn.disabled = true;
+            btn.textContent = 'Enviando...';
+
+            try {
+                await addDoc(collection(db, "reportes"), {
+                    titulo,
+                    descripcion,
+                    fecha: Timestamp.now()
+                });
+                localStorage.setItem('ultimo_reporte', Date.now().toString());
+                status.innerHTML = "<p style='color:#4ade80;'>✅ Reporte enviado. ¡Gracias por ayudar a la comunidad!</p>";
+                form.reset();
+                charCount.textContent = '0';
+            } catch (error) {
+                status.innerHTML = "<p style='color:#f87171;'>❌ Error al enviar. Intenta más tarde.</p>";
+            } finally {
+                btn.disabled = false;
+                btn.textContent = 'Enviar Reporte a la Comunidad';
+            }
+        });
+    </script>
+
+    <script>
+        function toggleNav(btn) {
+            const links = document.querySelector('.nav-links');
+            const isOpen = links.classList.toggle('open');
+            btn.setAttribute('aria-expanded', isOpen);
+            btn.innerHTML = isOpen
+                ? '<i class="fas fa-times"></i>'
+                : '<i class="fas fa-bars"></i>';
+        }
+        // Cerrar menú al hacer clic en un enlace
+        document.querySelectorAll('.nav-links a').forEach(link => {
+            link.addEventListener('click', () => {
+                const links = document.querySelector('.nav-links');
+                const btn = document.querySelector('.nav-toggle');
+                if (links.classList.contains('open')) {
+                    links.classList.remove('open');
+                    btn.setAttribute('aria-expanded', 'false');
+                    btn.innerHTML = '<i class="fas fa-bars"></i>';
+                }
+            });
+        });
+
+        // ── Banner de cookies ───────────────────────────────
+        function aceptarCookies() {
+            localStorage.setItem('cookies_aceptadas', '1');
+            document.getElementById('cookie-banner').classList.remove('visible');
+        }
+
+        window.addEventListener('DOMContentLoaded', () => {
+            if (!localStorage.getItem('cookies_aceptadas')) {
+                setTimeout(() => {
+                    document.getElementById('cookie-banner').classList.add('visible');
+                }, 800);
+            }
+        });
+
+        // ── PWA: Botón de instalación ───────────────────────
+        const btnInstalar = document.getElementById('btn-instalar');
+
+        btnInstalar.addEventListener('click', async () => {
+            if (!window.__pwaInstallPrompt) return;
+            window.__pwaInstallPrompt.prompt();
+            const { outcome } = await window.__pwaInstallPrompt.userChoice;
+            if (outcome === 'accepted') {
+                btnInstalar.style.display = 'none';
+                console.log('[PWA] App instalada');
+            }
+            window.__pwaInstallPrompt = null;
+        });
+    </script>
+
+    <!-- PWA: registro del SW compartido -->
+    <script src="pwa.js"></script>
+
+    <!-- Firebase Analytics -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
+        import { getAnalytics, logEvent } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-analytics.js";
+        const firebaseConfig = {
+            apiKey: "AIzaSyDBbiAZVGkN5em-ZUwISkjP4qCI9QK0Usc",
+            authDomain: "seguridadcomunitaria-22p.firebaseapp.com",
+            projectId: "seguridadcomunitaria-22p",
+            storageBucket: "seguridadcomunitaria-22p.firebasestorage.app",
+            messagingSenderId: "762347660708",
+            appId: "1:762347660708:web:8efb03cbed8dd1bd974d31",
+            measurementId: "G-Z3548XRKQX"
+        };
+        const app = initializeApp(firebaseConfig);
+        const analytics = getAnalytics(app);
+        logEvent(analytics, 'page_view', { page_title: 'Inicio' });
+    </script>
+
+</body>
+>>>>>>> 83c03bcbf206658d9eed9fbc4a8b713170c6b2ff
 </html>
