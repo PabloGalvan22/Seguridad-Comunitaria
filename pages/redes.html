@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <!-- PWA -->
+    <link rel="manifest" href="../manifest.json">
+    <meta name="theme-color" content="#38bdf8">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Seg. Comunitaria">
+    <link rel="apple-touch-icon" href="../assets/icons/icon-192.png">
+    <link rel="icon" type="image/png" href="../assets/icons/icon-192.png" sizes="192x192">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0 maximum-scale=5.0">
+    <title>Redes Sociales y Privacidad - Guía Completa</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="../assets/css/style.css">
+    <style>
+.score-board {
+            position: sticky; top: 80px; background: var(--bg-card); padding: 15px;
+            border-radius: 12px; border: 2px solid var(--secondary);
+            z-index: 99; margin: 20px 0; box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;
+        }
+.info-card { background: rgba(255,255,255,0.05); padding: 25px; border-radius: 15px; margin-bottom: 20px; border-top: 3px solid var(--primary); }
+        .amenaza-box { border-left: 4px solid var(--accent); padding-left: 15px; margin-bottom: 20px; }
+        .amenaza-box h4 { margin: 5px 0; color: var(--accent); font-size: 1.1rem; }
+</style>
+</head>
+<body>
+    <header>
+        <h1>Redes Sociales y Privacidad</h1>
+        <p>Gestiona tu presencia digital de forma inteligente</p>
+    </header>
+
+    <nav>
+        <button class="nav-toggle" aria-label="Abrir menú de navegación" aria-expanded="false" onclick="toggleNav(this)">
+            <i class="fas fa-bars"></i>
+        </button>
+        <div class="nav-links">
+            <a href="../index.html"><i class="fas fa-home"></i> Inicio</a>
+            <a href="phishing.html"><i class="fas fa-fish"></i> Phishing</a>
+            <a href="ciberseguridad.html"><i class="fas fa-shield-alt"></i> Ciberseguridad</a>
+            <a href="videojuegos.html"><i class="fas fa-gamepad"></i> Videojuegos</a>
+            <a href="redes.html"><i class="fas fa-users"></i> Redes Sociales</a>
+            <a href="grooming.html"><i class="fas fa-exclamation-triangle"></i> Grooming</a>
+            <a href="https://noticias-seguridad.web.app/" target="_blank" rel="noopener noreferrer">
+                <i class="fas fa-newspaper"></i> Noticias para la Comunidad
+            </a>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="section-nav">
+            <a href="#info">📚 Guía</a>
+            <a href="#amenazas">⚠️ Amenazas</a>
+            <a href="#android-test">🤖 Test Android</a>
+            <a href="#ios-test">🍎 Test iOS</a>
+            <a href="#windows-test">🖥️ Test Windows</a>
+        </div>
+
+        <h2 id="info">Vivir en un Mundo Conectado</h2>
+        <p>Las redes sociales son herramientas increíbles para compartir y aprender. No se trata de tener miedo, sino de entender cómo configurar las aplicaciones para que funcionen a nuestro favor y no en contra de nuestra privacidad.</p>
+
+        <div class="info-card">
+            <h3>📱 La Configuración de Privacidad</h3>
+            <p>Por defecto, muchas apps vienen configuradas para compartir el máximo de datos posible. Es recomendable dedicar 5 minutos a revisar la pestaña de "Privacidad" y decidir quién puede ver tus posts, quién puede etiquetarte y quién puede encontrarte mediante tu correo o teléfono.</p>
+        </div>
+
+        <div class="info-card">
+            <h3>📂 Tu Reputación Digital</h3>
+            <p>Lo que publicas hoy puede ser visto por un futuro empleador o universidad en 5 años. Internet tiene memoria; incluso si borras un post, alguien pudo haber hecho una captura. Piensa si te sentirías cómodo mostrando esa publicación a cualquier persona en el futuro antes de darle a "compartir".</p>
+        </div>
+
+        <hr>
+
+        <h2 id="amenazas">Principales Amenazas por Plataforma</h2>
+        <div class="info-card">
+            <div class="amenaza-box">
+                <h4>🔵 Facebook: Clonación de Perfiles</h4>
+                <p><strong>Amenaza:</strong> Alguien copia tus fotos y nombre para crear un perfil igual al tuyo y pedir dinero a tus conocidos fingiendo una emergencia.</p>
+                <p><em>Prevención:</em> Pon tu lista de amigos en "Privado" para que extraños no sepan a quién contactar.</p>
+            </div>
+
+            <div class="amenaza-box">
+                <h4>📸 Instagram: Falsos sorteos y Mensajes de "Copyright"</h4>
+                <p><strong>Amenaza:</strong> Perfiles que te etiquetan en fotos de "Ganaste un iPhone" o mensajes directos que dicen que infringiste una ley de autor para robar tu clave.</p>
+                <p><em>Prevención:</em> Desactiva las etiquetas de personas que no sigues y nunca pongas tu clave en links enviados por mensaje.</p>
+            </div>
+
+            <div class="amenaza-box">
+                <h4>🔴 YouTube: Comentarios con Links Maliciosos</h4>
+                <p><strong>Amenaza:</strong> Comentarios que prometen "Software gratis" o "Cuentas premium" que llevan a virus que roban tus cookies del navegador.</p>
+                <p><em>Prevención:</em> No descargues archivos de links en comentarios de YouTube; suelen ser troyanos.</p>
+            </div>
+
+            <div class="amenaza-box">
+                <h4>🟢 WhatsApp: El timo del "Código de 6 dígitos"</h4>
+                <p><strong>Amenaza:</strong> Alguien te pide que le reenvíes un código SMS que te llegó. Si lo haces, se robarán tu cuenta de WhatsApp.</p>
+                <p><em>Prevención:</em> Activa la Verificación en Dos Pasos y nunca compartas códigos por chat.</p>
+            </div>
+
+            <div class="amenaza-box">
+                <h4>✈️ Telegram: Canales de Inversión Falsa</h4>
+                <p><strong>Amenaza:</strong> Grupos que prometen multiplicar tu dinero en 24 horas si les envías criptomonedas o depósitos.</p>
+                <p><em>Prevención:</em> Telegram es excelente por su privacidad, pero abundan las estafas financieras. No confíes en "dinero mágico".</p>
+            </div>
+
+            <div class="amenaza-box">
+                <h4>👻 Snapchat: "Capturas" sin aviso</h4>
+                <p><strong>Amenaza:</strong> Confiar en que todo se borra. Hay apps que permiten guardar fotos de Snap sin que el remitente reciba el aviso de captura.</p>
+                <p><em>Prevención:</em> Trata cada mensaje enviado como si fuera a ser permanente.</p>
+            </div>
+        </div>
+
+        <hr>
+
+        <div class="score-board">
+            <div>
+                <div class="score-text">Nivel de Seguridad: <span id="puntos">0</span>/12 | <span id="porcentaje">0</span>% Seguro</div>
+                <div id="lastAttempt" style="font-size:0.8em; color:var(--text-muted); margin-top:5px;">Último intento: No registrado</div>
+            </div>
+            <div class="test-controls">
+                <button onclick="reiniciarTest()" style="background:var(--accent);">🔄 Reiniciar Test</button>
+                <button onclick="mostrarResultados()" style="background:var(--secondary);">📊 Ver Resultados</button>
+            </div>
+        </div>
+
+        <h2>🛠️ Simulador de Situaciones en Redes</h2>
+
+        <!-- Resultados finales -->
+        <div class="results-summary" id="resultsSummary">
+            <h3>📊 Resultados del Test</h3>
+            <div class="result-stats">
+                <div class="stat-item"><span class="stat-value" id="finalScore">0</span><span class="stat-label">Puntuación</span></div>
+                <div class="stat-item"><span class="stat-value" id="finalPercentage">0%</span><span class="stat-label">Efectividad</span></div>
+                <div class="stat-item"><span class="stat-value" id="timeSpent">0s</span><span class="stat-label">Tiempo</span></div>
+            </div>
+            <div id="performanceFeedback" style="margin-top:20px;"><p>Cargando evaluación...</p></div>
+            <button onclick="ocultarResultados()" style="margin-top:20px;">Cerrar Resultados</button>
+        </div>
+
+        <h3 id="android-test">🤖 Android</h3>
+        <div class="platform-badge android" onclick="scrollToSection('redes-a1')">Android</div>
+        <div class="question" id="redes-a1">
+            <p><strong>1. Recibes un mensaje de un familiar por WhatsApp pidiendo dinero prestado, pero su forma de escribir es rara.</strong></p>
+            <div class="options">
+                <button class="opt" data-status="correct" data-msg="¡CORRECTO! Siempre confirma por llamada antes de transferir dinero.">Llamarlo por teléfono para verificar si es él realmente.</button>
+                <button class="opt" data-status="incorrect" data-msg="ERROR: Es probable que su cuenta fuera hackeada para pedir dinero a sus contactos.">Transferirle el dinero de inmediato para ayudarlo.</button>
+            </div>
+            <div class="feedback"></div>
+        </div>
+        <div class="question">
+            <p><strong>2. Una App de "Edición de Fotos" te pide permiso para acceder a tu ubicación exacta y a tu Facebook.</strong></p>
+            <div class="options">
+                <button class="opt" data-status="correct" data-msg="¡CORRECTO! Si una app de fotos pide ubicación, suele ser para rastrear tus hábitos.">Denegar el acceso a la ubicación. Una app de fotos no la necesita.</button>
+                <button class="opt" data-status="incorrect" data-msg="ERROR: Estás regalando tus datos de movimiento diario a una empresa desconocida.">Aceptar, así las fotos salen con la ciudad marcada.</button>
+            </div>
+            <div class="feedback"></div>
+        </div>
+        <div class="question">
+            <p><strong>3. En Facebook ves un anuncio de "Quién ha visitado tu perfil" y te pide instalar una extensión.</strong></p>
+            <div class="options">
+                <button class="opt" data-status="incorrect" data-msg="ERROR: Facebook no permite ver quién visita tu perfil. Es un virus robadatos.">Instalarla para ver quién entra a mi perfil.</button>
+                <button class="opt" data-status="correct" data-msg="¡CORRECTO! Es un engaño muy viejo para infectar computadoras o móviles.">Ignorar. Es un método falso para robar sesiones de usuario.</button>
+            </div>
+            <div class="feedback"></div>
+        </div>
+        <div class="question">
+            <p><strong>4. Un extraño te etiqueta en Instagram en una publicación sobre "Inversiones en Criptomonedas".</strong></p>
+            <div class="options">
+                <button class="opt" data-status="correct" data-msg="¡CORRECTO! Son bots que buscan gente para estafar. Bloquea y reporta.">Reportar como SPAM y bloquear la cuenta.</button>
+                <button class="opt" data-status="incorrect" data-msg="ERROR: Entrar al link te expone a estafas financieras o robo de identidad.">Entrar al enlace para ver cómo funciona el negocio.</button>
+            </div>
+            <div class="feedback"></div>
+        </div>
+
+        <h3 id="ios-test">🍎 iOS (iPhone)</h3>
+        <div class="platform-badge ios" onclick="scrollToSection('redes-i1')">iOS</div>
+        <div class="question" id="redes-i1">
+            <p><strong>1. Al abrir Instagram, tu iPhone pregunta si permites que la App rastree tu actividad en otros sitios.</strong></p>
+            <div class="options">
+                <button class="opt" data-status="correct" data-msg="¡CORRECTO! 'Pedir a la App que no rastree' protege tu privacidad fuera de la app.">Pedir a la App que no rastree.</button>
+                <button class="opt" data-status="incorrect" data-msg="ERROR: Si permites el rastreo, la red social sabrá todo lo que buscas en Google.">Permitir, no tengo nada que ocultar.</button>
+            </div>
+            <div class="feedback"></div>
+        </div>
+        <div class="question">
+            <p><strong>2. Recibes un correo de "Apple Security" diciendo que tu cuenta de Facebook está en riesgo y des clic.</strong></p>
+            <div class="options">
+                <button class="opt" data-status="incorrect" data-msg="ERROR: Apple no envía alertas sobre Facebook. Es un correo falso.">Dar clic rápido para proteger mi Facebook.</button>
+                <button class="opt" data-status="correct" data-msg="¡CORRECTO! Es un ataque cruzado de Phishing. Apple no gestiona la seguridad de Facebook.">Borrar el correo. Es una estafa evidente de suplantación.</button>
+            </div>
+            <div class="feedback"></div>
+        </div>
+        <div class="question">
+            <p><strong>3. ¿Es seguro guardar fotos privadas en la carpeta de 'Recientes' de tu iPhone?</strong></p>
+            <div class="options">
+                <button class="opt" data-status="correct" data-msg="¡CORRECTO! Usa la función de álbum 'Oculto' con contraseña de iOS.">No, es mejor usar el álbum 'Oculto' bloqueado con FaceID/Código.">Moverlas al álbum oculto y bloquearlo con contraseña.</button>
+                <button class="opt" data-status="incorrect" data-msg="ERROR: Si prestas tu teléfono, cualquier persona verá tus fotos en 'Recientes'.">Sí, mientras mi iPhone tenga bloqueo de pantalla.</button>
+            </div>
+            <div class="feedback"></div>
+        </div>
+        <div class="question">
+            <p><strong>4. ¿Para qué sirve 'Ocultar mi correo' al registrarte en una red social con Apple ID?</strong></p>
+            <div class="options">
+                <button class="opt" data-status="correct" data-msg="¡CORRECTO! Evita que te llenen de spam o que sepan tu correo real en hackeos.">Para que la red social no conozca mi correo electrónico real.</button>
+                <button class="opt" data-status="incorrect" data-msg="ERROR: Es una medida de seguridad excelente para evitar rastreos masivos.">Para que la aplicación se abra más rápido.</button>
+            </div>
+            <div class="feedback"></div>
+        </div>
+
+        <h3 id="windows-test">🖥️ Windows</h3>
+        <div class="platform-badge windows" onclick="scrollToSection('redes-w1')">Windows</div>
+        <div class="question" id="redes-w1">
+            <p><strong>1. Un mensaje en Twitter te envía un archivo 'VIDEO_MIRA.zip' diciendo que sales tú.</strong></p>
+            <div class="options">
+                <button class="opt" data-status="incorrect" data-msg="ERROR: Los archivos .zip en redes sociales suelen ser virus de robo de contraseñas.">Abrirlo para ver de qué se trata el video.</button>
+                <button class="opt" data-status="correct" data-msg="¡CORRECTO! Es un troyano. Ninguna red social envía videos comprimidos en .zip.">No abrir y avisar a mi contacto que ha sido hackeado.</button>
+            </div>
+            <div class="feedback"></div>
+        </div>
+        <div class="question">
+            <p><strong>2. ¿Por qué no debes usar la opción 'Mantener sesión iniciada' en una laptop que no es tuya?</strong></p>
+            <div class="options">
+                <button class="opt" data-status="correct" data-msg="¡CORRECTO! Cualquier persona que use la laptop después entrará directo a tu cuenta.">Porque el siguiente usuario tendrá acceso total a mi perfil sin clave.</button>
+                <button class="opt" data-status="incorrect" data-msg="ERROR: Estás regalando el acceso a tu privacidad y a tus mensajes.">No importa, siempre cierro el navegador al terminar.</button>
+            </div>
+            <div class="feedback"></div>
+        </div>
+        <div class="question">
+            <p><strong>3. Una web te pide loguearte con Google para leer un chisme sobre una celebridad.</strong></p>
+            <div class="options">
+                <button class="opt" data-status="correct" data-msg="¡CORRECTO! Buscan permisos para ver tus contactos y mandarles spam a tu nombre.">Ignorar. Dar acceso a mi cuenta principal por un chisme es arriesgado.</button>
+                <button class="opt" data-status="incorrect" data-msg="ERROR: Es un truco para obtener datos de tu perfil y contactos.">Loguearme, solo tardaré un segundo.</button>
+            </div>
+            <div class="feedback"></div>
+        </div>
+        <div class="question">
+            <p><strong>4. ¿Qué es lo primero que debes hacer si sospechas que alguien entró a tu Facebook?</strong></p>
+            <div class="options">
+                <button class="opt" data-status="correct" data-msg="¡CORRECTO! Cerrar sesiones activas expulsa al hacker de inmediato.">Ir a Seguridad y dar clic en 'Cerrar todas las sesiones'.</button>
+                <button class="opt" data-status="incorrect" data-msg="ERROR: Si no cierras las sesiones, el hacker seguirá dentro aunque cambies la clave.">Solo cambiar la contraseña y esperar al día siguiente.</button>
+            </div>
+            <div class="feedback"></div>
+        </div>
+
+    </div>
+
+    <script>
+        let correctas = 0;
+        let respondidas = 0;
+        let startTime = null;
+        let testCompleted = false;
+        const TOTAL = 12;
+        const STORAGE_KEY = 'redesTestProgress';
+
+        function cargarProgreso() {
+            startTime = new Date();
+            const saved = localStorage.getItem(STORAGE_KEY);
+            if (!saved) return;
+            try {
+                const data = JSON.parse(saved);
+                correctas = data.correctas || 0;
+                respondidas = data.respondidas || 0;
+                startTime = data.startTime ? new Date(data.startTime) : new Date();
+                data.respuestas && Object.entries(data.respuestas).forEach(([id, info]) => {
+                    const q = document.getElementById(id);
+                    if (!q) return;
+                    const feedback = q.querySelector('.feedback');
+                    feedback.innerText = info.msg;
+                    feedback.style.display = 'block';
+                    feedback.className = 'feedback ' + (info.correct ? 'correct' : 'incorrect');
+                    q.querySelectorAll('.opt').forEach(b => { b.style.pointerEvents = 'none'; b.style.opacity = '0.5'; });
+                    q.classList.add('respondida');
+                    if (info.correct) { q.style.borderColor = 'var(--success)'; } else { q.style.borderColor = 'var(--danger)'; }
+                });
+                document.getElementById('puntos').innerText = correctas;
+                document.getElementById('porcentaje').innerText = respondidas > 0 ? Math.round((correctas / respondidas) * 100) : 0;
+                const last = localStorage.getItem('redesTestTime');
+                if (last) document.getElementById('lastAttempt').innerText = 'Último intento: ' + new Date(last).toLocaleString('es-MX');
+            } catch(e) { console.warn('Error cargando progreso:', e); }
+        }
+
+        function guardarProgreso(id, isCorrect, msg) {
+            const saved = localStorage.getItem(STORAGE_KEY);
+            const data = saved ? JSON.parse(saved) : { correctas: 0, respondidas: 0, respuestas: {} };
+            data.correctas = correctas; data.respondidas = respondidas;
+            data.startTime = startTime.toISOString();
+            data.respuestas[id] = { correct: isCorrect, msg };
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+            localStorage.setItem('redesTestTime', new Date().toISOString());
+            if (respondidas === TOTAL && !testCompleted) { testCompleted = true; }
+        }
+
+        document.querySelectorAll('.opt').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                const q = e.target.closest('.question');
+                if (q.classList.contains('respondida')) return;
+                respondidas++;
+                const feedback = q.querySelector('.feedback');
+                const status = e.target.getAttribute('data-status');
+                const msg = e.target.getAttribute('data-msg');
+                feedback.innerText = msg; feedback.style.display = 'block';
+                const isCorrect = status === 'correct';
+                if (isCorrect) { feedback.className = 'feedback correct'; correctas++; q.style.borderColor = 'var(--success)'; q.style.boxShadow = '0 5px 15px rgba(74,222,128,0.2)'; }
+                else { feedback.className = 'feedback incorrect'; q.style.borderColor = 'var(--danger)'; q.style.boxShadow = '0 5px 15px rgba(239,68,68,0.2)'; }
+                document.getElementById('puntos').innerText = correctas;
+                document.getElementById('porcentaje').innerText = Math.round((correctas / respondidas) * 100);
+                q.querySelectorAll('.opt').forEach(b => { b.style.pointerEvents = 'none'; b.style.opacity = '0.5'; });
+                q.classList.add('respondida');
+                guardarProgreso(q.id, isCorrect, msg);
+            });
+        });
+
+        function reiniciarTest() {
+            if (!confirm('¿Estás seguro de que quieres reiniciar el test?')) return;
+            correctas = 0; respondidas = 0; testCompleted = false; startTime = new Date();
+            document.querySelectorAll('.question').forEach(q => {
+                q.classList.remove('respondida'); q.style.borderColor = ''; q.style.boxShadow = '';
+                q.querySelector('.feedback').style.display = 'none';
+                q.querySelectorAll('.opt').forEach(b => { b.style.pointerEvents = 'auto'; b.style.opacity = '1'; });
+            });
+            document.getElementById('puntos').innerText = '0';
+            document.getElementById('porcentaje').innerText = '0';
+            document.getElementById('lastAttempt').innerText = 'Último intento: No registrado';
+            document.getElementById('resultsSummary').style.display = 'none';
+            localStorage.removeItem(STORAGE_KEY); localStorage.removeItem('redesTestTime');
+        }
+
+        function mostrarResultados() {
+            const timeDiff = Math.floor((new Date() - startTime) / 1000);
+            const m = Math.floor(timeDiff / 60), s = timeDiff % 60;
+            document.getElementById('finalScore').textContent = correctas;
+            document.getElementById('finalPercentage').textContent = Math.round((correctas / TOTAL) * 100) + '%';
+            document.getElementById('timeSpent').textContent = `${m > 0 ? m + 'm ' : ''}${s}s`;
+            const pct = (correctas / TOTAL) * 100;
+            let emoji, msg;
+            if (pct >= 90) { emoji = '🏆'; msg = '¡Excelente! Dominas la privacidad en redes sociales.'; }
+            else if (pct >= 70) { emoji = '👍'; msg = '¡Muy bien! Conoces los riesgos principales.'; }
+            else if (pct >= 50) { emoji = '💡'; msg = 'Bien, pero revisa las situaciones donde fallaste.'; }
+            else { emoji = '📚'; msg = 'Necesitas reforzar tus hábitos de seguridad digital.'; }
+            document.getElementById('performanceFeedback').innerHTML = `<p style="font-size:1.2rem;">${emoji} ${msg}</p>`;
+            const rs = document.getElementById('resultsSummary');
+            rs.style.display = 'block'; rs.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function ocultarResultados() { document.getElementById('resultsSummary').style.display = 'none'; }
+        function scrollToSection(id) { const el = document.getElementById(id); if (el) el.scrollIntoView({ behavior: 'smooth' }); }
+
+        document.addEventListener('DOMContentLoaded', cargarProgreso);
+    </script>
+    <script>
+        const currentPage = window.location.pathname.split("/").pop() || "index.html";
+        document.querySelectorAll("nav a").forEach(link => {
+            const linkPage = link.getAttribute("href").split("/").pop();
+            if (linkPage === currentPage) link.classList.add("active");
+        });
+    </script>
+    <script>
+        function toggleNav(btn) {
+            const links = document.querySelector('.nav-links');
+            const isOpen = links.classList.toggle('open');
+            btn.setAttribute('aria-expanded', isOpen);
+            btn.innerHTML = isOpen
+                ? '<i class="fas fa-times"></i>'
+                : '<i class="fas fa-bars"></i>';
+        }
+        // Cerrar menú al hacer clic en un enlace
+        document.querySelectorAll('.nav-links a').forEach(link => {
+            link.addEventListener('click', () => {
+                const links = document.querySelector('.nav-links');
+                const btn = document.querySelector('.nav-toggle');
+                if (links.classList.contains('open')) {
+                    links.classList.remove('open');
+                    btn.setAttribute('aria-expanded', 'false');
+                    btn.innerHTML = '<i class="fas fa-bars"></i>';
+                }
+            });
+        });
+    </script>
+
+    <!-- PWA: registro del SW compartido -->
+    <script src="../js/pwa.js"></script>
+</body>
+</html>

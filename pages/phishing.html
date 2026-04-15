@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <!-- PWA -->
+    <link rel="manifest" href="../manifest.json">
+    <meta name="theme-color" content="#38bdf8">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Seg. Comunitaria">
+    <link rel="apple-touch-icon" href="../assets/icons/icon-192.png">
+    <link rel="icon" type="image/png" href="../assets/icons/icon-192.png" sizes="192x192">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+    <title>Phishing - Guía Completa y Simulador</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="../assets/css/style.css">
+    <style>
+        /* Estilos del Simulador */
+.score-board {
+            position: sticky; 
+            top: 80px; 
+            background: var(--bg-card); 
+            padding: 15px;
+            border-radius: 12px; 
+            border: 2px solid var(--primary); 
+            text-align: center;
+            z-index: 99; 
+            margin: 20px 0; 
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+/* Estilos de Información */
+        .info-card { 
+            background: rgba(255,255,255,0.05); 
+            padding: 25px; 
+            border-radius: 15px; 
+            margin-bottom: 20px; 
+            border-top: 3px solid var(--secondary); 
+        }
+        .highlight { 
+            color: var(--accent); 
+            font-weight: 600; 
+        }
+        
+        /* Navegación interna */
+/* Resultados finales */
+</style>
+</head>
+<body>
+    <header>
+        <h1>Guía de Protección contra Engaños</h1>
+        <p>Toda la información y entrenamiento en un solo lugar</p>
+    </header>
+
+    <nav>
+        <button class="nav-toggle" aria-label="Abrir menú de navegación" aria-expanded="false" onclick="toggleNav(this)">
+            <i class="fas fa-bars"></i>
+        </button>
+        <div class="nav-links">
+            <a href="../index.html"><i class="fas fa-home"></i> Inicio</a>
+            <a href="phishing.html"><i class="fas fa-fish"></i> Phishing</a>
+            <a href="ciberseguridad.html"><i class="fas fa-shield-alt"></i> Ciberseguridad</a>
+            <a href="videojuegos.html"><i class="fas fa-gamepad"></i> Videojuegos</a>
+            <a href="redes.html"><i class="fas fa-users"></i> Redes Sociales</a>
+            <a href="grooming.html"><i class="fas fa-exclamation-triangle"></i> Grooming</a>
+            <a href="https://noticias-seguridad.web.app/" target="_blank" rel="noopener noreferrer">
+                <i class="fas fa-newspaper"></i> Noticias para la Comunidad
+            </a>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="section-nav">
+            <a href="#info">📚 Información</a>
+            <a href="#android-test">🤖 Test Android</a>
+            <a href="#ios-test">🍎 Test iOS</a>
+            <a href="#windows-test">🖥️ Test Windows</a>
+        </div>
+        
+        <h2 id="info">¿Qué es el Phishing? (Explicado para todos)</h2>
+        <p>Imagina que alguien llama a tu puerta disfrazado de cartero. Te pide las llaves de tu casa para "revisar que el buzón funcione". Si le das las llaves, podrá entrar cuando quiera. El <span class="highlight">Phishing</span> es exactamente eso: un desconocido se disfraza de una empresa famosa para que tú mismo le entregues tus contraseñas.</p>
+
+        <div class="info-card">
+            <h3>🎣 El "Anzuelo": ¿Cómo intentan atraparte?</h3>
+            <p>Los atacantes se basan en tres trucos psicológicos:</p>
+            <ul>
+                <li><strong>El Susto:</strong> Mensajes como "¡Alguien entró a tu cuenta!" hacen que quieras arreglarlo rápido sin pensar.</li>
+                <li><strong>El Regalo:</strong> "Ganaste un bono" o "Recibe dinero gratis" nos hace bajar la guardia.</li>
+                <li><strong>La Curiosidad:</strong> "Mira esta foto tuya" o "Hicieron un comentario de ti aquí".</li>
+            </ul>
+        </div>
+
+        <div class="info-card">
+            <h3>🧐 ¿Cómo saber si un mensaje es falso?</h3>
+            <p>Busca estos detalles simples pero reveladores:</p>
+            <ul>
+                <li><strong>Direcciones extrañas:</strong> Un correo oficial de Netflix debe ser <code>@netflix.com</code>, no <code>@ayuda-clientes-netflix.tk</code>.</li>
+                <li><strong>Faltas de ortografía:</strong> Errores gramaticales son señales de que el mensaje es fraudulento.</li>
+                <li><strong>Te piden datos secretos:</strong> Los bancos reales jamás piden contraseñas por mensajes.</li>
+            </ul>
+        </div>
+
+        <div class="info-card">
+            <h3>⚠️ Los disfraces más comunes hoy</h3>
+            <ul>
+                <li><strong>El paquete de correo:</strong> SMS diciendo que un paquete no se entregó por falta de datos.</li>
+                <li><strong>El código de WhatsApp:</strong> Alguien te pide que le digas un código de 6 números que te llegó "por error".</li>
+                <li><strong>Soporte Técnico falso:</strong> Un mensaje en pantalla dice que tu PC tiene virus y da un número de teléfono.</li>
+            </ul>
+        </div>
+
+        <hr>
+
+        <div class="score-board">
+            <div>
+                <div class="score-text">Puntaje: <span id="puntos">0</span>/12 | Efectividad: <span id="porcentaje">0</span>%</div>
+                <div id="lastAttempt" style="font-size:0.8em; color:var(--text-muted); margin-top:5px;">
+                    Último intento: No registrado
+                </div>
+            </div>
+            <div class="test-controls">
+                <button onclick="reiniciarTest()" style="background:var(--accent);">🔄 Reiniciar Test</button>
+                <button onclick="mostrarResultados()" style="background:var(--secondary);">📊 Ver Resultados</button>
+            </div>
+        </div>
+
+        <h2>🎮 Simulador de Amenazas</h2>
+        <p>Pon a prueba lo aprendido. Si fallas, te explicaremos el porqué del truco.</p>
+
+        <!-- Resultados finales -->
+        <div class="results-summary" id="resultsSummary">
+            <h3>📊 Resultados del Test</h3>
+            <div class="result-stats">
+                <div class="stat-item">
+                    <span class="stat-value" id="finalScore">0</span>
+                    <span class="stat-label">Puntuación</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-value" id="finalPercentage">0%</span>
+                    <span class="stat-label">Efectividad</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-value" id="timeSpent">0s</span>
+                    <span class="stat-label">Tiempo</span>
+                </div>
+            </div>
+            <div id="performanceFeedback" style="margin-top: 20px;">
+                <p>Cargando evaluación...</p>
+            </div>
+            <button onclick="ocultarResultados()" style="margin-top: 20px;">Cerrar Resultados</button>
+        </div>
+
+        <h3 id="android-test">🤖 Android</h3>
+        <div class="platform-badge android" onclick="scrollToSection('a1')">Android</div>
+        <div class="question" id="a1">
+            <p><strong>1. WhatsApp: Alguien te pide el código de 6 dígitos que te llegó por SMS para "verificar tu cuenta".</strong></p>
+            <div class="options">
+                <button onclick="check('a1','c','ERROR: Ese código es la llave para que ellos instalen TU WhatsApp en su teléfono y te roben la cuenta.')">Dárselo, parece urgente.</button>
+                <button onclick="check('a1','correct','¡CORRECTO! Nunca compartas códigos de acceso con nadie.')">Bloquear el número inmediatamente.</button>
+            </div>
+            <div class="feedback"></div>
+        </div>
+
+        <div class="question" id="a2">
+            <p><strong>2. Google Play: Un correo dice que instales una app de seguridad desde un enlace externo.</strong></p>
+            <div class="options">
+                <button onclick="check('a2','correct','¡CORRECTO! Las apps reales solo se bajan desde la Play Store oficial.')">Ignorar. Solo uso la tienda oficial de Google.</button>
+                <button onclick="check('a2','c','ERROR: Instalar cosas desde enlaces externos puede infectar tu móvil con spyware.')">Descargarla para estar protegido.</button>
+            </div>
+            <div class="feedback"></div>
+        </div>
+
+        <div class="question" id="a3">
+            <p><strong>3. Permisos: Una app de "Linterna" te pide permiso para ver tus contactos y llamadas.</strong></p>
+            <div class="options">
+                <button onclick="check('a3','c','ERROR: Una linterna no necesita saber quiénes son tus amigos. Es una app sospechosa.')">Permitir, seguro es necesario.</button>
+                <button onclick="check('a3','correct','¡CORRECTO! No permitas accesos que no tengan sentido para la función de la app.')">Denegar permisos y desinstalar la app.</button>
+            </div>
+            <div class="feedback"></div>
+        </div>
+
+        <div class="question" id="a4">
+            <p><strong>4. SMS: Un mensaje de "Paquetería" pide tu dirección en un link para entregar un paquete.</strong></p>
+            <div class="options">
+                <button onclick="check('a4','correct','¡CORRECTO! Es Smishing. Quieren que pongas tu tarjeta para cobrarte supuestos gastos.')">Desconfiar. No he pedido nada recientemente.</button>
+                <button onclick="check('a4','c','ERROR: Es una estafa para robar datos bancarios de forma masiva.')">Entrar al link y poner mi dirección.</button>
+            </div>
+            <div class="feedback"></div>
+        </div>
+
+        <h3 id="ios-test">🍎 iOS (iPhone)</h3>
+        <div class="platform-badge ios" onclick="scrollToSection('i1')">iOS</div>
+        <div class="question" id="i1">
+            <p><strong>1. iCloud: Un correo dice que tu espacio está lleno y des clic a un botón para pagar más.</strong></p>
+            <div class="options">
+                <button onclick="check('i1','c','ERROR: Ese botón lleva a una web falsa para robar tu Apple ID.')">Dar clic al botón para no perder mis fotos.</button>
+                <button onclick="check('i1','correct','¡CORRECTO! Siempre revisa el almacenamiento desde Ajustes > Tu Nombre.')">Cerrar el correo e ir a Ajustes manualmente.</button>
+            </div>
+            <div class="feedback"></div>
+        </div>
+
+        <div class="question" id="i2">
+            <p><strong>2. Safari: Aparece un mensaje: "¡Tu iPhone tiene 13 virus! Tienes 2 minutos para desinfectarlo".</strong></p>
+            <div class="options">
+                <button onclick="check('i2','correct','¡CORRECTO! Apple no muestra avisos de virus en el navegador.')">Cerrar la pestaña; es publicidad engañosa.</button>
+                <button onclick="check('i2','c','ERROR: Es un truco para que instales apps sospechosas o des tus datos.')">Instalar el limpiador recomendado.</button>
+            </div>
+            <div class="feedback"></div>
+        </div>
+
+        <div class="question" id="i3">
+            <p><strong>3. Buscar mi iPhone: SMS dice que tu iPhone robado fue hallado y da un link para verlo.</strong></p>
+            <div class="options">
+                <button onclick="check('i3','c','ERROR: Los ladrones quieren tu clave para desbloquear el iPhone robado.')">Poner mi clave en el link para ver la ubicación.</button>
+                <button onclick="check('i3','correct','¡CORRECTO! Solo entra a icloud.com/find directamente.')">No entrar. Usar la web oficial de iCloud manualmente.</button>
+            </div>
+            <div class="feedback"></div>
+        </div>
+
+        <div class="question" id="i4">
+            <p><strong>4. Factura Falsa: Mail dice que compraste una app de $99 y da un link si quieres "Cancelar".</strong></p>
+            <div class="options">
+                <button onclick="check('i4','correct','¡CORRECTO! Usan el susto del dinero para que entres a su sitio falso.')">Ignorar el link. Revisar mis compras reales en la App Store.</button>
+                <button onclick="check('i4','c','ERROR: El link de cancelación es una trampa para robar tu cuenta.')">Llenar el formulario de cancelación rápido.</button>
+            </div>
+            <div class="feedback"></div>
+        </div>
+
+        <h3 id="windows-test">🖥️ Windows</h3>
+        <div class="platform-badge windows" onclick="scrollToSection('w1')">Windows</div>
+        <div class="question" id="w1">
+            <p><strong>1. Soporte: Una ventana dice que llames a un 01-800 para quitar un error de Windows.</strong></p>
+            <div class="options">
+                <button onclick="check('w1','c','ERROR: Microsoft nunca pone teléfonos en pantallas de error.')">Llamar para que me ayuden.</button>
+                <button onclick="check('w1','correct','¡CORRECTO! Es una estafa de soporte técnico falso.')">Reiniciar la computadora.</button>
+            </div>
+            <div class="feedback"></div>
+        </div>
+
+        <div class="question" id="w2">
+            <p><strong>2. Archivos: Recibes una factura en un archivo llamado "Cobro.zip" de alguien desconocido.</strong></p>
+            <div class="options">
+                <button onclick="check('w2','correct','¡CORRECTO! Los archivos .zip desconocidos suelen traer virus.')">No abrirlo y borrar el correo.</button>
+                <button onclick="check('w2','c','ERROR: Los archivos comprimidos son la forma favorita de enviar malware.')">Abrirlo para ver de qué se trata.</button>
+            </div>
+            <div class="feedback"></div>
+        </div>
+
+        <div class="question" id="w3">
+            <p><strong>3. Software: Una web te pide apagar el antivirus para instalar un programa "gratis".</strong></p>
+            <div class="options">
+                <button onclick="check('w3','c','ERROR: Si te pide apagar el antivirus, el programa es peligroso.')">Apagarlo un momento.</button>
+                <button onclick="check('w3','correct','¡CORRECTO! Jamás apagues tu seguridad por un programa.')">No hacerlo y salir de esa web.</button>
+            </div>
+            <div class="feedback"></div>
+        </div>
+
+        <div class="question" id="w4">
+            <p><strong>4. Office: Un Excel de "Nuevos Salarios" te pide "Habilitar Macros" para verlo.</strong></p>
+            <div class="options">
+                <button onclick="check('w4','c','ERROR: Las macros pueden ejecutar virus que borran todo tu disco duro.')">Habilitar macros para ver el archivo.</button>
+                <button onclick="check('w4','correct','¡CORRECTO! Las macros son un riesgo alto de seguridad.')">Cerrar el archivo sin habilitar nada.</button>
+            </div>
+            <div class="feedback"></div>
+        </div>
+    </div>
+
+    <script>
+        // Variables globales
+        let correctas = 0;
+        let respondidas = 0;
+        let startTime = null;
+        let testCompleted = false;
+        
+        // Cargar progreso guardado
+        function cargarProgreso() {
+            const savedProgress = localStorage.getItem('phishingTestProgress');
+            const savedScore = localStorage.getItem('phishingTestScore');
+            const savedTime = localStorage.getItem('phishingTestTime');
+            
+            if (savedProgress) {
+                const progress = JSON.parse(savedProgress);
+                progress.forEach(item => {
+                    if (item.answered) {
+                        const q = document.getElementById(item.id);
+                        if (q) {
+                            // Marcar como respondida
+                            q.classList.add('respondida');
+                            if (item.correct) correctas++;
+                            respondidas++;
+                            
+                            // Mostrar feedback
+                            const feedback = q.querySelector('.feedback');
+                            feedback.innerText = item.feedback;
+                            feedback.style.display = 'block';
+                            feedback.className = `feedback ${item.correct ? 'correct' : 'incorrect'}`;
+                            
+                            // Deshabilitar botones
+                            q.querySelectorAll('button').forEach(b => {
+                                b.style.pointerEvents = 'none';
+                                b.style.opacity = '0.5';
+                            });
+                        }
+                    }
+                });
+                
+                // Actualizar puntuación
+                document.getElementById('puntos').innerText = correctas;
+                document.getElementById('porcentaje').innerText = Math.round((correctas / respondidas) * 100);
+                
+                // Mostrar último intento
+                if (savedTime) {
+                    const fecha = new Date(savedTime);
+                    document.getElementById('lastAttempt').innerText = 
+                        `Último intento: ${fecha.toLocaleDateString()} ${fecha.toLocaleTimeString()}`;
+                }
+                
+                // Verificar si el test está completo
+                if (respondidas === 12) {
+                    testCompleted = true;
+                    startTime = new Date(savedScore?.startTime || Date.now());
+                }
+            }
+            
+            // Iniciar temporizador si no hay progreso guardado
+            if (!startTime) {
+                startTime = new Date();
+            }
+        }
+        
+        // Guardar progreso
+        function guardarProgreso(id, correct, feedbackText) {
+            const progress = JSON.parse(localStorage.getItem('phishingTestProgress') || '[]');
+            const existingIndex = progress.findIndex(item => item.id === id);
+            
+            if (existingIndex !== -1) {
+                progress[existingIndex] = { id, answered: true, correct, feedback: feedbackText };
+            } else {
+                progress.push({ id, answered: true, correct, feedback: feedbackText });
+            }
+            
+            localStorage.setItem('phishingTestProgress', JSON.stringify(progress));
+            localStorage.setItem('phishingTestScore', JSON.stringify({
+                correctas,
+                respondidas,
+                startTime: startTime.toISOString()
+            }));
+            localStorage.setItem('phishingTestTime', new Date().toISOString());
+            
+            // Disparar evento para estadísticas en index.html
+            if (respondidas === 12 && !testCompleted) {
+                testCompleted = true;
+                const event = new Event('testCompleted');
+                window.dispatchEvent(event);
+            }
+        }
+        
+        // Función principal para verificar respuestas
+        function check(id, status, msg) {
+            const q = document.getElementById(id);
+            
+            // Si ya fue respondida, no hacer nada
+            if (q.classList.contains('respondida')) return;
+            
+            respondidas++;
+            const feedback = q.querySelector('.feedback');
+            feedback.innerText = msg;
+            feedback.style.display = 'block';
+            
+            const isCorrect = status === 'correct';
+            if (isCorrect) { 
+                feedback.className = 'feedback correct'; 
+                correctas++; 
+            } else { 
+                feedback.className = 'feedback incorrect'; 
+            }
+            
+            document.getElementById('puntos').innerText = correctas;
+            document.getElementById('porcentaje').innerText = Math.round((correctas / respondidas) * 100);
+            
+            q.querySelectorAll('button').forEach(b => { 
+                b.style.pointerEvents = 'none'; 
+                b.style.opacity = '0.5'; 
+            });
+            
+            q.classList.add('respondida');
+            
+            // Guardar progreso
+            guardarProgreso(id, isCorrect, msg);
+        }
+        
+        // Reiniciar test
+        function reiniciarTest() {
+            if (confirm('¿Estás seguro de que quieres reiniciar el test? Se perderán tus respuestas actuales.')) {
+                correctas = 0;
+                respondidas = 0;
+                testCompleted = false;
+                startTime = new Date();
+                
+                // Resetear todas las preguntas
+                document.querySelectorAll('.question').forEach(q => {
+                    q.classList.remove('respondida');
+                    const feedback = q.querySelector('.feedback');
+                    feedback.style.display = 'none';
+                    q.querySelectorAll('button').forEach(b => {
+                        b.style.pointerEvents = 'auto';
+                        b.style.opacity = '1';
+                    });
+                });
+                
+                // Actualizar puntuación
+                document.getElementById('puntos').innerText = '0';
+                document.getElementById('porcentaje').innerText = '0';
+                document.getElementById('lastAttempt').innerText = 'Último intento: No registrado';
+                
+                // Limpiar localStorage
+                localStorage.removeItem('phishingTestProgress');
+                localStorage.removeItem('phishingTestScore');
+                localStorage.removeItem('phishingTestTime');
+                
+                // Ocultar resultados
+                document.getElementById('resultsSummary').style.display = 'none';
+            }
+        }
+        
+        // Mostrar resultados finales
+        function mostrarResultados() {
+            const resultsSummary = document.getElementById('resultsSummary');
+            const finalScore = document.getElementById('finalScore');
+            const finalPercentage = document.getElementById('finalPercentage');
+            const timeSpent = document.getElementById('timeSpent');
+            const performanceFeedback = document.getElementById('performanceFeedback');
+            
+            // Calcular tiempo transcurrido
+            const endTime = new Date();
+            const timeDiff = Math.floor((endTime - startTime) / 1000);
+            const minutes = Math.floor(timeDiff / 60);
+            const seconds = timeDiff % 60;
+            
+            // Actualizar estadísticas
+            finalScore.textContent = correctas;
+            finalPercentage.textContent = Math.round((correctas / 12) * 100) + '%';
+            timeSpent.textContent = `${minutes > 0 ? minutes + 'm ' : ''}${seconds}s`;
+            
+            // Dar feedback según el desempeño
+            let feedback = '';
+            let emoji = '';
+            
+            const percentage = (correctas / 12) * 100;
+            
+            if (percentage >= 90) {
+                feedback = '¡Excelente! Eres un experto en detectar phishing.';
+                emoji = '🏆';
+            } else if (percentage >= 70) {
+                feedback = '¡Muy bien! Tienes buen conocimiento sobre phishing.';
+                emoji = '👍';
+            } else if (percentage >= 50) {
+                feedback = 'Bien, pero hay áreas donde puedes mejorar. Revisa las respuestas incorrectas.';
+                emoji = '💡';
+            } else {
+                feedback = 'Necesitas aprender más sobre phishing. Revisa la información y vuelve a intentarlo.';
+                emoji = '📚';
+            }
+            
+            performanceFeedback.innerHTML = `<p style="font-size:1.2rem;">${emoji} ${feedback}</p>`;
+            
+            // Mostrar resultados
+            resultsSummary.style.display = 'block';
+            resultsSummary.scrollIntoView({ behavior: 'smooth' });
+        }
+        
+        // Ocultar resultados
+        function ocultarResultados() {
+            document.getElementById('resultsSummary').style.display = 'none';
+        }
+        
+        // Navegación por secciones
+        function scrollToSection(sectionId) {
+            const element = document.getElementById(sectionId);
+            if (element) {
+                element.scrollIntoView({ behavior: 'smooth' });
+            }
+        }
+        
+        // Inicializar
+        document.addEventListener('DOMContentLoaded', cargarProgreso);
+    </script>
+    <script>
+        const currentPage = window.location.pathname.split("/").pop() || "index.html";
+        document.querySelectorAll("nav a").forEach(link => {
+            const linkPage = link.getAttribute("href").split("/").pop();
+            if (linkPage === currentPage) link.classList.add("active");
+        });
+    </script>
+    <script>
+        function toggleNav(btn) {
+            const links = document.querySelector('.nav-links');
+            const isOpen = links.classList.toggle('open');
+            btn.setAttribute('aria-expanded', isOpen);
+            btn.innerHTML = isOpen
+                ? '<i class="fas fa-times"></i>'
+                : '<i class="fas fa-bars"></i>';
+        }
+        // Cerrar menú al hacer clic en un enlace
+        document.querySelectorAll('.nav-links a').forEach(link => {
+            link.addEventListener('click', () => {
+                const links = document.querySelector('.nav-links');
+                const btn = document.querySelector('.nav-toggle');
+                if (links.classList.contains('open')) {
+                    links.classList.remove('open');
+                    btn.setAttribute('aria-expanded', 'false');
+                    btn.innerHTML = '<i class="fas fa-bars"></i>';
+                }
+            });
+        });
+    </script>
+
+    <!-- PWA: registro del SW compartido -->
+    <script src="../js/pwa.js"></script>
+</body>
+</html>
