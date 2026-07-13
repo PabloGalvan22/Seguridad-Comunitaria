@@ -3,18 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <!-- PWA -->
-    <link rel="manifest" href="../manifest.json">
+    <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#38bdf8">
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="Seg. Comunitaria">
-    <link rel="apple-touch-icon" href="../assets/icons/icon-192.png">
-    <link rel="icon" type="image/png" href="../assets/icons/icon-192.png" sizes="192x192">
+    <link rel="apple-touch-icon" href="icon-192.png">
+    <link rel="icon" type="image/png" href="icon-192.png" sizes="192x192">
     <title>Admin - Publicar Historia</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="../assets/css/style.css">
+    <link rel="stylesheet" href="style.css">
     <style>
         /* Estilos adicionales para el admin */
         .admin-panel {
@@ -472,12 +472,15 @@
 <body>
     <nav>
         <a href="grooming.html"><i class="fas fa-arrow-left"></i> Volver al Blog</a>
-        <a href="../index.html"><i class="fas fa-home"></i> Inicio</a>
+        <a href="index.html"><i class="fas fa-home"></i> Inicio</a>
         <a href="phishing.html"><i class="fas fa-fish"></i> Phishing</a>
         <a href="ciberseguridad.html"><i class="fas fa-shield-alt"></i> Ciberseguridad</a>
         <a href="videojuegos.html"><i class="fas fa-gamepad"></i> Videojuegos</a>
         <a href="redes.html"><i class="fas fa-users"></i> Redes Sociales</a>
         <a href="grooming.html"><i class="fas fa-exclamation-triangle"></i> Grooming</a>
+        <a href="https://pablogalvan22.github.io/NoticiasSanIsidro/" target="_blank" rel="noopener noreferrer">
+            <i class="fas fa-newspaper"></i> Noticias
+        </a>
         <a href="admin.html" style="margin-left: auto; background: rgba(239, 68, 68, 0.1);">
             <i class="fas fa-lock"></i> Admin
         </a>
@@ -759,7 +762,7 @@
             db, auth, collection, addDoc, getDocs, Timestamp, 
             signInWithEmailAndPassword, onAuthStateChanged, signOut,
             query, orderBy, doc, deleteDoc, updateDoc
-        } from '../js/firebase.js';
+        } from './firebase.js';
 
         const loginSection = document.getElementById('login-section');
         const postSection = document.getElementById('post-section');
@@ -1205,8 +1208,8 @@
                 loginSection.style.display = 'block';
                 postSection.style.display = 'none';
                 redirectTimer = setTimeout(() => {
-                    if (!auth.currentUser) window.location.href = '../index.html';
-                }, 5000);
+                    if (!auth.currentUser) window.location.href = 'index.html';
+                }, 60000);
             }
         });
 
@@ -1332,6 +1335,6 @@
     </script>
 
     <!-- PWA: registro del SW compartido -->
-    <script src="../js/pwa.js"></script>
+    <script src="pwa.js"></script>
 </body>
 </html>
